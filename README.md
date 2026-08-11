@@ -15,6 +15,100 @@ Smart India Hackathon 2026. Team of 6 first-year CSE students.
 
 ---
 
+## What it looks like
+
+Every screenshot below is the real app, captured at phone size while walking the
+full flow. The default language is Hindi.
+
+### The nine-step journey
+
+<table>
+<tr>
+<td width="33%"><img src="docs/screenshots/01-consent.png" alt="Consent screen with language chooser"></td>
+<td width="33%"><img src="docs/screenshots/02-home.png" alt="Home screen with the grid of ten forms"></td>
+<td width="33%"><img src="docs/screenshots/03-digilocker.png" alt="DigiLocker consent page"></td>
+</tr>
+<tr>
+<td><b>1. Consent + language</b><br>Consent comes before any data is touched, per the DPDP Act. Doubles as the language chooser, since that is the one thing a citizen can do before they can read anything else.</td>
+<td><b>2. Pick a form</b><br>Ten forms, or scan one you are holding. Every heading can be heard aloud.</td>
+<td><b>3. DigiLocker login</b><br>Aadhaar and OTP are entered on DigiLocker's own page. FormMitra never sees either.</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td width="33%"><img src="docs/screenshots/04-home-verified.png" alt="Home screen showing a verified DigiLocker profile"></td>
+<td width="33%"><img src="docs/screenshots/05-overview.png" alt="Form overview showing field counts"></td>
+<td width="33%"><img src="docs/screenshots/06-explanation.png" alt="A field expanded to show its plain-language explanation"></td>
+</tr>
+<tr>
+<td><b>4. Verified profile</b><br>Name, DOB, gender and address arrive verified and auto-fill across every form.</td>
+<td><b>5. What you will be asked</b><br><b>11 fields, 5 already filled, 6 questions.</b> DigiLocker removed nearly half the work before a single question was asked.</td>
+<td><b>6. Tap to understand</b><br>The bit a cyber-café agent charges ₹50 for. Pre-written, human-reviewed, and spoken aloud — no model involved.</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td width="33%"><img src="docs/screenshots/07-fill.png" alt="Guided fill asking one question with a large mic button"></td>
+<td width="33%"><img src="docs/screenshots/08-validation.png" alt="An invalid Aadhaar number rejected with a Hindi explanation"></td>
+<td width="33%"><img src="docs/screenshots/09-confirm.png" alt="Confirmation screen listing every answer"></td>
+</tr>
+<tr>
+<td><b>7. One question at a time</b><br>Spoken automatically on arrival. The text box below the mic is always live — voice is an accelerator, never a requirement.</td>
+<td><b>8. Validation that cannot be wrong</b><br>Pure regex and the real UIDAI checksum. The reason is <i>spoken</i> in Hindi, not just shown in red to someone who cannot read it.</td>
+<td><b>9. Read back for checking</b><br>Aadhaar comes back as "2 3 4 5, 6 7 8 9, 0 1 2 4" — checkable by ear. Tap any answer to change it.</td>
+</tr>
+</table>
+
+### Checklist, output, and English
+
+<table>
+<tr>
+<td width="33%"><img src="docs/screenshots/10-checklist.png" alt="Document checklist cross-referenced against DigiLocker"></td>
+<td width="33%"><img src="docs/screenshots/11-done.png" alt="Completion screen after the PDF is saved"></td>
+<td width="33%"><img src="docs/screenshots/12-done-english.png" alt="The same completion screen in English"></td>
+</tr>
+<tr>
+<td><b>Documents to carry</b><br>Cross-referenced against DigiLocker: <b>3 of these 6 are already held</b>, so the citizen is not sent to a tehsil office for something they already have.</td>
+<td><b>Saved to the device</b><br>Generated in the browser and never uploaded. Carries a standing warning that this is a printable form, not an online submission.</td>
+<td><b>Both languages throughout</b><br>Every string, explanation, question and error message exists in Hindi and English.</td>
+</tr>
+</table>
+
+### The form it produces
+
+<img src="docs/screenshots/13-pdf.png" alt="The generated filled PDF" width="480">
+
+Generated entirely in the browser by pdf-lib, saved straight to the phone.
+DigiLocker-sourced fields are marked verified, the amount is formatted in Indian
+grouping, and the document checklist is printed with tick boxes.
+[Download the real file](docs/screenshots/sample-filled-form.pdf).
+
+### With the network switched off
+
+The service worker caches the app, all ten templates, every explanation, the OCR
+model and the PDF engine on first visit. From the second visit, none of this
+needs a connection:
+
+```
+2. Network OFF — everything below runs from the device
+  ok   app loads with no network
+  ok   form template opened (bundled, not fetched)
+  ok   pre-written explanation available offline
+  ok   validation ran offline, reached confirm
+  ok   checklist works offline
+  ok   done screen reached offline
+  downloaded offline: ration-card-formmitra.pdf
+
+  (0 network requests were refused while offline)
+```
+
+Only DigiLocker login needs internet, and it says so rather than failing
+silently.
+
+---
+
 ## Run it
 
 You need two terminals.
