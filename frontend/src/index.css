@@ -1,0 +1,112 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   FormMitra design tokens.
+   Primary users are elderly / low-literacy citizens, often on cheap phones in
+   bright sunlight. Everything here is tuned for that: minimum 18px body text,
+   56px+ tap targets, and high-contrast colours only.
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-ink: #10151f;
+  --color-ink-soft: #46506a;
+  --color-paper: #f6f7fb;
+  --color-line: #d9dee9;
+
+  --color-brand-50: #eef3ff;
+  --color-brand-100: #dbe5ff;
+  --color-brand-500: #2b5ce6;
+  --color-brand-600: #1e40af;
+  --color-brand-700: #17337f;
+
+  --color-saffron-50: #fff5e6;
+  --color-saffron-500: #f08a24;
+  --color-saffron-600: #c96a0e;
+
+  --color-good-50: #e8f7ee;
+  --color-good-500: #128a4a;
+  --color-good-600: #0d6a39;
+
+  --color-bad-50: #fdecec;
+  --color-bad-500: #cc2626;
+  --color-bad-600: #a11b1b;
+
+  --text-base: 1.125rem; /* 18px floor, per accessibility target */
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.25rem;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family:
+    'Noto Sans', 'Noto Sans Devanagari', system-ui, -apple-system, 'Segoe UI',
+    Roboto, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Never let a stray element cause sideways scroll on a small phone. */
+#root {
+  overflow-x: hidden;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Visible focus ring — many of our users navigate by tabbing on a shared
+   keyboard-attached device at a CSC. */
+:focus-visible {
+  outline: 3px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
+
+@keyframes fm-pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgb(43 92 230 / 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 22px rgb(43 92 230 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(43 92 230 / 0);
+  }
+}
+
+.fm-listening {
+  animation: fm-pulse-ring 1.4s ease-out infinite;
+}
+
+@keyframes fm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fm-rise {
+  animation: fm-rise 0.28s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-listening,
+  .fm-rise {
+    animation: none;
+  }
+}

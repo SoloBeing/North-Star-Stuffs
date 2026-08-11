@@ -1,0 +1,166 @@
+{
+  "id": "ration-card",
+  "icon": "🌾",
+  "name": {
+    "en": "Ration Card Application",
+    "hi": "राशन कार्ड आवेदन"
+  },
+  "issuer": {
+    "en": "Department of Food and Civil Supplies (State Government)",
+    "hi": "खाद्य एवं नागरिक आपूर्ति विभाग (राज्य सरकार)"
+  },
+  "summary": {
+    "en": "For subsidised food grain under the National Food Security Act.",
+    "hi": "राष्ट्रीय खाद्य सुरक्षा कानून के तहत सस्ते अनाज के लिए।"
+  },
+  "ocrKeywords": [
+    "ration card",
+    "food security",
+    "public distribution",
+    "fair price shop",
+    "nfsa",
+    "khadya suraksha"
+  ],
+  "documents": [
+    { "en": "Aadhaar card of every family member", "hi": "परिवार के हर सदस्य का आधार कार्ड", "digilockerType": "ADHAR" },
+    { "en": "Proof of residence", "hi": "निवास प्रमाण" },
+    { "en": "Income certificate", "hi": "आय प्रमाण पत्र", "digilockerType": "INCMC" },
+    { "en": "Passport size photo of the head of family", "hi": "परिवार के मुखिया की पासपोर्ट साइज़ फोटो" },
+    { "en": "Surrender certificate, if you had a ration card elsewhere before", "hi": "समर्पण प्रमाण पत्र, अगर पहले कहीं और राशन कार्ड था" }
+  ],
+  "fields": [
+    {
+      "id": "head_name",
+      "label": { "en": "Name of head of family", "hi": "परिवार के मुखिया का नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": {
+        "en": "What is the name of the head of the family?",
+        "hi": "परिवार के मुखिया का नाम क्या है?"
+      },
+      "explain": {
+        "en": "Under the food security law the eldest woman of the house aged 18 or above is normally made the head of family. The ration card is issued in her name.",
+        "hi": "खाद्य सुरक्षा कानून के अनुसार घर की सबसे बड़ी महिला, जिसकी उम्र 18 साल या उससे ज़्यादा हो, आमतौर पर परिवार की मुखिया बनती है। राशन कार्ड उन्हीं के नाम पर बनता है।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "dob",
+      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "rule": "date_past",
+      "source": "digilocker",
+      "profileKey": "dob",
+      "question": {
+        "en": "Date of birth of the head of family?",
+        "hi": "परिवार के मुखिया की जन्म तिथि?"
+      },
+      "explain": {
+        "en": "Used to confirm the head of family is 18 or older, which the law requires.",
+        "hi": "यह जाँचने के लिए कि मुखिया की उम्र 18 साल या उससे ज़्यादा है, जो कानून के लिए ज़रूरी है।"
+      },
+      "example": "14/08/1961"
+    },
+    {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number of head of family", "hi": "मुखिया की आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": {
+        "en": "Please say the head of family's Aadhaar number.",
+        "hi": "कृपया परिवार के मुखिया का आधार नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "Aadhaar is used to check that the same family is not drawing ration in two different places.",
+        "hi": "आधार से यह जाँचा जाता है कि एक ही परिवार दो अलग-अलग जगहों से राशन तो नहीं ले रहा।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
+      "id": "address",
+      "label": { "en": "Full residential address", "hi": "पूरा निवास पता" },
+      "rule": "text",
+      "source": "digilocker",
+      "profileKey": "address",
+      "question": { "en": "What is your full address?", "hi": "आपका पूरा पता क्या है?" },
+      "explain": {
+        "en": "This decides which fair price shop you are attached to. You can only collect ration from that one shop.",
+        "hi": "इससे तय होता है कि आप किस सस्ते गल्ले की दुकान से जुड़ेंगे। आप केवल उसी दुकान से राशन ले सकते हैं।"
+      }
+    },
+    {
+      "id": "pincode",
+      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "rule": "pincode",
+      "source": "digilocker",
+      "profileKey": "pincode",
+      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "explain": {
+        "en": "Six digits of your area's postal code.",
+        "hi": "आपके इलाके के डाक कोड के छह अंक।"
+      },
+      "example": "302015"
+    },
+    {
+      "id": "family_members",
+      "label": { "en": "Total family members", "hi": "परिवार के कुल सदस्य" },
+      "rule": "amount",
+      "source": "ask",
+      "question": {
+        "en": "How many people live in your household?",
+        "hi": "आपके घर में कुल कितने लोग रहते हैं?"
+      },
+      "explain": {
+        "en": "Count everyone who eats from the same kitchen, including small children. You get five kilograms of grain per person per month, so a wrong count means less ration.",
+        "hi": "उन सभी लोगों को गिनें जो एक ही रसोई का खाना खाते हैं, छोटे बच्चों सहित। हर व्यक्ति को महीने में पाँच किलो अनाज मिलता है, इसलिए गलत गिनती से कम राशन मिलेगा।"
+      },
+      "example": "5"
+    },
+    {
+      "id": "card_category",
+      "label": { "en": "Card category", "hi": "कार्ड की श्रेणी" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "AAY", "en": "Antyodaya (poorest households)", "hi": "अंत्योदय (सबसे गरीब परिवार)" },
+        { "value": "PHH", "en": "Priority household", "hi": "प्राथमिकता वाला परिवार" },
+        { "value": "NPHH", "en": "Non-priority household", "hi": "गैर-प्राथमिकता वाला परिवार" }
+      ],
+      "question": {
+        "en": "Which ration card category are you applying for?",
+        "hi": "आप किस श्रेणी के राशन कार्ड के लिए आवेदन कर रहे हैं?"
+      },
+      "explain": {
+        "en": "Antyodaya gives 35 kilograms per family per month and is for the poorest households. Priority gives 5 kilograms per person. The final category is decided by the department, not by you.",
+        "hi": "अंत्योदय में हर परिवार को महीने में 35 किलो मिलता है और यह सबसे गरीब परिवारों के लिए है। प्राथमिकता में हर व्यक्ति को 5 किलो मिलता है। अंतिम श्रेणी विभाग तय करता है, आप नहीं।"
+      }
+    },
+    {
+      "id": "annual_income",
+      "label": { "en": "Annual family income (₹)", "hi": "परिवार की वार्षिक आय (₹)" },
+      "rule": "amount",
+      "source": "ask",
+      "question": {
+        "en": "What is your family's income in one year?",
+        "hi": "आपके परिवार की एक साल की आय कितनी है?"
+      },
+      "explain": {
+        "en": "Total earnings of the whole family in a year. This must match your income certificate. Each state sets its own limit for a subsidised card.",
+        "hi": "पूरे परिवार की एक साल की कुल कमाई। यह आपके आय प्रमाण पत्र से मिलनी चाहिए। सस्ते कार्ड के लिए हर राज्य की अपनी सीमा होती है।"
+      },
+      "example": "96000"
+    },
+    {
+      "id": "mobile",
+      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
+      "rule": "mobile",
+      "source": "ask",
+      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
+      "explain": {
+        "en": "You will receive an SMS when your card is approved and ready to collect.",
+        "hi": "जब आपका कार्ड मंज़ूर होकर लेने के लिए तैयार होगा तो आपको एसएमएस मिलेगा।"
+      },
+      "example": "9876543210"
+    }
+  ]
+}

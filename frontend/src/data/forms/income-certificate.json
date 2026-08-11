@@ -1,0 +1,177 @@
+{
+  "id": "income-certificate",
+  "icon": "📄",
+  "name": {
+    "en": "Income Certificate Application",
+    "hi": "आय प्रमाण पत्र आवेदन"
+  },
+  "issuer": {
+    "en": "Revenue Department / Tehsildar Office (State Government)",
+    "hi": "राजस्व विभाग / तहसीलदार कार्यालय (राज्य सरकार)"
+  },
+  "summary": {
+    "en": "Official proof of family income. Needed for scholarships, ration cards and reservations.",
+    "hi": "परिवार की आय का सरकारी प्रमाण। छात्रवृत्ति, राशन कार्ड और आरक्षण के लिए ज़रूरी।"
+  },
+  "ocrKeywords": [
+    "income certificate",
+    "aay praman patra",
+    "annual income",
+    "tehsildar",
+    "revenue department",
+    "certificate of income"
+  ],
+  "documents": [
+    { "en": "Aadhaar card", "hi": "आधार कार्ड", "digilockerType": "ADHAR" },
+    { "en": "Ration card", "hi": "राशन कार्ड" },
+    { "en": "Salary slip or employer letter, if employed", "hi": "वेतन पर्ची या नियोक्ता का पत्र, अगर नौकरी करते हैं" },
+    { "en": "Land records, if you own farmland", "hi": "ज़मीन के कागज़, अगर खेती की ज़मीन है" },
+    { "en": "Self-declaration affidavit on stamp paper", "hi": "स्टाम्प पेपर पर स्वघोषणा शपथ पत्र" }
+  ],
+  "fields": [
+    {
+      "id": "applicant_name",
+      "label": { "en": "Applicant's full name", "hi": "आवेदक का पूरा नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": { "en": "What is your full name?", "hi": "आपका पूरा नाम क्या है?" },
+      "explain": {
+        "en": "The certificate will be issued in this exact name. If it is for a student's scholarship, use the parent's name here — the certificate is about the family's income.",
+        "hi": "प्रमाण पत्र इसी नाम से बनेगा। अगर यह विद्यार्थी की छात्रवृत्ति के लिए है तो यहाँ माता-पिता का नाम लिखें — प्रमाण पत्र परिवार की आय का होता है।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "father_name",
+      "label": { "en": "Father's or husband's name", "hi": "पिता या पति का नाम" },
+      "rule": "name",
+      "source": "ask",
+      "question": {
+        "en": "What is your father's or husband's name?",
+        "hi": "आपके पिता या पति का नाम क्या है?"
+      },
+      "explain": {
+        "en": "Revenue records identify families this way, so this is how the office finds your household.",
+        "hi": "राजस्व रिकॉर्ड में परिवारों की पहचान इसी तरह होती है, इसी से कार्यालय आपका परिवार खोजता है।"
+      },
+      "example": "Ram Prasad"
+    },
+    {
+      "id": "dob",
+      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "rule": "date_past",
+      "source": "digilocker",
+      "profileKey": "dob",
+      "question": { "en": "What is your date of birth?", "hi": "आपकी जन्म तिथि क्या है?" },
+      "explain": {
+        "en": "Used to confirm you are an adult and can apply in your own name.",
+        "hi": "यह पुष्टि करने के लिए कि आप वयस्क हैं और अपने नाम से आवेदन कर सकते हैं।"
+      },
+      "example": "14/08/1961"
+    },
+    {
+      "id": "address",
+      "label": { "en": "Full residential address", "hi": "पूरा निवास पता" },
+      "rule": "text",
+      "source": "digilocker",
+      "profileKey": "address",
+      "question": { "en": "What is your full address?", "hi": "आपका पूरा पता क्या है?" },
+      "explain": {
+        "en": "This decides which tehsil office issues your certificate. You must apply at the office of the area where you actually live.",
+        "hi": "इससे तय होता है कि कौन सा तहसील कार्यालय आपका प्रमाण पत्र देगा। आपको उसी इलाके के कार्यालय में आवेदन करना होगा जहाँ आप वास्तव में रहते हैं।"
+      }
+    },
+    {
+      "id": "pincode",
+      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "rule": "pincode",
+      "source": "digilocker",
+      "profileKey": "pincode",
+      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "explain": {
+        "en": "Six digits of your area's postal code.",
+        "hi": "आपके इलाके के डाक कोड के छह अंक।"
+      },
+      "example": "302015"
+    },
+    {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": {
+        "en": "Please say your twelve digit Aadhaar number.",
+        "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "Used to confirm your identity so that one person cannot get two different income certificates.",
+        "hi": "आपकी पहचान की पुष्टि के लिए, ताकि एक व्यक्ति दो अलग-अलग आय प्रमाण पत्र न बनवा सके।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
+      "id": "annual_income",
+      "label": { "en": "Annual family income (₹)", "hi": "परिवार की वार्षिक आय (₹)" },
+      "rule": "amount",
+      "source": "ask",
+      "question": {
+        "en": "What is your family's total income in one year?",
+        "hi": "आपके परिवार की एक साल की कुल आय कितनी है?"
+      },
+      "explain": {
+        "en": "Add up what everyone in the family earns in a year, from all sources — salary, farming, shop, daily wages, rent. Declaring less than the truth is a punishable offence, and every scheme you later apply for will check this number.",
+        "hi": "एक साल में परिवार के सभी लोगों की सभी स्रोतों से कमाई जोड़ें — वेतन, खेती, दुकान, दिहाड़ी, किराया। सच से कम बताना दंडनीय अपराध है, और आगे आप जिस भी योजना में आवेदन करेंगे वह इसी राशि को जाँचेगी।"
+      },
+      "example": "180000"
+    },
+    {
+      "id": "income_source",
+      "label": { "en": "Main source of income", "hi": "आय का मुख्य स्रोत" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "Agriculture", "en": "Agriculture", "hi": "खेती" },
+        { "value": "Daily wage", "en": "Daily wage labour", "hi": "दिहाड़ी मज़दूरी" },
+        { "value": "Salary", "en": "Salaried job", "hi": "वेतन वाली नौकरी" },
+        { "value": "Business", "en": "Small business or shop", "hi": "छोटा व्यापार या दुकान" },
+        { "value": "Pension", "en": "Pension", "hi": "पेंशन" }
+      ],
+      "question": {
+        "en": "Where does most of your family's income come from?",
+        "hi": "आपके परिवार की ज़्यादातर आय कहाँ से आती है?"
+      },
+      "explain": {
+        "en": "This decides which supporting document the office will ask for. Farming needs land records, a salaried job needs a salary slip, daily wage work needs only your affidavit.",
+        "hi": "इससे तय होता है कि कार्यालय कौन सा कागज़ माँगेगा। खेती के लिए ज़मीन के कागज़, नौकरी के लिए वेतन पर्ची, और दिहाड़ी के लिए केवल आपका शपथ पत्र चाहिए।"
+      }
+    },
+    {
+      "id": "purpose",
+      "label": { "en": "Purpose of the certificate", "hi": "प्रमाण पत्र का उद्देश्य" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "Why do you need this certificate?",
+        "hi": "आपको यह प्रमाण पत्र किस लिए चाहिए?"
+      },
+      "explain": {
+        "en": "For example, for a child's scholarship, for a ration card, or for a hostel admission. Write the real reason — the certificate is usually valid for six months to a year.",
+        "hi": "जैसे बच्चे की छात्रवृत्ति के लिए, राशन कार्ड के लिए, या छात्रावास में दाखिले के लिए। सही कारण लिखें — प्रमाण पत्र आमतौर पर छह महीने से एक साल तक मान्य रहता है।"
+      },
+      "example": "For daughter's college scholarship"
+    },
+    {
+      "id": "mobile",
+      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
+      "rule": "mobile",
+      "source": "ask",
+      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
+      "explain": {
+        "en": "You will get an SMS when the certificate is ready to collect.",
+        "hi": "प्रमाण पत्र तैयार होने पर आपको एसएमएस मिलेगा।"
+      },
+      "example": "9876543210"
+    }
+  ]
+}

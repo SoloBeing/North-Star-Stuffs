@@ -1,0 +1,296 @@
+/**
+ * FormMitra — app shell and flow control.
+ *
+ * The nine steps from the spec map onto these screens:
+ *
+ *   consent  -> DPDP consent + language          (before any data is touched)
+ *   home     -> DigiLocker login, form grid, scan
+ *   scan     -> camera -> Tesseract -> identify
+ *   overview -> tap a field to hear what it means
+ *   fill     -> one voice question at a time, validated
+ *   confirm  -> every answer read back aloud
+ *   checklist-> documents to carry, cross-referenced with DigiLocker
+ *   done     -> pdf-lib builds the PDF, saved to the device
+ *
+ * Answers live in component state and nowhere else. They are never written to
+ * localStorage and never sent to a server — closing the tab genuinely destroys
+ * them, which is what the consent screen promises.
+ */
+
+import { useCallback, useEffect, useState } from 'react'
+import { Header } from './components/ui'
+import Consent from './screens/Consent'
+import Home from './screens/Home'
+import Scan from './screens/Scan'
+import FormOverview from './screens/FormOverview'
+import GuidedFill from './screens/GuidedFill'
+import Confirm from './screens/Confirm'
+import Checklist from './screens/Checklist'
+import Done from './screens/Done'
+import { stopSpeaking } from './lib/speech'
+import { releaseOcr } from './lib/ocr'
+import { t } from './lib/i18n'
+
+const LANG_KEY = 'formmitra.lang'
+const CONSENT_KEY = 'formmitra.consented'
+
+export default function App() {
+  const [lang, setLang] = useState(
+    () => localStorage.getItem(LANG_KEY) ?? 'hi',
+  )
+  const [consented, setConsented] = useState(
+    () => localStorage.getItem(CONSENT_KEY) === 'yes',
+  )
+  const [screen, setScreen] = useState('home')
+
+  const [sessionId, setSessionId] = useState(null)
+  const [profile, setProfile] = useState(null)
+  const [issuedDocuments, setIssuedDocuments] = useState([])
+  const [loggingIn, setLoggingIn] = useState(false)
+  const [loginError, setLoginError] = useState(null)
+
+  const [form, setForm] = useState(null)
+  const [answers, setAnswers] = useState({})
+  const [editField, setEditField] = useState(null)
+
+  const [offline, setOffline] = useState(!navigator.onLine)
+
+  useEffect(() => {
+    const on = () => setOffline(false)
+    const off = () => setOffline(true)
+    window.addEventListener('online', on)
+    window.addEventListener('offline', off)
+    return () => {
+      window.removeEventListener('online', on)
+      window.removeEventListener('offline', off)
+    }
+  }, [])
+
+  useEffect(() => localStorage.setItem(LANG_KEY, lang), [lang])
+
+  // --- DigiLocker return trip ---------------------------------------------
+  // The OAuth redirect reloads the page, landing back here with ?dl_session=.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const session = params.get('dl_session')
+    const error = params.get('dl_error')
+    if (!session && !error) return
+
+    // Strip the query string so a refresh does not replay the login.
+    window.history.replaceState({}, '', window.location.pathname)
+
+    if (error) {
+      setLoginError(error)
+      return
+    }
+
+    setSessionId(session)
+    ;(async () => {
+      try {
+        const [profileRes, docsRes] = await Promise.all([
+          fetch(`/api/digilocker/profile?session_id=${session}`),
+          fetch(`/api/digilocker/issued-documents?session_id=${session}`),
+        ])
+        if (!profileRes.ok) throw new Error('Session expired')
+        setProfile(await profileRes.json())
+        if (docsRes.ok) setIssuedDocuments((await docsRes.json()).documents)
+      } catch (err) {
+        setLoginError(String(err.message ?? err))
+      }
+    })()
+  }, [])
+
+  async function login() {
+    setLoggingIn(true)
+    setLoginError(null)
+    try {
+      const res = await fetch('/api/digilocker/authorize')
+      const data = await res.json()
+      window.location.href = data.authorize_url
+    } catch (err) {
+      setLoginError(String(err.message ?? err))
+      setLoggingIn(false)
+    }
+  }
+
+  /** One-tap clear — wipes the citizen's data from the device and the server. */
+  const clearEverything = useCallback(async () => {
+    stopSpeaking()
+    if (sessionId) {
+      try {
+        await fetch(`/api/digilocker/logout?session_id=${sessionId}`, {
+          method: 'POST',
+        })
+      } catch {
+        // Offline, or the server is down. The browser-side wipe below still
+        // happens, which is the part that actually holds the citizen's data.
+      }
+    }
+    localStorage.removeItem(CONSENT_KEY)
+    localStorage.removeItem(LANG_KEY)
+    setSessionId(null)
+    setProfile(null)
+    setIssuedDocuments([])
+    setForm(null)
+    setAnswers({})
+    setEditField(null)
+    setConsented(false)
+    setScreen('home')
+    releaseOcr()
+  }, [sessionId])
+
+  function agree() {
+    localStorage.setItem(CONSENT_KEY, 'yes')
+    setConsented(true)
+  }
+
+  /** Seed answers from the DigiLocker profile, then show the overview. */
+  function pickForm(chosen) {
+    const seeded = {}
+    for (const field of chosen.fields) {
+      if (field.source === 'digilocker' && profile?.[field.profileKey]) {
+        seeded[field.id] = profile[field.profileKey]
+      }
+    }
+    setForm(chosen)
+    setAnswers(seeded)
+    setScreen('overview')
+  }
+
+  const answer = useCallback(
+    (id, value) => setAnswers((prev) => ({ ...prev, [id]: value })),
+    [],
+  )
+
+  function restart() {
+    stopSpeaking()
+    setForm(null)
+    setAnswers({})
+    setEditField(null)
+    setScreen('home')
+  }
+
+  if (!consented) {
+    return (
+      <Consent lang={lang} onLangChange={setLang} onAgree={agree} />
+    )
+  }
+
+  // Fields the voice flow needs to ask about — DigiLocker-sourced ones are
+  // skipped entirely, which is the whole point of logging in.
+  const askableFields =
+    form?.fields.filter(
+      (f) => !(f.source === 'digilocker' && profile?.[f.profileKey]),
+    ) ?? []
+
+  return (
+    <>
+      <Header
+        lang={lang}
+        onLangChange={setLang}
+        onClear={clearEverything}
+        showClear={Boolean(profile) || Object.keys(answers).length > 0}
+      />
+
+      {offline && (
+        <div className="mx-auto mb-3 w-full max-w-xl px-4">
+          <div className="rounded-xl border-l-4 border-good-500 bg-good-50 px-4 py-2 text-base font-semibold text-good-600">
+            ✓ {t('offlineReady', lang)}
+          </div>
+        </div>
+      )}
+
+      {loginError && (
+        <div className="mx-auto mb-3 w-full max-w-xl px-4">
+          <div className="rounded-xl border-l-4 border-bad-500 bg-bad-50 px-4 py-2 text-base font-semibold text-bad-600">
+            {loginError}
+          </div>
+        </div>
+      )}
+
+      {screen === 'home' && (
+        <Home
+          lang={lang}
+          profile={profile}
+          loggingIn={loggingIn}
+          offline={offline}
+          onLogin={login}
+          onScan={() => setScreen('scan')}
+          onPickForm={pickForm}
+        />
+      )}
+
+      {screen === 'scan' && (
+        <Scan lang={lang} onPickForm={pickForm} onBack={() => setScreen('home')} />
+      )}
+
+      {screen === 'overview' && form && (
+        <FormOverview
+          lang={lang}
+          form={form}
+          profile={profile}
+          onStart={() => setScreen('fill')}
+          onBack={restart}
+        />
+      )}
+
+      {screen === 'fill' && form && (
+        <GuidedFill
+          // Remounting on edit resets the internal question index cleanly.
+          key={editField ? `edit-${editField.id}` : 'fill'}
+          lang={lang}
+          form={form}
+          fields={editField ? [editField] : askableFields}
+          answers={answers}
+          onAnswer={answer}
+          onDone={() => {
+            setEditField(null)
+            setScreen('confirm')
+          }}
+          onBack={() => {
+            if (editField) {
+              setEditField(null)
+              setScreen('confirm')
+            } else setScreen('overview')
+          }}
+        />
+      )}
+
+      {screen === 'confirm' && form && (
+        <Confirm
+          lang={lang}
+          form={form}
+          answers={answers}
+          profile={profile}
+          onEditField={(field) => {
+            setEditField(field)
+            setScreen('fill')
+          }}
+          onConfirm={() => setScreen('checklist')}
+          onBack={() => setScreen('fill')}
+        />
+      )}
+
+      {screen === 'checklist' && form && (
+        <Checklist
+          lang={lang}
+          form={form}
+          issuedDocuments={issuedDocuments}
+          onContinue={() => setScreen('done')}
+          onBack={() => setScreen('confirm')}
+        />
+      )}
+
+      {screen === 'done' && form && (
+        <Done
+          lang={lang}
+          form={form}
+          answers={answers}
+          profile={profile}
+          onFillAnother={restart}
+          onStartOver={restart}
+        />
+      )}
+    </>
+  )
+}

@@ -1,0 +1,165 @@
+{
+  "id": "pan-49a",
+  "icon": "🪪",
+  "name": {
+    "en": "PAN Card Application (Form 49A)",
+    "hi": "पैन कार्ड आवेदन (फॉर्म 49A)"
+  },
+  "issuer": {
+    "en": "Income Tax Department, Government of India",
+    "hi": "आयकर विभाग, भारत सरकार"
+  },
+  "summary": {
+    "en": "To get a new PAN card. Needed to open most bank accounts and to file tax.",
+    "hi": "नया पैन कार्ड बनवाने के लिए। ज़्यादातर बैंक खाते खोलने और कर भरने के लिए ज़रूरी।"
+  },
+  "ocrKeywords": [
+    "form 49a",
+    "49a",
+    "permanent account number",
+    "application for allotment",
+    "income tax department",
+    "pan"
+  ],
+  "documents": [
+    { "en": "Aadhaar card", "hi": "आधार कार्ड", "digilockerType": "ADHAR" },
+    { "en": "Two passport size photographs", "hi": "दो पासपोर्ट साइज़ फोटो" },
+    { "en": "Proof of date of birth (Class 10 marksheet or birth certificate)", "hi": "जन्म तिथि का प्रमाण (दसवीं की अंकतालिका या जन्म प्रमाण पत्र)", "digilockerType": "MARKS" },
+    { "en": "Proof of address", "hi": "पते का प्रमाण" }
+  ],
+  "fields": [
+    {
+      "id": "full_name",
+      "label": { "en": "Full name", "hi": "पूरा नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": { "en": "What is your full name?", "hi": "आपका पूरा नाम क्या है?" },
+      "explain": {
+        "en": "This name will be printed on your PAN card forever. Changing it later needs a separate correction form and another fee, so check the spelling carefully.",
+        "hi": "यही नाम आपके पैन कार्ड पर हमेशा के लिए छपेगा। बाद में बदलने के लिए अलग सुधार फॉर्म और फिर से शुल्क लगता है, इसलिए वर्तनी ध्यान से जाँच लें।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "father_name",
+      "label": { "en": "Father's full name", "hi": "पिता का पूरा नाम" },
+      "rule": "name",
+      "source": "ask",
+      "question": {
+        "en": "What is your father's full name?",
+        "hi": "आपके पिता का पूरा नाम क्या है?"
+      },
+      "explain": {
+        "en": "Form 49A asks for the father's name even for married women, because PAN records follow the father's name. Write it as it appears on his documents.",
+        "hi": "फॉर्म 49A में विवाहित महिलाओं के लिए भी पिता का नाम पूछा जाता है, क्योंकि पैन रिकॉर्ड पिता के नाम पर चलता है। उनके दस्तावेज़ों के अनुसार लिखें।"
+      },
+      "example": "Ram Prasad"
+    },
+    {
+      "id": "dob",
+      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "rule": "date_past",
+      "source": "digilocker",
+      "profileKey": "dob",
+      "question": { "en": "What is your date of birth?", "hi": "आपकी जन्म तिथि क्या है?" },
+      "explain": {
+        "en": "Must match your date of birth proof exactly. A mismatch of even one day gets the application returned.",
+        "hi": "यह आपके जन्म तिथि प्रमाण से बिल्कुल मिलनी चाहिए। एक दिन का भी अंतर होने पर आवेदन वापस आ जाता है।"
+      },
+      "example": "14/08/1961"
+    },
+    {
+      "id": "gender",
+      "label": { "en": "Gender", "hi": "लिंग" },
+      "rule": "choice",
+      "source": "digilocker",
+      "profileKey": "gender",
+      "options": [
+        { "value": "Male", "en": "Male", "hi": "पुरुष" },
+        { "value": "Female", "en": "Female", "hi": "महिला" },
+        { "value": "Transgender", "en": "Transgender", "hi": "ट्रांसजेंडर" }
+      ],
+      "question": { "en": "Gender?", "hi": "लिंग?" },
+      "explain": {
+        "en": "Simply tick what appears on your Aadhaar so the two records agree.",
+        "hi": "वही चुनें जो आपके आधार पर है, ताकि दोनों रिकॉर्ड मिलते रहें।"
+      }
+    },
+    {
+      "id": "address",
+      "label": { "en": "Residential address", "hi": "निवास का पता" },
+      "rule": "text",
+      "source": "digilocker",
+      "profileKey": "address",
+      "question": { "en": "What is your address?", "hi": "आपका पता क्या है?" },
+      "explain": {
+        "en": "Your PAN card will be posted to this address. If nobody is home during the day, give an address where someone can receive it.",
+        "hi": "आपका पैन कार्ड इसी पते पर डाक से आएगा। अगर दिन में घर पर कोई नहीं रहता तो ऐसा पता दें जहाँ कोई कार्ड ले सके।"
+      }
+    },
+    {
+      "id": "pincode",
+      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "rule": "pincode",
+      "source": "digilocker",
+      "profileKey": "pincode",
+      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "explain": {
+        "en": "Six digits. A wrong PIN code is the most common reason a PAN card never arrives.",
+        "hi": "छह अंक। गलत पिन कोड ही सबसे आम वजह है कि पैन कार्ड कभी नहीं पहुँचता।"
+      },
+      "example": "302015"
+    },
+    {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": {
+        "en": "Please say your twelve digit Aadhaar number.",
+        "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "Linking Aadhaar to PAN is compulsory by law. An unlinked PAN becomes inoperative and cannot be used for banking.",
+        "hi": "कानून के अनुसार आधार को पैन से जोड़ना अनिवार्य है। बिना जुड़ा पैन निष्क्रिय हो जाता है और बैंकिंग में काम नहीं आता।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
+      "id": "mobile",
+      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
+      "rule": "mobile",
+      "source": "ask",
+      "question": {
+        "en": "What is your mobile number?",
+        "hi": "आपका मोबाइल नंबर क्या है?"
+      },
+      "explain": {
+        "en": "You will get an SMS with a tracking number to check where your PAN application has reached.",
+        "hi": "आपको एसएमएस से एक ट्रैकिंग नंबर मिलेगा जिससे आप देख सकते हैं कि आपका आवेदन कहाँ तक पहुँचा।"
+      },
+      "example": "9876543210"
+    },
+    {
+      "id": "source_of_income",
+      "label": { "en": "Source of income", "hi": "आय का स्रोत" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "Salary", "en": "Salary", "hi": "वेतन" },
+        { "value": "Business", "en": "Business or profession", "hi": "व्यापार या पेशा" },
+        { "value": "Agriculture", "en": "Agriculture", "hi": "खेती" },
+        { "value": "No income", "en": "No income", "hi": "कोई आय नहीं" }
+      ],
+      "question": {
+        "en": "Where does your income come from?",
+        "hi": "आपकी आय कहाँ से आती है?"
+      },
+      "explain": {
+        "en": "You may tick 'No income'. Students, homemakers and dependants get a PAN card this way and it is completely valid.",
+        "hi": "आप 'कोई आय नहीं' भी चुन सकते हैं। विद्यार्थी, गृहिणी और आश्रित इसी तरह पैन कार्ड बनवाते हैं और यह पूरी तरह मान्य है।"
+      }
+    }
+  ]
+}

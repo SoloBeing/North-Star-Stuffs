@@ -1,0 +1,173 @@
+{
+  "id": "caste-certificate",
+  "icon": "📜",
+  "name": {
+    "en": "Caste Certificate Application",
+    "hi": "जाति प्रमाण पत्र आवेदन"
+  },
+  "issuer": {
+    "en": "Revenue Department / Sub-Divisional Magistrate (State Government)",
+    "hi": "राजस्व विभाग / उपखंड अधिकारी (राज्य सरकार)"
+  },
+  "summary": {
+    "en": "Official proof of SC, ST or OBC status, for reservation in education and jobs.",
+    "hi": "एससी, एसटी या ओबीसी होने का सरकारी प्रमाण, शिक्षा और नौकरी में आरक्षण के लिए।"
+  },
+  "ocrKeywords": [
+    "caste certificate",
+    "jati praman patra",
+    "scheduled caste",
+    "scheduled tribe",
+    "other backward class",
+    "community certificate"
+  ],
+  "documents": [
+    { "en": "Aadhaar card", "hi": "आधार कार्ड", "digilockerType": "ADHAR" },
+    { "en": "Father's or grandfather's caste certificate, if the family has one", "hi": "पिता या दादा का जाति प्रमाण पत्र, अगर परिवार में हो", "digilockerType": "CASTE" },
+    { "en": "School leaving certificate showing caste", "hi": "जाति दर्शाने वाला स्कूल छोड़ने का प्रमाण पत्र" },
+    { "en": "Proof of residence", "hi": "निवास प्रमाण" },
+    { "en": "Self-declaration affidavit on stamp paper", "hi": "स्टाम्प पेपर पर स्वघोषणा शपथ पत्र" },
+    { "en": "Income certificate (only for OBC non-creamy layer)", "hi": "आय प्रमाण पत्र (केवल ओबीसी नॉन-क्रीमी लेयर के लिए)", "digilockerType": "INCMC" }
+  ],
+  "fields": [
+    {
+      "id": "applicant_name",
+      "label": { "en": "Applicant's full name", "hi": "आवेदक का पूरा नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": { "en": "What is your full name?", "hi": "आपका पूरा नाम क्या है?" },
+      "explain": {
+        "en": "Use the name exactly as it appears on your school records. This certificate stays valid for life, so an error here follows you for decades.",
+        "hi": "नाम बिल्कुल वैसा लिखें जैसा आपके स्कूल के रिकॉर्ड में है। यह प्रमाण पत्र जीवन भर मान्य रहता है, इसलिए यहाँ की गलती दशकों तक साथ चलती है।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "father_name",
+      "label": { "en": "Father's full name", "hi": "पिता का पूरा नाम" },
+      "rule": "name",
+      "source": "ask",
+      "question": {
+        "en": "What is your father's full name?",
+        "hi": "आपके पिता का पूरा नाम क्या है?"
+      },
+      "explain": {
+        "en": "Caste is recorded through the father's line in government records, so the office verifies your claim against his records.",
+        "hi": "सरकारी रिकॉर्ड में जाति पिता के वंश से दर्ज होती है, इसलिए कार्यालय आपके दावे को उन्हीं के रिकॉर्ड से जाँचता है।"
+      },
+      "example": "Ram Prasad"
+    },
+    {
+      "id": "dob",
+      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "rule": "date_past",
+      "source": "digilocker",
+      "profileKey": "dob",
+      "question": { "en": "What is your date of birth?", "hi": "आपकी जन्म तिथि क्या है?" },
+      "explain": {
+        "en": "Must match your Class 10 marksheet, which is the document the office trusts most.",
+        "hi": "यह दसवीं की अंकतालिका से मिलनी चाहिए, कार्यालय उसी दस्तावेज़ पर सबसे ज़्यादा भरोसा करता है।"
+      },
+      "example": "14/08/1961"
+    },
+    {
+      "id": "category",
+      "label": { "en": "Category", "hi": "श्रेणी" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "SC", "en": "Scheduled Caste (SC)", "hi": "अनुसूचित जाति (एससी)" },
+        { "value": "ST", "en": "Scheduled Tribe (ST)", "hi": "अनुसूचित जनजाति (एसटी)" },
+        { "value": "OBC", "en": "Other Backward Class (OBC)", "hi": "अन्य पिछड़ा वर्ग (ओबीसी)" }
+      ],
+      "question": {
+        "en": "Which category are you applying under?",
+        "hi": "आप किस श्रेणी में आवेदन कर रहे हैं?"
+      },
+      "explain": {
+        "en": "Each state keeps its own official list of which caste falls in which category, and the same caste can be in different categories in different states. The office will check your caste against your state's list.",
+        "hi": "हर राज्य की अपनी आधिकारिक सूची होती है कि कौन सी जाति किस श्रेणी में आती है, और एक ही जाति अलग-अलग राज्यों में अलग श्रेणी में हो सकती है। कार्यालय आपकी जाति को आपके राज्य की सूची से मिलाएगा।"
+      }
+    },
+    {
+      "id": "caste_name",
+      "label": { "en": "Caste name", "hi": "जाति का नाम" },
+      "rule": "text",
+      "source": "ask",
+      "question": { "en": "What is your caste?", "hi": "आपकी जाति क्या है?" },
+      "explain": {
+        "en": "Write the caste name exactly as it is spelled in your state's official list. A different spelling from the one in the government list is a very common reason for rejection.",
+        "hi": "जाति का नाम बिल्कुल वैसे लिखें जैसा आपके राज्य की आधिकारिक सूची में है। सरकारी सूची से अलग वर्तनी होना अस्वीकार होने की बहुत आम वजह है।"
+      },
+      "example": "Meghwal"
+    },
+    {
+      "id": "address",
+      "label": { "en": "Full residential address", "hi": "पूरा निवास पता" },
+      "rule": "text",
+      "source": "digilocker",
+      "profileKey": "address",
+      "question": { "en": "What is your full address?", "hi": "आपका पूरा पता क्या है?" },
+      "explain": {
+        "en": "Caste certificates are issued by the state where your family has lived, not where you happen to be now. Give your permanent family address.",
+        "hi": "जाति प्रमाण पत्र उसी राज्य से बनता है जहाँ आपका परिवार रहता आया है, न कि जहाँ आप इस समय हैं। अपना स्थायी पारिवारिक पता दें।"
+      }
+    },
+    {
+      "id": "pincode",
+      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "rule": "pincode",
+      "source": "digilocker",
+      "profileKey": "pincode",
+      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "explain": {
+        "en": "Six digits of your area's postal code.",
+        "hi": "आपके इलाके के डाक कोड के छह अंक।"
+      },
+      "example": "302015"
+    },
+    {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": {
+        "en": "Please say your twelve digit Aadhaar number.",
+        "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "Used to confirm your identity and link the certificate to you permanently.",
+        "hi": "आपकी पहचान की पुष्टि करने और प्रमाण पत्र को स्थायी रूप से आपसे जोड़ने के लिए।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
+      "id": "purpose",
+      "label": { "en": "Purpose of the certificate", "hi": "प्रमाण पत्र का उद्देश्य" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "Why do you need this certificate?",
+        "hi": "आपको यह प्रमाण पत्र किस लिए चाहिए?"
+      },
+      "explain": {
+        "en": "For example, for college admission, for a government job application, or for a scholarship.",
+        "hi": "जैसे कॉलेज में दाखिले के लिए, सरकारी नौकरी के आवेदन के लिए, या छात्रवृत्ति के लिए।"
+      },
+      "example": "For college admission"
+    },
+    {
+      "id": "mobile",
+      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
+      "rule": "mobile",
+      "source": "ask",
+      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
+      "explain": {
+        "en": "You will get an SMS when the certificate is ready.",
+        "hi": "प्रमाण पत्र तैयार होने पर आपको एसएमएस मिलेगा।"
+      },
+      "example": "9876543210"
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "id": "ayushman-card",
+  "icon": "🏥",
+  "name": {
+    "en": "Ayushman Bharat Card (PM-JAY)",
+    "hi": "आयुष्मान भारत कार्ड (पीएम-जय)"
+  },
+  "issuer": {
+    "en": "National Health Authority, Ministry of Health",
+    "hi": "राष्ट्रीय स्वास्थ्य प्राधिकरण, स्वास्थ्य मंत्रालय"
+  },
+  "summary": {
+    "en": "Free hospital treatment up to ₹5 lakh per family per year.",
+    "hi": "हर परिवार को साल में ₹5 लाख तक मुफ़्त अस्पताल इलाज।"
+  },
+  "ocrKeywords": [
+    "ayushman bharat",
+    "pm-jay",
+    "pmjay",
+    "pradhan mantri jan arogya",
+    "health card",
+    "golden card"
+  ],
+  "documents": [
+    { "en": "Aadhaar card", "hi": "आधार कार्ड", "digilockerType": "ADHAR" },
+    { "en": "Ration card", "hi": "राशन कार्ड" },
+    { "en": "Mobile number linked to Aadhaar", "hi": "आधार से जुड़ा मोबाइल नंबर" },
+    { "en": "SECC family identification letter, if you received one", "hi": "एसईसीसी परिवार पहचान पत्र, अगर मिला हो" }
+  ],
+  "fields": [
+    {
+      "id": "beneficiary_name",
+      "label": { "en": "Beneficiary's full name", "hi": "लाभार्थी का पूरा नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": { "en": "What is your full name?", "hi": "आपका पूरा नाम क्या है?" },
+      "explain": {
+        "en": "The name must match your Aadhaar. At the hospital they check this name against the card before starting free treatment.",
+        "hi": "नाम आधार से मिलना चाहिए। अस्पताल में मुफ़्त इलाज शुरू करने से पहले यही नाम कार्ड से मिलाया जाता है।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "dob",
+      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "rule": "date_past",
+      "source": "digilocker",
+      "profileKey": "dob",
+      "question": { "en": "What is your date of birth?", "hi": "आपकी जन्म तिथि क्या है?" },
+      "explain": {
+        "en": "There is no age limit for this scheme. Newborn children and very elderly people are both covered.",
+        "hi": "इस योजना में उम्र की कोई सीमा नहीं है। नवजात बच्चे और बहुत बुज़ुर्ग दोनों शामिल हैं।"
+      },
+      "example": "14/08/1961"
+    },
+    {
+      "id": "gender",
+      "label": { "en": "Gender", "hi": "लिंग" },
+      "rule": "choice",
+      "source": "digilocker",
+      "profileKey": "gender",
+      "options": [
+        { "value": "Male", "en": "Male", "hi": "पुरुष" },
+        { "value": "Female", "en": "Female", "hi": "महिला" },
+        { "value": "Transgender", "en": "Transgender", "hi": "ट्रांसजेंडर" }
+      ],
+      "question": { "en": "Gender?", "hi": "लिंग?" },
+      "explain": {
+        "en": "Tick what appears on your Aadhaar.",
+        "hi": "वही चुनें जो आपके आधार पर है।"
+      }
+    },
+    {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": {
+        "en": "Please say your twelve digit Aadhaar number.",
+        "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "Aadhaar is used to find your family in the government's eligibility list. Your fingerprint is checked against it at the hospital.",
+        "hi": "आधार से सरकार की पात्रता सूची में आपका परिवार खोजा जाता है। अस्पताल में आपके अंगूठे का निशान इसी से मिलाया जाता है।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
+      "id": "ration_card_number",
+      "label": { "en": "Ration card number", "hi": "राशन कार्ड संख्या" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "What is your ration card number?",
+        "hi": "आपका राशन कार्ड नंबर क्या है?"
+      },
+      "explain": {
+        "en": "Eligibility for this scheme is decided family by family, and the ration card is what proves who is in your family.",
+        "hi": "इस योजना की पात्रता परिवार के हिसाब से तय होती है, और राशन कार्ड ही यह साबित करता है कि आपके परिवार में कौन-कौन है।"
+      },
+      "example": "RJ12345678901"
+    },
+    {
+      "id": "address",
+      "label": { "en": "Address", "hi": "पता" },
+      "rule": "text",
+      "source": "digilocker",
+      "profileKey": "address",
+      "question": { "en": "What is your address?", "hi": "आपका पता क्या है?" },
+      "explain": {
+        "en": "Used to show you which empanelled hospitals near you accept the Ayushman card.",
+        "hi": "इससे आपको यह दिखाया जाता है कि आपके पास कौन से सूचीबद्ध अस्पताल आयुष्मान कार्ड लेते हैं।"
+      }
+    },
+    {
+      "id": "pincode",
+      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "rule": "pincode",
+      "source": "digilocker",
+      "profileKey": "pincode",
+      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "explain": {
+        "en": "Six digits of your area's postal code.",
+        "hi": "आपके इलाके के डाक कोड के छह अंक।"
+      },
+      "example": "302015"
+    },
+    {
+      "id": "family_members",
+      "label": { "en": "Number of family members", "hi": "परिवार के सदस्यों की संख्या" },
+      "rule": "amount",
+      "source": "ask",
+      "question": {
+        "en": "How many members are there in your family?",
+        "hi": "आपके परिवार में कितने सदस्य हैं?"
+      },
+      "explain": {
+        "en": "The five lakh rupee cover is shared by the whole family in one year, not five lakh each. Every member still needs their own card.",
+        "hi": "पाँच लाख रुपये का कवर पूरे परिवार के लिए एक साल में होता है, हर सदस्य के लिए अलग पाँच लाख नहीं। फिर भी हर सदस्य का अपना कार्ड बनना ज़रूरी है।"
+      },
+      "example": "5"
+    },
+    {
+      "id": "mobile",
+      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
+      "rule": "mobile",
+      "source": "ask",
+      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
+      "explain": {
+        "en": "An OTP is sent here to confirm your identity when the card is made.",
+        "hi": "कार्ड बनते समय पहचान की पुष्टि के लिए यहाँ ओटीपी भेजा जाता है।"
+      },
+      "example": "9876543210"
+    }
+  ]
+}

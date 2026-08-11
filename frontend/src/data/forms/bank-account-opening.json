@@ -1,0 +1,188 @@
+{
+  "id": "bank-account-opening",
+  "icon": "🏦",
+  "name": {
+    "en": "Bank Account Opening Form (KYC)",
+    "hi": "बैंक खाता खोलने का फॉर्म (केवाईसी)"
+  },
+  "issuer": {
+    "en": "Any scheduled commercial bank (RBI KYC format)",
+    "hi": "कोई भी अनुसूचित वाणिज्यिक बैंक (आरबीआई केवाईसी प्रारूप)"
+  },
+  "summary": {
+    "en": "To open a savings account, including a zero-balance Jan Dhan account.",
+    "hi": "बचत खाता खोलने के लिए, जन धन शून्य-बैलेंस खाता भी शामिल।"
+  },
+  "ocrKeywords": [
+    "account opening form",
+    "know your customer",
+    "kyc",
+    "savings account",
+    "jan dhan",
+    "customer information"
+  ],
+  "documents": [
+    { "en": "Aadhaar card", "hi": "आधार कार्ड", "digilockerType": "ADHAR" },
+    { "en": "PAN card, or Form 60 if you do not have a PAN", "hi": "पैन कार्ड, या पैन न होने पर फॉर्म 60", "digilockerType": "PANCR" },
+    { "en": "Two passport size photographs", "hi": "दो पासपोर्ट साइज़ फोटो" },
+    { "en": "Proof of address, if different from Aadhaar", "hi": "पते का प्रमाण, अगर आधार से अलग हो" }
+  ],
+  "fields": [
+    {
+      "id": "applicant_name",
+      "label": { "en": "Applicant's full name", "hi": "आवेदक का पूरा नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": { "en": "What is your full name?", "hi": "आपका पूरा नाम क्या है?" },
+      "explain": {
+        "en": "Must match your Aadhaar exactly. The bank checks this letter by letter, and a mismatch is the most common reason an account is refused at the counter.",
+        "hi": "यह आपके आधार से बिल्कुल मिलना चाहिए। बैंक इसे अक्षर-अक्षर जाँचता है, और यही सबसे आम वजह है कि काउंटर पर खाता खोलने से मना कर दिया जाता है।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "dob",
+      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "rule": "date_past",
+      "source": "digilocker",
+      "profileKey": "dob",
+      "question": { "en": "What is your date of birth?", "hi": "आपकी जन्म तिथि क्या है?" },
+      "explain": {
+        "en": "Senior citizens aged 60 and above get a higher interest rate, so this date matters for your money.",
+        "hi": "60 साल या उससे ऊपर के वरिष्ठ नागरिकों को ज़्यादा ब्याज मिलता है, इसलिए यह तारीख आपके पैसे के लिए मायने रखती है।"
+      },
+      "example": "14/08/1961"
+    },
+    {
+      "id": "gender",
+      "label": { "en": "Gender", "hi": "लिंग" },
+      "rule": "choice",
+      "source": "digilocker",
+      "profileKey": "gender",
+      "options": [
+        { "value": "Male", "en": "Male", "hi": "पुरुष" },
+        { "value": "Female", "en": "Female", "hi": "महिला" },
+        { "value": "Transgender", "en": "Transgender", "hi": "ट्रांसजेंडर" }
+      ],
+      "question": { "en": "Gender?", "hi": "लिंग?" },
+      "explain": {
+        "en": "Tick what appears on your Aadhaar.",
+        "hi": "वही चुनें जो आपके आधार पर है।"
+      }
+    },
+    {
+      "id": "address",
+      "label": { "en": "Address", "hi": "पता" },
+      "rule": "text",
+      "source": "digilocker",
+      "profileKey": "address",
+      "question": { "en": "What is your address?", "hi": "आपका पता क्या है?" },
+      "explain": {
+        "en": "The bank posts your ATM card, cheque book and passbook to this address.",
+        "hi": "बैंक आपका एटीएम कार्ड, चेकबुक और पासबुक इसी पते पर भेजता है।"
+      }
+    },
+    {
+      "id": "pincode",
+      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "rule": "pincode",
+      "source": "digilocker",
+      "profileKey": "pincode",
+      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "explain": {
+        "en": "Six digits. Also decides which branch is nearest to you.",
+        "hi": "छह अंक। इससे यह भी तय होता है कि आपके सबसे पास कौन सी शाखा है।"
+      },
+      "example": "302015"
+    },
+    {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": {
+        "en": "Please say your twelve digit Aadhaar number.",
+        "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "Aadhaar is accepted as both identity proof and address proof, so it alone is enough to open the account.",
+        "hi": "आधार पहचान प्रमाण और पता प्रमाण दोनों के रूप में मान्य है, इसलिए अकेला आधार ही खाता खोलने के लिए काफ़ी है।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
+      "id": "pan",
+      "label": { "en": "PAN number", "hi": "पैन नंबर" },
+      "rule": "pan",
+      "source": "ask",
+      "question": { "en": "What is your PAN number?", "hi": "आपका पैन नंबर क्या है?" },
+      "explain": {
+        "en": "Ten characters, five letters then four digits then one letter. If you do not have a PAN you can sign Form 60 at the branch instead — it is free and takes two minutes.",
+        "hi": "दस अक्षर — पाँच अक्षर, फिर चार अंक, फिर एक अक्षर। अगर आपके पास पैन नहीं है तो शाखा में फॉर्म 60 भर सकते हैं — यह मुफ़्त है और दो मिनट लगते हैं।"
+      },
+      "example": "ABCDE1234F"
+    },
+    {
+      "id": "mobile",
+      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
+      "rule": "mobile",
+      "source": "ask",
+      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
+      "explain": {
+        "en": "Every deposit and withdrawal will be sent to this number by SMS. This is how you notice if someone touches your money.",
+        "hi": "हर जमा और निकासी का एसएमएस इसी नंबर पर आएगा। इसी से आपको पता चलेगा कि कोई आपके पैसे को छू तो नहीं रहा।"
+      },
+      "example": "9876543210"
+    },
+    {
+      "id": "account_type",
+      "label": { "en": "Type of account", "hi": "खाते का प्रकार" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "BSBDA", "en": "Zero balance (Jan Dhan / BSBDA)", "hi": "शून्य बैलेंस (जन धन / बीएसबीडीए)" },
+        { "value": "Savings", "en": "Regular savings account", "hi": "सामान्य बचत खाता" },
+        { "value": "Joint", "en": "Joint account", "hi": "संयुक्त खाता" }
+      ],
+      "question": {
+        "en": "Which type of account do you want to open?",
+        "hi": "आप कौन सा खाता खोलना चाहते हैं?"
+      },
+      "explain": {
+        "en": "A zero balance account needs no minimum money at all and charges no penalty if it is empty. Every bank must offer it. A regular savings account may require you to keep one to five thousand rupees.",
+        "hi": "शून्य बैलेंस खाते में कोई न्यूनतम राशि नहीं रखनी पड़ती और खाली रहने पर जुर्माना भी नहीं लगता। हर बैंक को यह देना ही होता है। सामान्य बचत खाते में एक से पाँच हज़ार रुपये रखने पड़ सकते हैं।"
+      }
+    },
+    {
+      "id": "nominee_name",
+      "label": { "en": "Nominee's name", "hi": "नामांकित व्यक्ति का नाम" },
+      "rule": "name",
+      "source": "ask",
+      "question": {
+        "en": "Who do you want to name as your nominee?",
+        "hi": "आप किसे अपना नामांकित व्यक्ति बनाना चाहते हैं?"
+      },
+      "explain": {
+        "en": "The nominee is the person who receives the money in your account if something happens to you. Without a nominee your family may need a court order to get the money. Naming one costs nothing and can be changed any time.",
+        "hi": "नामांकित व्यक्ति वह है जिसे आपके साथ कुछ हो जाने पर आपके खाते का पैसा मिलेगा। नामांकित न होने पर आपके परिवार को पैसा पाने के लिए अदालत के आदेश की ज़रूरत पड़ सकती है। यह मुफ़्त है और कभी भी बदला जा सकता है।"
+      },
+      "example": "Ram Prasad"
+    },
+    {
+      "id": "nominee_relation",
+      "label": { "en": "Nominee's relationship to you", "hi": "नामांकित व्यक्ति से आपका रिश्ता" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "What is that person's relationship to you?",
+        "hi": "उस व्यक्ति से आपका क्या रिश्ता है?"
+      },
+      "explain": {
+        "en": "For example son, daughter, husband, wife, brother or sister.",
+        "hi": "जैसे बेटा, बेटी, पति, पत्नी, भाई या बहन।"
+      },
+      "example": "Son"
+    }
+  ]
+}

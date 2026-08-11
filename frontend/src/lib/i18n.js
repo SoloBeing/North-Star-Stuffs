@@ -1,0 +1,148 @@
+/**
+ * UI strings, in both languages.
+ *
+ * Flat keys, no library. Every string the citizen can see or hear lives here,
+ * so a missing translation is a visible gap in one file rather than a hunt
+ * through twenty components.
+ */
+
+export const STRINGS = {
+  appName: { en: 'FormMitra', hi: 'फॉर्ममित्र' },
+  tagline: {
+    en: 'Fill any government form by speaking',
+    hi: 'बोलकर कोई भी सरकारी फॉर्म भरें',
+  },
+
+  // Consent
+  consentTitle: { en: 'Before we begin', hi: 'शुरू करने से पहले' },
+  consentBody: {
+    en: 'FormMitra fills forms on your phone. Your answers stay on this device and are never sent to us or stored on any server.',
+    hi: 'फॉर्ममित्र आपके फोन पर ही फॉर्म भरता है। आपके जवाब इसी फोन में रहते हैं, हमें या किसी सर्वर पर नहीं भेजे जाते।',
+  },
+  consentPoint1: {
+    en: 'Nothing you fill is saved on our servers',
+    hi: 'आपकी भरी हुई जानकारी हमारे सर्वर पर नहीं रखी जाती',
+  },
+  consentPoint2: {
+    en: 'We never see your Aadhaar number or OTP',
+    hi: 'हम आपका आधार नंबर या ओटीपी कभी नहीं देखते',
+  },
+  consentPoint3: {
+    en: 'You can erase everything with one tap, any time',
+    hi: 'आप एक टैप से कभी भी सब कुछ मिटा सकते हैं',
+  },
+  agree: { en: 'I agree, continue', hi: 'मैं सहमत हूँ, आगे बढ़ें' },
+  chooseLanguage: { en: 'Choose your language', hi: 'अपनी भाषा चुनें' },
+
+  // Home
+  pickForm: { en: 'Which form do you need?', hi: 'आपको कौन सा फॉर्म चाहिए?' },
+  scanAny: { en: 'Scan any form', hi: 'कोई भी फॉर्म स्कैन करें' },
+  scanAnyHint: {
+    en: 'Take a photo and we will recognise it',
+    hi: 'फोटो लीजिए, हम पहचान लेंगे',
+  },
+  loginDigilocker: { en: 'Login with DigiLocker', hi: 'डिजिलॉकर से लॉगिन करें' },
+  loginHint: {
+    en: 'Fills your name, date of birth and address automatically',
+    hi: 'आपका नाम, जन्म तिथि और पता अपने आप भर देता है',
+  },
+  loggedInAs: { en: 'Signed in as', hi: 'साइन इन:' },
+  verified: { en: 'DigiLocker verified', hi: 'डिजिलॉकर से सत्यापित' },
+  clearAll: { en: 'Erase my data', hi: 'मेरा डेटा मिटाएँ' },
+  offlineReady: { en: 'Works offline', hi: 'बिना इंटरनेट चलता है' },
+
+  // Scan
+  scanTitle: { en: 'Photograph the form', hi: 'फॉर्म की फोटो लीजिए' },
+  scanHint: {
+    en: 'Hold the phone steady above the whole page, in good light',
+    hi: 'फोन को पूरे पन्ने के ऊपर सीधा पकड़ें, अच्छी रोशनी में',
+  },
+  takePhoto: { en: 'Open camera', hi: 'कैमरा खोलें' },
+  choosePhoto: { en: 'Choose a photo', hi: 'फोटो चुनें' },
+  reading: { en: 'Reading the form…', hi: 'फॉर्म पढ़ा जा रहा है…' },
+  recognised: { en: 'This looks like', hi: 'यह लगता है' },
+  notRecognised: {
+    en: 'We could not recognise this form',
+    hi: 'हम इस फॉर्म को पहचान नहीं पाए',
+  },
+  pickManually: {
+    en: 'Please choose it from the list instead',
+    hi: 'कृपया सूची में से चुन लीजिए',
+  },
+  yesCorrect: { en: 'Yes, that is right', hi: 'हाँ, यही है' },
+  noPickAnother: { en: 'No, choose another', hi: 'नहीं, दूसरा चुनें' },
+
+  // Form overview
+  tapToUnderstand: {
+    en: 'Tap any field to hear what it means',
+    hi: 'किसी भी जगह पर टैप करके सुनिए कि उसका क्या मतलब है',
+  },
+  fieldsTotal: { en: 'fields in this form', hi: 'जगह इस फॉर्म में' },
+  autoFilled: { en: 'already filled from DigiLocker', hi: 'डिजिलॉकर से पहले ही भरे' },
+  weWillAsk: { en: 'we will ask you', hi: 'हम आपसे पूछेंगे' },
+  startFilling: { en: 'Start filling', hi: 'भरना शुरू करें' },
+  listen: { en: 'Listen', hi: 'सुनिए' },
+
+  // Guided fill
+  question: { en: 'Question', hi: 'सवाल' },
+  of: { en: 'of', hi: 'में से' },
+  tapToSpeak: { en: 'Tap and speak', hi: 'टैप करके बोलिए' },
+  listening: { en: 'Listening…', hi: 'सुन रहे हैं…' },
+  typeInstead: { en: 'Or type it', hi: 'या टाइप कीजिए' },
+  repeatQuestion: { en: 'Say it again', hi: 'फिर से बोलिए' },
+  whatIsThis: { en: 'What is this?', hi: 'यह क्या है?' },
+  next: { en: 'Next', hi: 'आगे' },
+  back: { en: 'Back', hi: 'पीछे' },
+  skip: { en: 'Skip for now', hi: 'अभी छोड़ें' },
+  example: { en: 'Example', hi: 'उदाहरण' },
+  micBlocked: {
+    en: 'Microphone is not available. Please type your answer.',
+    hi: 'माइक्रोफोन उपलब्ध नहीं है। कृपया अपना जवाब टाइप कीजिए।',
+  },
+  didNotHear: {
+    en: 'We did not hear anything. Please try again or type it.',
+    hi: 'हमें कुछ सुनाई नहीं दिया। फिर कोशिश कीजिए या टाइप कीजिए।',
+  },
+
+  // Confirm
+  confirmTitle: { en: 'Please check your answers', hi: 'कृपया अपने जवाब जाँच लें' },
+  confirmHint: {
+    en: 'We will read each one aloud. Tap any answer to change it.',
+    hi: 'हम हर जवाब पढ़कर सुनाएँगे। बदलने के लिए किसी भी जवाब पर टैप कीजिए।',
+  },
+  readAloud: { en: 'Read everything aloud', hi: 'सब कुछ पढ़कर सुनाएँ' },
+  stopReading: { en: 'Stop', hi: 'रोकें' },
+  isThisCorrect: { en: 'is this correct?', hi: 'सही है?' },
+  change: { en: 'Change', hi: 'बदलें' },
+  allCorrect: { en: 'Everything is correct', hi: 'सब सही है' },
+
+  // Checklist
+  checklistTitle: { en: 'Documents to carry', hi: 'साथ ले जाने वाले दस्तावेज़' },
+  checklistHint: {
+    en: 'Take these with you when you submit the form',
+    hi: 'फॉर्म जमा करते समय ये साथ ले जाइए',
+  },
+  youHaveThis: { en: 'You already have this in DigiLocker', hi: 'यह आपके डिजिलॉकर में पहले से है' },
+  needToArrange: { en: 'You need to arrange this', hi: 'यह आपको जुटाना होगा' },
+
+  // Done
+  downloadPdf: { en: 'Download filled form', hi: 'भरा हुआ फॉर्म डाउनलोड करें' },
+  creatingPdf: { en: 'Creating your form…', hi: 'आपका फॉर्म बन रहा है…' },
+  doneTitle: { en: 'Your form is ready', hi: 'आपका फॉर्म तैयार है' },
+  doneBody: {
+    en: 'The file has been saved to this phone. Print it, sign it, and submit it with the documents listed.',
+    hi: 'फाइल इसी फोन में सहेज ली गई है। इसे छापिए, हस्ताक्षर कीजिए, और बताए गए दस्तावेज़ों के साथ जमा कीजिए।',
+  },
+  fillAnother: { en: 'Fill another form', hi: 'दूसरा फॉर्म भरें' },
+  startOver: { en: 'Start again', hi: 'फिर से शुरू करें' },
+  notSubmitted: {
+    en: 'This is a filled printable form, not an online submission. You still need to submit it at the office.',
+    hi: 'यह भरा हुआ छापने योग्य फॉर्म है, ऑनलाइन जमा नहीं हुआ है। आपको इसे कार्यालय में जमा करना होगा।',
+  },
+}
+
+export function t(key, lang = 'hi') {
+  const entry = STRINGS[key]
+  if (!entry) return key
+  return entry[lang] ?? entry.en
+}

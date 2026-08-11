@@ -1,0 +1,147 @@
+{
+  "id": "rti-application",
+  "icon": "⚖️",
+  "name": {
+    "en": "RTI Application (Right to Information)",
+    "hi": "आरटीआई आवेदन (सूचना का अधिकार)"
+  },
+  "issuer": {
+    "en": "Public Information Officer of the concerned department",
+    "hi": "संबंधित विभाग के लोक सूचना अधिकारी"
+  },
+  "summary": {
+    "en": "To formally ask any government office for information. Fee is ₹10, and free if you are below poverty line.",
+    "hi": "किसी भी सरकारी कार्यालय से औपचारिक रूप से जानकारी माँगने के लिए। शुल्क ₹10, और गरीबी रेखा से नीचे होने पर मुफ़्त।"
+  },
+  "ocrKeywords": [
+    "right to information",
+    "rti",
+    "public information officer",
+    "section 6(1)",
+    "suchna ka adhikar",
+    "information sought"
+  ],
+  "documents": [
+    { "en": "Aadhaar card or any identity proof", "hi": "आधार कार्ड या कोई पहचान प्रमाण", "digilockerType": "ADHAR" },
+    { "en": "₹10 postal order, court fee stamp, or cash receipt", "hi": "₹10 का पोस्टल ऑर्डर, कोर्ट फीस स्टाम्प, या नकद रसीद" },
+    { "en": "BPL card, if claiming fee exemption", "hi": "बीपीएल कार्ड, अगर शुल्क माफ़ी चाहते हैं" }
+  ],
+  "fields": [
+    {
+      "id": "applicant_name",
+      "label": { "en": "Applicant's full name", "hi": "आवेदक का पूरा नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": { "en": "What is your full name?", "hi": "आपका पूरा नाम क्या है?" },
+      "explain": {
+        "en": "Any Indian citizen can file an RTI. You do not have to explain who you are or why you want the information.",
+        "hi": "कोई भी भारतीय नागरिक आरटीआई दायर कर सकता है। आपको यह बताने की ज़रूरत नहीं कि आप कौन हैं या जानकारी क्यों चाहिए।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "address",
+      "label": { "en": "Full postal address", "hi": "पूरा डाक पता" },
+      "rule": "text",
+      "source": "digilocker",
+      "profileKey": "address",
+      "question": {
+        "en": "What is your full postal address?",
+        "hi": "आपका पूरा डाक पता क्या है?"
+      },
+      "explain": {
+        "en": "The reply comes to you by post at this address, so it must be complete and correct.",
+        "hi": "जवाब इसी पते पर डाक से आएगा, इसलिए यह पूरा और सही होना चाहिए।"
+      }
+    },
+    {
+      "id": "pincode",
+      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "rule": "pincode",
+      "source": "digilocker",
+      "profileKey": "pincode",
+      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "explain": {
+        "en": "Six digits. Without it the reply can be delayed by weeks.",
+        "hi": "छह अंक। इसके बिना जवाब आने में हफ़्तों की देरी हो सकती है।"
+      },
+      "example": "302015"
+    },
+    {
+      "id": "public_authority",
+      "label": { "en": "Department you are asking", "hi": "जिस विभाग से पूछ रहे हैं" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "Which government department do you want information from?",
+        "hi": "आप किस सरकारी विभाग से जानकारी चाहते हैं?"
+      },
+      "explain": {
+        "en": "Name the office that actually holds the information — for example the tehsil office, the electricity board, or a specific hospital. If you send it to the wrong office they must forward it within five days, but that wastes time.",
+        "hi": "उस कार्यालय का नाम लिखें जिसके पास सच में वह जानकारी है — जैसे तहसील कार्यालय, बिजली बोर्ड, या कोई अस्पताल। गलत कार्यालय भेजने पर उन्हें पाँच दिन में आगे भेजना पड़ता है, पर समय बर्बाद होता है।"
+      },
+      "example": "Tehsil Office, Jaipur"
+    },
+    {
+      "id": "information_sought",
+      "label": { "en": "Information you want", "hi": "आप कौन सी जानकारी चाहते हैं" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "What information do you want to ask for?",
+        "hi": "आप कौन सी जानकारी माँगना चाहते हैं?"
+      },
+      "explain": {
+        "en": "Ask for specific facts, documents or file notings — for example 'the current status of my pension application dated 12 March 2026'. Do not ask 'why' questions. The law requires them to give you information they hold, not to explain or justify their decisions.",
+        "hi": "ठोस तथ्य, दस्तावेज़ या फाइल की टिप्पणियाँ माँगें — जैसे '12 मार्च 2026 को दिए मेरे पेंशन आवेदन की वर्तमान स्थिति'। 'क्यों' वाले सवाल न पूछें। कानून के अनुसार उन्हें अपने पास मौजूद जानकारी देनी होती है, अपने फैसलों की सफाई नहीं देनी होती।"
+      },
+      "example": "Current status of pension application dated 12/03/2026"
+    },
+    {
+      "id": "period_of_information",
+      "label": { "en": "Time period of the information", "hi": "जानकारी की अवधि" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "For which time period do you need this information?",
+        "hi": "आपको यह जानकारी किस अवधि की चाहिए?"
+      },
+      "explain": {
+        "en": "For example, from January 2026 to today. Giving a clear period makes it much harder for the office to refuse your request as too vague.",
+        "hi": "जैसे जनवरी 2026 से आज तक। स्पष्ट अवधि देने पर कार्यालय के लिए आपके आवेदन को 'अस्पष्ट' कहकर मना करना बहुत मुश्किल हो जाता है।"
+      },
+      "example": "January 2026 to August 2026"
+    },
+    {
+      "id": "bpl_status",
+      "label": { "en": "Below poverty line?", "hi": "क्या गरीबी रेखा से नीचे हैं?" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "No", "en": "No — I will pay the ₹10 fee", "hi": "नहीं — मैं ₹10 शुल्क दूँगा/दूँगी" },
+        { "value": "Yes", "en": "Yes — I have a BPL card (no fee)", "hi": "हाँ — मेरे पास बीपीएल कार्ड है (कोई शुल्क नहीं)" }
+      ],
+      "question": {
+        "en": "Do you have a below poverty line card?",
+        "hi": "क्या आपके पास गरीबी रेखा से नीचे का कार्ड है?"
+      },
+      "explain": {
+        "en": "If you hold a BPL card the entire RTI is free — no application fee and no charge for the photocopies. Attach a copy of the card.",
+        "hi": "अगर आपके पास बीपीएल कार्ड है तो पूरी आरटीआई मुफ़्त है — न आवेदन शुल्क, न फोटोकॉपी का पैसा। कार्ड की एक प्रति साथ लगाएँ।"
+      }
+    },
+    {
+      "id": "mobile",
+      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
+      "rule": "mobile",
+      "source": "ask",
+      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
+      "explain": {
+        "en": "Optional, but useful if the officer needs to clarify your question. By law you must get a reply within 30 days.",
+        "hi": "ज़रूरी नहीं, पर अगर अधिकारी को आपका सवाल समझना हो तो काम आता है। कानून के अनुसार आपको 30 दिन में जवाब मिलना चाहिए।"
+      },
+      "example": "9876543210"
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "id": "pension-life-certificate",
+  "icon": "👵",
+  "name": {
+    "en": "Pension Life Certificate (Jeevan Pramaan)",
+    "hi": "पेंशन जीवन प्रमाण पत्र (जीवन प्रमाण)"
+  },
+  "issuer": {
+    "en": "Department of Pension and Pensioners' Welfare",
+    "hi": "पेंशन एवं पेंशनभोगी कल्याण विभाग"
+  },
+  "summary": {
+    "en": "Yearly proof that a pensioner is alive. Without it, the pension stops.",
+    "hi": "हर साल यह प्रमाण कि पेंशनभोगी जीवित है। इसके बिना पेंशन रुक जाती है।"
+  },
+  "ocrKeywords": [
+    "life certificate",
+    "jeevan pramaan",
+    "pensioner",
+    "ppo number",
+    "digital life certificate",
+    "existence certificate"
+  ],
+  "documents": [
+    { "en": "Aadhaar card", "hi": "आधार कार्ड", "digilockerType": "ADHAR" },
+    { "en": "PPO (Pension Payment Order) number", "hi": "पीपीओ (पेंशन भुगतान आदेश) नंबर" },
+    { "en": "Bank passbook of the pension account", "hi": "पेंशन खाते की बैंक पासबुक" },
+    { "en": "Mobile number linked to Aadhaar", "hi": "आधार से जुड़ा मोबाइल नंबर" }
+  ],
+  "fields": [
+    {
+      "id": "pensioner_name",
+      "label": { "en": "Pensioner's full name", "hi": "पेंशनभोगी का पूरा नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": {
+        "en": "What is the pensioner's full name?",
+        "hi": "पेंशनभोगी का पूरा नाम क्या है?"
+      },
+      "explain": {
+        "en": "Write the name exactly as it appears on the pension order. Even a small spelling difference can hold up the pension.",
+        "hi": "नाम बिल्कुल वैसा लिखें जैसा पेंशन आदेश पर है। छोटी सी वर्तनी की गलती से भी पेंशन रुक सकती है।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "dob",
+      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "rule": "date_past",
+      "source": "digilocker",
+      "profileKey": "dob",
+      "question": { "en": "What is your date of birth?", "hi": "आपकी जन्म तिथि क्या है?" },
+      "explain": {
+        "en": "Used to confirm your age. Pensioners above 80 receive an additional amount automatically.",
+        "hi": "आपकी उम्र की पुष्टि के लिए। 80 साल से ऊपर के पेंशनभोगियों को अपने आप अतिरिक्त राशि मिलती है।"
+      },
+      "example": "14/08/1961"
+    },
+    {
+      "id": "ppo_number",
+      "label": { "en": "PPO number", "hi": "पीपीओ नंबर" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "What is your P P O number?",
+        "hi": "आपका पीपीओ नंबर क्या है?"
+      },
+      "explain": {
+        "en": "PPO means Pension Payment Order. It is the number printed at the top of the pension book the department gave you when your pension started. This is the single most important number on this form.",
+        "hi": "पीपीओ का मतलब है पेंशन भुगतान आदेश। यह वह नंबर है जो पेंशन शुरू होने पर विभाग से मिली पेंशन किताब के ऊपर छपा होता है। इस फॉर्म का यही सबसे ज़रूरी नंबर है।"
+      },
+      "example": "PPO/2019/0043215"
+    },
+    {
+      "id": "pension_type",
+      "label": { "en": "Type of pension", "hi": "पेंशन का प्रकार" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "Service", "en": "Service pension (retired employee)", "hi": "सेवा पेंशन (सेवानिवृत्त कर्मचारी)" },
+        { "value": "Family", "en": "Family pension (spouse of deceased employee)", "hi": "पारिवारिक पेंशन (दिवंगत कर्मचारी के जीवनसाथी)" },
+        { "value": "Old Age", "en": "Old age / social security pension", "hi": "वृद्धावस्था / सामाजिक सुरक्षा पेंशन" },
+        { "value": "Widow", "en": "Widow pension", "hi": "विधवा पेंशन" }
+      ],
+      "question": {
+        "en": "Which kind of pension do you receive?",
+        "hi": "आपको किस प्रकार की पेंशन मिलती है?"
+      },
+      "explain": {
+        "en": "Family pension is for a spouse receiving the pension of a government employee who has died. This changes which office processes your certificate.",
+        "hi": "पारिवारिक पेंशन उन जीवनसाथी के लिए है जिन्हें किसी दिवंगत सरकारी कर्मचारी की पेंशन मिलती है। इससे तय होता है कि आपका प्रमाण पत्र कौन सा कार्यालय देखेगा।"
+      }
+    },
+    {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": {
+        "en": "Please say your twelve digit Aadhaar number.",
+        "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "Jeevan Pramaan proves you are alive using your fingerprint or iris against Aadhaar. That is why the Aadhaar number is required.",
+        "hi": "जीवन प्रमाण आपके अंगूठे के निशान या आँख की पुतली को आधार से मिलाकर साबित करता है कि आप जीवित हैं। इसीलिए आधार नंबर ज़रूरी है।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
+      "id": "bank_account",
+      "label": { "en": "Pension bank account number", "hi": "पेंशन बैंक खाता संख्या" },
+      "rule": "bank_account",
+      "source": "ask",
+      "question": {
+        "en": "Which bank account does your pension come into?",
+        "hi": "आपकी पेंशन किस बैंक खाते में आती है?"
+      },
+      "explain": {
+        "en": "The account where your pension is already being credited. Do not give a different account here — this form does not change your pension account.",
+        "hi": "वही खाता जिसमें आपकी पेंशन पहले से आ रही है। यहाँ दूसरा खाता न दें — यह फॉर्म आपका पेंशन खाता नहीं बदलता।"
+      },
+      "example": "30123456789"
+    },
+    {
+      "id": "ifsc",
+      "label": { "en": "Bank IFSC code", "hi": "बैंक आईएफएससी कोड" },
+      "rule": "ifsc",
+      "source": "ask",
+      "question": {
+        "en": "What is your bank's IFSC code?",
+        "hi": "आपके बैंक का आईएफएससी कोड क्या है?"
+      },
+      "explain": {
+        "en": "Eleven characters identifying your bank branch, printed on the first page of your passbook.",
+        "hi": "ग्यारह अक्षर जो आपकी बैंक शाखा को पहचानते हैं, पासबुक के पहले पन्ने पर छपे होते हैं।"
+      },
+      "example": "SBIN0001234"
+    },
+    {
+      "id": "mobile",
+      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
+      "rule": "mobile",
+      "source": "ask",
+      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
+      "explain": {
+        "en": "The certificate confirmation comes by SMS. Use the number that is linked to your Aadhaar, otherwise the OTP will not arrive.",
+        "hi": "प्रमाण पत्र की पुष्टि एसएमएस से आती है। वही नंबर दें जो आधार से जुड़ा है, वरना ओटीपी नहीं आएगा।"
+      },
+      "example": "9876543210"
+    }
+  ]
+}

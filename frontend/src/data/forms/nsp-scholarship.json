@@ -1,0 +1,213 @@
+{
+  "id": "nsp-scholarship",
+  "icon": "🎓",
+  "name": {
+    "en": "NSP Scholarship Application",
+    "hi": "एनएसपी छात्रवृत्ति आवेदन"
+  },
+  "issuer": {
+    "en": "National Scholarship Portal, Ministry of Education",
+    "hi": "राष्ट्रीय छात्रवृत्ति पोर्टल, शिक्षा मंत्रालय"
+  },
+  "summary": {
+    "en": "For students applying for a central or state government scholarship.",
+    "hi": "केंद्र या राज्य सरकार की छात्रवृत्ति के लिए आवेदन करने वाले विद्यार्थियों के लिए।"
+  },
+  "ocrKeywords": [
+    "national scholarship portal",
+    "nsp",
+    "scholarship application",
+    "pre-matric",
+    "post-matric",
+    "scholarship"
+  ],
+  "documents": [
+    { "en": "Aadhaar card", "hi": "आधार कार्ड", "digilockerType": "ADHAR" },
+    {
+      "en": "Income certificate",
+      "hi": "आय प्रमाण पत्र",
+      "digilockerType": "INCMC"
+    },
+    {
+      "en": "Previous year marksheet",
+      "hi": "पिछले वर्ष की अंकतालिका",
+      "digilockerType": "MARKS"
+    },
+    { "en": "Bank passbook first page", "hi": "बैंक पासबुक का पहला पन्ना" },
+    { "en": "Institute fee receipt", "hi": "संस्थान की फीस रसीद" },
+    {
+      "en": "Caste certificate (only if applying under SC/ST/OBC)",
+      "hi": "जाति प्रमाण पत्र (केवल SC/ST/OBC श्रेणी में आवेदन पर)",
+      "digilockerType": "CASTE"
+    }
+  ],
+  "fields": [
+    {
+      "id": "student_name",
+      "label": { "en": "Student's full name", "hi": "विद्यार्थी का पूरा नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": {
+        "en": "What is the student's full name?",
+        "hi": "विद्यार्थी का पूरा नाम क्या है?"
+      },
+      "explain": {
+        "en": "Write the name exactly as it appears on your Aadhaar card. If the name on your marksheet is different, the scholarship can be rejected.",
+        "hi": "नाम बिल्कुल वैसा लिखें जैसा आधार कार्ड पर है। अगर अंकतालिका पर नाम अलग हुआ तो छात्रवृत्ति रद्द हो सकती है।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "dob",
+      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "rule": "date_past",
+      "source": "digilocker",
+      "profileKey": "dob",
+      "question": {
+        "en": "What is the student's date of birth?",
+        "hi": "विद्यार्थी की जन्म तिथि क्या है?"
+      },
+      "explain": {
+        "en": "Use the date printed on your Class 10 marksheet. That is the date the government treats as official.",
+        "hi": "वही तारीख लिखें जो दसवीं की अंकतालिका पर छपी है। सरकार उसी को सही मानती है।"
+      },
+      "example": "14/08/2005"
+    },
+    {
+      "id": "gender",
+      "label": { "en": "Gender", "hi": "लिंग" },
+      "rule": "choice",
+      "source": "digilocker",
+      "profileKey": "gender",
+      "options": [
+        { "value": "Male", "en": "Male", "hi": "पुरुष" },
+        { "value": "Female", "en": "Female", "hi": "महिला" },
+        { "value": "Transgender", "en": "Transgender", "hi": "ट्रांसजेंडर" }
+      ],
+      "question": { "en": "Gender?", "hi": "लिंग?" },
+      "explain": {
+        "en": "Some scholarships are reserved for girl students, so this decides which schemes you are shown.",
+        "hi": "कुछ छात्रवृत्तियाँ केवल छात्राओं के लिए होती हैं, इसलिए इससे तय होता है कि आपको कौन सी योजनाएँ दिखेंगी।"
+      }
+    },
+    {
+      "id": "address",
+      "label": { "en": "Full address", "hi": "पूरा पता" },
+      "rule": "text",
+      "source": "digilocker",
+      "profileKey": "address",
+      "question": {
+        "en": "What is your full address?",
+        "hi": "आपका पूरा पता क्या है?"
+      },
+      "explain": {
+        "en": "Your address decides whether you are counted as a student of this state. State scholarships are only for residents of that state.",
+        "hi": "आपके पते से तय होता है कि आप इस राज्य के विद्यार्थी माने जाएँगे या नहीं। राज्य की छात्रवृत्ति केवल उसी राज्य के निवासियों को मिलती है।"
+      }
+    },
+    {
+      "id": "pincode",
+      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "rule": "pincode",
+      "source": "digilocker",
+      "profileKey": "pincode",
+      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "explain": {
+        "en": "The six digit postal code of your area. It is printed on any letter that reaches your house.",
+        "hi": "आपके इलाके का छह अंकों का डाक कोड। यह आपके घर आने वाली किसी भी चिट्ठी पर लिखा होता है।"
+      },
+      "example": "302015"
+    },
+    {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": {
+        "en": "Please say your twelve digit Aadhaar number.",
+        "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "NSP requires Aadhaar because the scholarship money is sent to the bank account linked to it. If your bank account is not Aadhaar-linked, the payment will fail.",
+        "hi": "एनएसपी को आधार चाहिए क्योंकि छात्रवृत्ति का पैसा उसी से जुड़े बैंक खाते में आता है। अगर आपका खाता आधार से नहीं जुड़ा है तो पैसा नहीं आएगा।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
+      "id": "institute_name",
+      "label": { "en": "Name of institute or college", "hi": "संस्थान या कॉलेज का नाम" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "Which college or school are you studying in?",
+        "hi": "आप किस कॉलेज या स्कूल में पढ़ रहे हैं?"
+      },
+      "explain": {
+        "en": "Write the full official name of your college, not the short name people use. Your institute must already be registered on NSP.",
+        "hi": "कॉलेज का पूरा सरकारी नाम लिखें, छोटा नाम नहीं। आपका संस्थान एनएसपी पर पहले से पंजीकृत होना चाहिए।"
+      },
+      "example": "Government College, Jaipur"
+    },
+    {
+      "id": "course_name",
+      "label": { "en": "Course you are studying", "hi": "आप कौन सा कोर्स कर रहे हैं" },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "Which course are you studying?",
+        "hi": "आप कौन सा कोर्स कर रहे हैं?"
+      },
+      "explain": {
+        "en": "For example B.A. first year, or B.Sc. second year. The scholarship amount is different for different courses.",
+        "hi": "जैसे बी.ए. प्रथम वर्ष, या बी.एससी. द्वितीय वर्ष। अलग-अलग कोर्स के लिए छात्रवृत्ति की राशि अलग होती है।"
+      },
+      "example": "B.A. First Year"
+    },
+    {
+      "id": "annual_income",
+      "label": { "en": "Annual family income (₹)", "hi": "परिवार की वार्षिक आय (₹)" },
+      "rule": "amount",
+      "source": "ask",
+      "question": {
+        "en": "What is your family's total income in one year, in rupees?",
+        "hi": "आपके पूरे परिवार की एक साल की आय कितनी है, रुपये में?"
+      },
+      "explain": {
+        "en": "The total earnings of everyone in your family in one year. This must match the number on your income certificate exactly, or the application will be rejected. Most NSP scholarships need income below ₹2,50,000.",
+        "hi": "एक साल में आपके परिवार के सभी लोगों की कुल कमाई। यह आय प्रमाण पत्र पर लिखी राशि से बिल्कुल मिलनी चाहिए, वरना आवेदन रद्द हो जाएगा। ज़्यादातर एनएसपी छात्रवृत्ति के लिए आय ₹2,50,000 से कम होनी चाहिए।"
+      },
+      "example": "180000"
+    },
+    {
+      "id": "bank_account",
+      "label": { "en": "Bank account number", "hi": "बैंक खाता संख्या" },
+      "rule": "bank_account",
+      "source": "ask",
+      "question": {
+        "en": "Please say your bank account number.",
+        "hi": "कृपया अपना बैंक खाता नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "The account must be in the student's own name, not a parent's. Scholarship money sent to someone else's account gets returned.",
+        "hi": "खाता विद्यार्थी के अपने नाम पर होना चाहिए, माता-पिता के नाम पर नहीं। किसी और के खाते में भेजा गया पैसा वापस चला जाता है।"
+      },
+      "example": "30123456789"
+    },
+    {
+      "id": "ifsc",
+      "label": { "en": "Bank IFSC code", "hi": "बैंक आईएफएससी कोड" },
+      "rule": "ifsc",
+      "source": "ask",
+      "question": {
+        "en": "What is your bank's IFSC code?",
+        "hi": "आपके बैंक का आईएफएससी कोड क्या है?"
+      },
+      "explain": {
+        "en": "An eleven character code that identifies your bank branch. It is printed on the first page of your passbook and on your cheque book. It always has a zero as the fifth character.",
+        "hi": "ग्यारह अक्षरों का कोड जो आपकी बैंक शाखा को पहचानता है। यह पासबुक के पहले पन्ने और चेकबुक पर लिखा होता है। इसका पाँचवाँ अक्षर हमेशा शून्य होता है।"
+      },
+      "example": "SBIN0001234"
+    }
+  ]
+}
