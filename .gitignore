@@ -23,3 +23,9 @@ frontend/dev-dist/
 # which on a public repo means every push needs a secret scan first. The
 # hand-written story of the build lives in docs/build-log/ instead.
 session_transcripts/
+
+# Vercel's local project link and the token it pulls down.
+# `vercel link` also appends its own `.env*` here, which must be deleted if it
+# comes back: it sits *below* the `!.env.example` exception above, and the last
+# matching rule wins, so it silently re-ignores the one env file we do commit.
+.vercel

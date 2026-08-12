@@ -9,6 +9,10 @@ printable filled PDF that never leaves the phone.
 
 Smart India Hackathon 2026. Team of 6 first-year CSE students.
 
+**Try it: [formmitra-cyan.vercel.app](https://formmitra-cyan.vercel.app)** —
+nothing to install. Open it on a phone in Chrome, since the microphone needs
+Chrome's Web Speech support.
+
 > **Prototype.** Built in one day to see the whole thing standing up end to end.
 > It works — the complete nine-step flow runs, offline included — but read
 > `docs/build-log/06-verification.md` for what has and has not been tested.
@@ -141,6 +145,43 @@ npm run build && npm run preview
 
 ---
 
+## Deploying
+
+The app and the API deploy together as one Vercel project — two services on one
+domain, defined in `vercel.json`. Because they share an origin, the frontend's
+relative `/api` calls, the redirect back from DigiLocker login, and CORS all
+work with no configuration.
+
+```bash
+npx vercel@latest --prod          # CLI 58+ is required; older ones reject `services`
+```
+
+No environment variables are needed for a mock-mode deploy. Two are worth
+knowing about:
+
+| | |
+|---|---|
+| `FORMMITRA_SECRET_KEY` | Signs the mock provider's session tokens. Optional — the fallback protects nothing today — but set it so tokens from one deployment are not accepted by another. |
+| `GEMINI_API_KEY` | Only enables V1 generic mode. Unset, generic mode returns a `503` and template mode is unaffected. |
+
+**Share the production URL, not a preview one.** Preview deployments sit behind
+Vercel authentication, which your testers will not have.
+
+**Deploying is what makes phone testing possible.** The microphone and camera
+need a secure origin, so a LAN IP address never worked — HTTPS is the thing that
+unlocks them.
+
+> **One caveat, and it is a real one.** Serverless does not keep memory between
+> requests, so the mock DigiLocker provider signs its tokens instead of storing
+> them. The **live** DigiLocker path still uses an in-memory session store and
+> therefore cannot run on serverless — `/api/health` reports this as
+> `needs_session_store`, and login refuses rather than failing intermittently.
+> Going live needs Redis or an HttpOnly-cookie session first.
+> `docs/build-log/11-deploying.md` explains why signing the real tokens would
+> have been the wrong fix.
+
+---
+
 ## What works today
 
 - **10 form templates** — NSP scholarship, PAN Form 93, ration card, pension
@@ -258,3 +299,5 @@ broke, and what is still missing:
 | `07-official-form-geometry.md` | Reading ~950 box coordinates out of the official PDF |
 | `08-official-form-overlay.md` | Stamping answers into the government's own form |
 | `09-wiring-and-form-93.md` | Form 49A → Form 93, and two bugs that would have broken the demo |
+| `10-sourcing-the-other-blanks.md` | Which of the other nine forms can be filled, and which have no paper form at all |
+| `11-deploying.md` | Going live on Vercel, and the in-memory session bug serverless forced us to fix |

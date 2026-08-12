@@ -64,6 +64,11 @@ async def health() -> dict[str, Any]:
         "status": "ok",
         "digilocker_mode": "mock" if digilocker.USE_MOCK else "live",
         "gemini_configured": bool(os.getenv("GEMINI_API_KEY")),
+        "serverless": digilocker.ON_SERVERLESS,
+        # Live credentials on serverless cannot work: the PKCE verifier and
+        # access token live in memory, which is not shared between instances.
+        # Reported here so the cause is one curl away rather than a mystery.
+        "needs_session_store": digilocker.requires_session_store(),
     }
 
 
