@@ -1,3 +1,13 @@
+<p align="center">
+  <img src="frontend/public/icon-192.png" alt="FormMitra icon" width="120">
+</p>
+
+<h1 align="center">FormMitra</h1>
+
+<p align="center">
+  <b>Fill Indian government forms by voice, in your own language. Works offline.</b>
+</p>
+
 # FormMitra
 
 **Fill Indian government forms by voice, in your own language. Works offline.**
