@@ -18,3 +18,8 @@ frontend/dev-dist/
 .env
 .env.*
 !.env.example
+
+# Session transcripts are written automatically and log raw command output,
+# which on a public repo means every push needs a secret scan first. The
+# hand-written story of the build lives in docs/build-log/ instead.
+session_transcripts/
