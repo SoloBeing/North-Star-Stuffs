@@ -36,7 +36,18 @@ export default defineConfig({
         // Tesseract's wasm core + trained-data files are large; cache them so the
         // second visit works with zero internet (spec: offline is non-negotiable).
         maximumFileSizeToCacheInBytes: 12 * 1024 * 1024,
-        globPatterns: ['**/*.{js,css,html,svg,png,json,wasm}'],
+        // `pdf` covers the blank official government forms in public/forms —
+        // without it the overlay output would need the network, and "works
+        // offline" would quietly stop being true for the one artefact the
+        // citizen actually carries to the counter.
+        globPatterns: ['**/*.{js,css,html,svg,png,json,wasm,pdf}'],
+        // Workbox answers *every* navigation with the cached index.html. That
+        // silently ate the DigiLocker round trip in production builds: both the
+        // redirect out to the provider and the /api/digilocker/callback return
+        // landed on the app shell instead of the server, so login could never
+        // complete once the service worker was installed. Dev has no service
+        // worker, which is why this survived the first round of testing.
+        navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
           {
             // Tesseract downloads its language model from a CDN on first use.

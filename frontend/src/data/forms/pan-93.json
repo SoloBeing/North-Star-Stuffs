@@ -1,9 +1,9 @@
 {
-  "id": "pan-49a",
+  "id": "pan-93",
   "icon": "🪪",
   "name": {
-    "en": "PAN Card Application (Form 49A)",
-    "hi": "पैन कार्ड आवेदन (फॉर्म 49A)"
+    "en": "PAN Card Application (Form 93)",
+    "hi": "पैन कार्ड आवेदन (फॉर्म 93)"
   },
   "issuer": {
     "en": "Income Tax Department, Government of India",
@@ -13,7 +13,10 @@
     "en": "To get a new PAN card. Needed to open most bank accounts and to file tax.",
     "hi": "नया पैन कार्ड बनवाने के लिए। ज़्यादातर बैंक खाते खोलने और कर भरने के लिए ज़रूरी।"
   },
+  "officialForm": "form93",
   "ocrKeywords": [
+    "form no. 93",
+    "form 93",
     "form 49a",
     "49a",
     "permanent account number",
@@ -51,8 +54,8 @@
         "hi": "आपके पिता का पूरा नाम क्या है?"
       },
       "explain": {
-        "en": "Form 49A asks for the father's name even for married women, because PAN records follow the father's name. Write it as it appears on his documents.",
-        "hi": "फॉर्म 49A में विवाहित महिलाओं के लिए भी पिता का नाम पूछा जाता है, क्योंकि पैन रिकॉर्ड पिता के नाम पर चलता है। उनके दस्तावेज़ों के अनुसार लिखें।"
+        "en": "Form 93 asks for the father's name even for married women, because PAN records follow the father's name. Write it as it appears on his documents.",
+        "hi": "फॉर्म 93 में विवाहित महिलाओं के लिए भी पिता का नाम पूछा जाता है, क्योंकि पैन रिकॉर्ड पिता के नाम पर चलता है। उनके दस्तावेज़ों के अनुसार लिखें।"
       },
       "example": "Ram Prasad"
     },

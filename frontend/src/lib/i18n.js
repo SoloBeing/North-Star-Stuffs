@@ -139,6 +139,46 @@ export const STRINGS = {
     en: 'This is a filled printable form, not an online submission. You still need to submit it at the office.',
     hi: 'यह भरा हुआ छापने योग्य फॉर्म है, ऑनलाइन जमा नहीं हुआ है। आपको इसे कार्यालय में जमा करना होगा।',
   },
+
+  // The official government form, filled in its own boxes
+  officialFormTitle: {
+    en: 'The real government form, filled',
+    hi: 'असली सरकारी फॉर्म, भरा हुआ',
+  },
+  officialFormBody: {
+    en: 'This is the department’s own form with your answers written into its boxes. Print this one and hand it in.',
+    hi: 'यह विभाग का अपना फॉर्म है, जिसके खानों में आपके जवाब लिखे गए हैं। इसी को छापकर जमा कीजिए।',
+  },
+  summarySheetLabel: {
+    en: 'Your answers in easy language',
+    hi: 'आपके जवाब आसान भाषा में',
+  },
+  summarySheetBody: {
+    en: 'Keep this for yourself. It is not the form to submit.',
+    hi: 'यह अपने पास रखिए। यह जमा करने वाला फॉर्म नहीं है।',
+  },
+  downloadOfficial: {
+    en: 'Download the government form',
+    hi: 'सरकारी फॉर्म डाउनलोड करें',
+  },
+  // Distinct from downloadPdf: once both documents exist, "Download filled
+  // form" no longer says which of the two it means.
+  downloadSummary: {
+    en: 'Download your answers sheet',
+    hi: 'अपने जवाबों की शीट डाउनलोड करें',
+  },
+  checkTheseTitle: {
+    en: 'Please check these before you submit',
+    hi: 'जमा करने से पहले ये ज़रूर देख लें',
+  },
+  stillToFillTitle: {
+    en: 'You must still fill these by hand',
+    hi: 'ये आपको हाथ से भरने होंगे',
+  },
+  tooLongTitle: {
+    en: 'Too long for the form’s boxes — shorten by hand',
+    hi: 'फॉर्म के खानों के लिए बहुत लंबा — हाथ से छोटा कीजिए',
+  },
 }
 
 export function t(key, lang = 'hi') {

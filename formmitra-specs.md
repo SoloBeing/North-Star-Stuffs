@@ -82,7 +82,7 @@ What still needs internet: DigiLocker login (login step only), Bhashini API (upg
 ## SCOPE
 
 **MVP — Internal Hackathon (22 Aug 2026):**
-- 10 pre-mapped forms: NSP scholarship, PAN 49A, ration card, pension life certificate, bank account opening, Ayushman card, income certificate, caste certificate, LPG subsidy, RTI application
+- 10 pre-mapped forms: NSP scholarship, PAN Form 93 (replaced Form 49A under PAN 2.0), ration card, pension life certificate, bank account opening, Ayushman card, income certificate, caste certificate, LPG subsidy, RTI application
 - DigiLocker login (sandbox credentials) OR manual Aadhaar entry fallback
 - Voice fill in Hindi + English (Web Speech API, offline)
 - Filled PDF downloaded to device

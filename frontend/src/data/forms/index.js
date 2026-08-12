@@ -10,7 +10,7 @@
  */
 
 import nspScholarship from './nsp-scholarship.json'
-import pan49a from './pan-49a.json'
+import pan93 from './pan-93.json'
 import rationCard from './ration-card.json'
 import pensionLifeCertificate from './pension-life-certificate.json'
 import bankAccountOpening from './bank-account-opening.json'
@@ -22,7 +22,7 @@ import rtiApplication from './rti-application.json'
 
 export const FORMS = [
   nspScholarship,
-  pan49a,
+  pan93,
   rationCard,
   pensionLifeCertificate,
   bankAccountOpening,

@@ -4,6 +4,11 @@
 **Owner in the team split:** AI / Integrations (explanation cache) + Research
 **Files:** `frontend/src/data/forms/*.json`, `frontend/src/data/forms/index.js`
 
+> **Superseded in one place (12 Aug 2026).** The PAN template below is called
+> `pan-49a`. Form 49A was withdrawn under the PAN 2.0 project and replaced by
+> **Form No. 93**; the template is now `pan-93.json`. Everything else on this
+> page still holds. See `07-official-form-geometry.md`.
+
 ---
 
 ## Why this step is the actual product
