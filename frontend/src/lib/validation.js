@@ -33,6 +33,14 @@ const P_TABLE = [
   [7, 0, 4, 6, 9, 1, 3, 2, 5, 8],
 ]
 
+// --- Devanagari digit normaliser ------------------------------------------
+const DEVANAGARI_MAP = {
+  '०':'0','१':'1','२':'2','३':'3','४':'4',
+  '५':'5','६':'6','७':'7','८':'8','९':'9'
+}
+const normaliseDevanagari = (v) =>
+  v.replace(/[०-९]/g, d => DEVANAGARI_MAP[d] || d)
+
 function verhoeffValid(number) {
   let c = 0
   const digits = number.split('').reverse()
@@ -66,7 +74,7 @@ export const RULES = {
   },
   aadhaar: {
     test: (v) => /^[2-9]\d{11}$/.test(v) && verhoeffValid(v),
-    normalise: stripSpaces,
+    normalise: (v) => stripSpaces(normaliseDevanagari(v)),
     en: 'Aadhaar must be 12 digits and pass the UIDAI check. Please read the number again.',
     hi: 'आधार 12 अंकों का होना चाहिए और UIDAI जाँच में सही होना चाहिए। कृपया नंबर दोबारा देखें।',
   },
@@ -79,21 +87,23 @@ export const RULES = {
   mobile: {
     test: (v) => /^[6-9]\d{9}$/.test(v),
     normalise: (v) => {
-      const digits = stripSpaces(v).replace(/^\+?91/, '')
-      return digits
+    let s = stripSpaces(normaliseDevanagari(v))
+    if (s.startsWith('+91') && s.length === 13) s = s.slice(3)
+    else if (s.startsWith('91') && s.length === 12) s = s.slice(2)
+    return s
     },
     en: 'Mobile number must be 10 digits starting with 6, 7, 8 or 9.',
     hi: 'मोबाइल नंबर 10 अंकों का हो और 6, 7, 8 या 9 से शुरू हो।',
   },
   pincode: {
     test: (v) => /^[1-9]\d{5}$/.test(v),
-    normalise: stripSpaces,
+    normalise: (v) => stripSpaces(normaliseDevanagari(v)),
     en: 'PIN code must be 6 digits and cannot start with 0.',
     hi: 'पिन कोड 6 अंकों का होता है और 0 से शुरू नहीं होता।',
   },
   bank_account: {
     test: (v) => /^\d{9,18}$/.test(v),
-    normalise: stripSpaces,
+    normalise: (v) => stripSpaces(normaliseDevanagari(v)),
     en: 'Bank account number must be between 9 and 18 digits.',
     hi: 'बैंक खाता संख्या 9 से 18 अंकों के बीच होनी चाहिए।',
   },
@@ -121,7 +131,7 @@ export const RULES = {
   },
   amount: {
     test: (v) => /^\d{1,9}$/.test(v),
-    normalise: (v) => v.replace(/[,\s₹]/g, ''),
+    normalise: (v) => normaliseDevanagari(v.replace(/[,\s₹]/g, '')),
     en: 'Amount must be a whole number in rupees, without commas.',
     hi: 'राशि पूरे रुपये में लिखें, अल्पविराम के बिना।',
   },
@@ -209,4 +219,32 @@ export function speakableValue(field, value) {
     default:
       return value
   }
+}
+
+// --- Spoken input normalisation ------------------------------------------
+const HINDI_NUMBER_WORDS = {
+  'shoonya':'0','ek':'1','do':'2','teen':'3',
+  'chaar':'4','char':'4','paanch':'5','panch':'5',
+  'chhah':'6','chhe':'6','saat':'7','sat':'7',
+  'aath':'8','ath':'8','nau':'9','nao':'9',
+}
+
+export function normaliseSpokenInput(raw) {
+  if (!raw) return ''
+  let v = normaliseDevanagari(raw.trim().toLowerCase())
+  v = v.replace(
+    /\b(shoonya|ek|do|teen|chaar|char|paanch|panch|chhah|chhe|saat|sat|aath|ath|nau|nao)\b/g,
+    w => HINDI_NUMBER_WORDS[w] || w
+  )
+  return v
+}
+
+export function isSpokenYes(raw) {
+  const v = (raw || '').trim().toLowerCase()
+  return /^(haan|han|ha|ji haan|ji han|yes|yeah|sahi|theek|bilkul|correct)/.test(v)
+}
+
+export function isSpokenNo(raw) {
+  const v = (raw || '').trim().toLowerCase()
+  return /^(nahi|nah|na|naa|ji nahi|no|nope|galat|wrong)/.test(v)
 }
