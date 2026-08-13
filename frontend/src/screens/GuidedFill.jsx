@@ -148,6 +148,12 @@ export default function GuidedFill({
           <SpeakButton lang={lang} text={field.question[lang]} />
         </div>
 
+        {field.optional && (
+          <p className="mt-3 text-base font-semibold text-ink-soft">
+            {t('optional', lang)}
+          </p>
+        )}
+
         {field.example && !isChoice && (
           <p className="mt-3 text-base text-ink-soft">
             {t('example', lang)}:{' '}
@@ -256,8 +262,18 @@ export default function GuidedFill({
         <Button variant="secondary" onClick={goBack} className="max-w-32">
           {t('back', lang)}
         </Button>
-        <Button onClick={goNext} disabled={!draft}>
-          {index + 1 === fields.length ? t('allCorrect', lang) : t('next', lang)}
+        {/*
+          An optional field left empty turns the primary button into "Skip"
+          rather than adding a third button to the bar. One button that says
+          what it will do beats two the citizen has to choose between, and it
+          keeps the tap target at full width.
+        */}
+        <Button onClick={goNext} disabled={!draft && !field.optional}>
+          {!draft && field.optional
+            ? t('skip', lang)
+            : index + 1 === fields.length
+              ? t('allCorrect', lang)
+              : t('next', lang)}
         </Button>
       </BottomBar>
     </Screen>

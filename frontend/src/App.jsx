@@ -29,6 +29,7 @@ import Checklist from './screens/Checklist'
 import Done from './screens/Done'
 import { stopSpeaking } from './lib/speech'
 import { releaseOcr } from './lib/ocr'
+import { staleFields, visibleFields } from './lib/fields'
 import { t } from './lib/i18n'
 
 const LANG_KEY = 'formmitra.lang'
@@ -52,6 +53,9 @@ export default function App() {
   const [form, setForm] = useState(null)
   const [answers, setAnswers] = useState({})
   const [editField, setEditField] = useState(null)
+  // Non-null when the fill is resuming a short list of outstanding questions
+  // rather than walking the whole form; see the confirm-screen effect below.
+  const [fillQueue, setFillQueue] = useState(null)
 
   const [offline, setOffline] = useState(!navigator.onLine)
 
@@ -162,11 +166,48 @@ export default function App() {
     [],
   )
 
+  // A field can stop applying when an earlier answer changes — the citizen goes
+  // back to the confirm screen and says they do have a single parent, after
+  // already giving their mother's name. Drop the answer the moment its question
+  // stops being asked, so it cannot reach the confirm read-back or either PDF.
+  useEffect(() => {
+    const stale = staleFields(form, answers)
+    if (stale.length === 0) return
+    setAnswers((prev) => {
+      const next = { ...prev }
+      for (const field of stale) delete next[field.id]
+      return next
+    })
+  }, [form, answers])
+
+  // Fields the voice flow needs to ask about — DigiLocker-sourced ones are
+  // skipped entirely, which is the whole point of logging in, and so are the
+  // ones an earlier answer has ruled out.
+  const askableFields = visibleFields(form, answers).filter(
+    (f) => !(f.source === 'digilocker' && profile?.[f.profileKey]),
+  )
+
+  // Editing one answer can *unlock* a question that was never asked: saying on
+  // the confirm screen that you are not a single parent after all brings items
+  // 14 and 15 back. Those would otherwise reach the PDF blank and unmentioned,
+  // because the confirm screen only lists the answers it has. So confirm sends
+  // the citizen back into the fill with exactly what is outstanding.
+  useEffect(() => {
+    if (screen !== 'confirm') return
+    const pending = askableFields.filter((f) => answers[f.id] === undefined)
+    if (pending.length === 0) return
+    setFillQueue(pending)
+    setScreen('fill')
+    // askableFields is rebuilt every render, so depending on it would loop.
+    // Screen changes are what can leave a question outstanding.
+  }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
+
   function restart() {
     stopSpeaking()
     setForm(null)
     setAnswers({})
     setEditField(null)
+    setFillQueue(null)
     setScreen('home')
   }
 
@@ -175,13 +216,6 @@ export default function App() {
       <Consent lang={lang} onLangChange={setLang} onAgree={agree} />
     )
   }
-
-  // Fields the voice flow needs to ask about — DigiLocker-sourced ones are
-  // skipped entirely, which is the whole point of logging in.
-  const askableFields =
-    form?.fields.filter(
-      (f) => !(f.source === 'digilocker' && profile?.[f.profileKey]),
-    ) ?? []
 
   return (
     <>
@@ -236,21 +270,34 @@ export default function App() {
 
       {screen === 'fill' && form && (
         <GuidedFill
-          // Remounting on edit resets the internal question index cleanly.
-          key={editField ? `edit-${editField.id}` : 'fill'}
+          // Remounting resets the internal question index cleanly, which each
+          // of these three modes needs — a different list is being walked.
+          key={
+            editField
+              ? `edit-${editField.id}`
+              : fillQueue
+                ? `resume-${fillQueue.map((f) => f.id).join('-')}`
+                : 'fill'
+          }
           lang={lang}
           form={form}
-          fields={editField ? [editField] : askableFields}
+          fields={editField ? [editField] : (fillQueue ?? askableFields)}
           answers={answers}
           onAnswer={answer}
           onDone={() => {
             setEditField(null)
+            setFillQueue(null)
             setScreen('confirm')
           }}
           onBack={() => {
             if (editField) {
               setEditField(null)
               setScreen('confirm')
+            } else if (fillQueue) {
+              // Not back to confirm: confirm would bounce straight here again
+              // and Back would look broken. The overview is the way out.
+              setFillQueue(null)
+              setScreen('overview')
             } else setScreen('overview')
           }}
         />

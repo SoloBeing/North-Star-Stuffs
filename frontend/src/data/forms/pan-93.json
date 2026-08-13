@@ -45,21 +45,6 @@
       "example": "Sunita Devi"
     },
     {
-      "id": "father_name",
-      "label": { "en": "Father's full name", "hi": "पिता का पूरा नाम" },
-      "rule": "name",
-      "source": "ask",
-      "question": {
-        "en": "What is your father's full name?",
-        "hi": "आपके पिता का पूरा नाम क्या है?"
-      },
-      "explain": {
-        "en": "Form 93 asks for the father's name even for married women, because PAN records follow the father's name. Write it as it appears on his documents.",
-        "hi": "फॉर्म 93 में विवाहित महिलाओं के लिए भी पिता का नाम पूछा जाता है, क्योंकि पैन रिकॉर्ड पिता के नाम पर चलता है। उनके दस्तावेज़ों के अनुसार लिखें।"
-      },
-      "example": "Ram Prasad"
-    },
-    {
       "id": "dob",
       "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
       "rule": "date_past",
@@ -90,6 +75,21 @@
       }
     },
     {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": {
+        "en": "Please say your twelve digit Aadhaar number.",
+        "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
+      },
+      "explain": {
+        "en": "Linking Aadhaar to PAN is compulsory by law. An unlinked PAN becomes inoperative and cannot be used for banking.",
+        "hi": "कानून के अनुसार आधार को पैन से जोड़ना अनिवार्य है। बिना जुड़ा पैन निष्क्रिय हो जाता है और बैंकिंग में काम नहीं आता।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
       "id": "address",
       "label": { "en": "Residential address", "hi": "निवास का पता" },
       "rule": "text",
@@ -100,6 +100,22 @@
         "en": "Your PAN card will be posted to this address. If nobody is home during the day, give an address where someone can receive it.",
         "hi": "आपका पैन कार्ड इसी पते पर डाक से आएगा। अगर दिन में घर पर कोई नहीं रहता तो ऐसा पता दें जहाँ कोई कार्ड ले सके।"
       }
+    },
+    {
+      "id": "post_office",
+      "label": { "en": "Post office", "hi": "डाकघर" },
+      "rule": "text",
+      "source": "ask",
+      "optional": true,
+      "question": {
+        "en": "Which post office serves your address?",
+        "hi": "आपके पते का डाकघर कौन सा है?"
+      },
+      "explain": {
+        "en": "The form has a line for the post office that delivers to you. The postman uses it to find your house when the address is hard to follow. If you do not know it, leave it empty — the PIN code is what matters most.",
+        "hi": "फॉर्म में उस डाकघर की एक पंक्ति है जो आपके यहाँ डाक पहुँचाता है। पता कठिन होने पर डाकिया इसी से आपका घर ढूँढता है। न पता हो तो खाली छोड़ दें — सबसे ज़रूरी पिन कोड है।"
+      },
+      "example": "Gandhi Nagar"
     },
     {
       "id": "pincode",
@@ -115,19 +131,23 @@
       "example": "302015"
     },
     {
-      "id": "aadhaar",
-      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
-      "rule": "aadhaar",
+      "id": "residential_status",
+      "label": { "en": "Residential status", "hi": "निवास की स्थिति" },
+      "rule": "choice",
       "source": "ask",
+      "options": [
+        { "value": "Resident", "en": "Resident — I live in India", "hi": "निवासी — मैं भारत में रहता/रहती हूँ" },
+        { "value": "Non Resident", "en": "Non Resident — I live abroad", "hi": "अनिवासी — मैं विदेश में रहता/रहती हूँ" },
+        { "value": "Not Ordinarily Resident", "en": "Resident but not ordinarily resident", "hi": "निवासी, पर सामान्यतः निवासी नहीं" }
+      ],
       "question": {
-        "en": "Please say your twelve digit Aadhaar number.",
-        "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
+        "en": "Do you live in India?",
+        "hi": "क्या आप भारत में रहते हैं?"
       },
       "explain": {
-        "en": "Linking Aadhaar to PAN is compulsory by law. An unlinked PAN becomes inoperative and cannot be used for banking.",
-        "hi": "कानून के अनुसार आधार को पैन से जोड़ना अनिवार्य है। बिना जुड़ा पैन निष्क्रिय हो जाता है और बैंकिंग में काम नहीं आता।"
-      },
-      "example": "2345 6789 0124"
+        "en": "This is a legal declaration about where you live for tax purposes. If you live and work in India, you are a Resident. The other two apply only if you have spent most of the last few years outside India — and those need your passport number as well, which this app does not ask for.",
+        "hi": "यह कानूनी घोषणा है कि कर के लिहाज़ से आप कहाँ रहते हैं। अगर आप भारत में रहते और काम करते हैं तो आप निवासी हैं। बाकी दो तभी लगते हैं जब आपने पिछले कुछ साल ज़्यादातर भारत से बाहर बिताए हों — उनके लिए पासपोर्ट नंबर भी चाहिए, जो यह ऐप नहीं पूछता।"
+      }
     },
     {
       "id": "mobile",
@@ -145,6 +165,22 @@
       "example": "9876543210"
     },
     {
+      "id": "email",
+      "label": { "en": "Email address", "hi": "ईमेल पता" },
+      "rule": "email",
+      "source": "ask",
+      "optional": true,
+      "question": {
+        "en": "Do you have an email address?",
+        "hi": "क्या आपका कोई ईमेल पता है?"
+      },
+      "explain": {
+        "en": "Your e-PAN — a PDF copy of the card, valid everywhere the plastic card is — is sent to this address, usually days before the card arrives in the post. If you do not have an email address you can leave this empty; the card still comes by post.",
+        "hi": "आपका ई-पैन — कार्ड की पीडीएफ प्रति, जो हर जगह प्लास्टिक कार्ड जितनी ही मान्य है — इसी पते पर आता है, अक्सर डाक से कार्ड आने से कई दिन पहले। ईमेल न हो तो खाली छोड़ सकते हैं; कार्ड फिर भी डाक से आएगा।"
+      },
+      "example": "sunita@example.com"
+    },
+    {
       "id": "source_of_income",
       "label": { "en": "Source of income", "hi": "आय का स्रोत" },
       "rule": "choice",
@@ -153,6 +189,8 @@
         { "value": "Salary", "en": "Salary", "hi": "वेतन" },
         { "value": "Business", "en": "Business or profession", "hi": "व्यापार या पेशा" },
         { "value": "Agriculture", "en": "Agriculture", "hi": "खेती" },
+        { "value": "House Property", "en": "Rent from a house or shop", "hi": "मकान या दुकान का किराया" },
+        { "value": "Capital Gains", "en": "Selling land, a house or shares", "hi": "ज़मीन, मकान या शेयर बेचने से" },
         { "value": "No income", "en": "No income", "hi": "कोई आय नहीं" }
       ],
       "question": {
@@ -160,8 +198,76 @@
         "hi": "आपकी आय कहाँ से आती है?"
       },
       "explain": {
-        "en": "You may tick 'No income'. Students, homemakers and dependants get a PAN card this way and it is completely valid.",
-        "hi": "आप 'कोई आय नहीं' भी चुन सकते हैं। विद्यार्थी, गृहिणी और आश्रित इसी तरह पैन कार्ड बनवाते हैं और यह पूरी तरह मान्य है।"
+        "en": "You may tick 'No income'. Students, homemakers and dependants get a PAN card this way and it is completely valid. If more than one applies, pick the one you earn the most from.",
+        "hi": "आप 'कोई आय नहीं' भी चुन सकते हैं। विद्यार्थी, गृहिणी और आश्रित इसी तरह पैन कार्ड बनवाते हैं और यह पूरी तरह मान्य है। एक से ज़्यादा लागू हों तो वह चुनें जिससे सबसे ज़्यादा कमाई होती है।"
+      }
+    },
+    {
+      "id": "single_parent",
+      "label": { "en": "Raised by a single parent", "hi": "एकल अभिभावक" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "No", "en": "No — I can give both parents' names", "hi": "नहीं — मैं दोनों के नाम दे सकता/सकती हूँ" },
+        { "value": "Yes", "en": "Yes — a single parent raised me", "hi": "हाँ — मुझे एकल अभिभावक ने पाला" }
+      ],
+      "question": {
+        "en": "Were you raised by a single parent?",
+        "hi": "क्या आपको एकल अभिभावक ने पाला है?"
+      },
+      "explain": {
+        "en": "The form asks this so that a child of a single parent is not forced to fill in a parent they cannot name. Answer yes and you will not be asked for your mother's name.",
+        "hi": "फॉर्म यह इसलिए पूछता है ताकि एकल अभिभावक की संतान को ऐसा नाम न भरना पड़े जो वह बता ही न सके। हाँ कहने पर आपसे माता का नाम नहीं पूछा जाएगा।"
+      }
+    },
+    {
+      "id": "father_name",
+      "label": { "en": "Father's full name", "hi": "पिता का पूरा नाम" },
+      "rule": "name",
+      "source": "ask",
+      "question": {
+        "en": "What is your father's full name?",
+        "hi": "आपके पिता का पूरा नाम क्या है?"
+      },
+      "explain": {
+        "en": "Form 93 asks for the father's name even for married women, because PAN records follow the father's name. Write it as it appears on his documents.",
+        "hi": "फॉर्म 93 में विवाहित महिलाओं के लिए भी पिता का नाम पूछा जाता है, क्योंकि पैन रिकॉर्ड पिता के नाम पर चलता है। उनके दस्तावेज़ों के अनुसार लिखें।"
+      },
+      "example": "Ram Prasad"
+    },
+    {
+      "id": "mother_name",
+      "label": { "en": "Mother's full name", "hi": "माता का पूरा नाम" },
+      "rule": "name",
+      "source": "ask",
+      "showIf": { "single_parent": "No" },
+      "question": {
+        "en": "What is your mother's full name?",
+        "hi": "आपकी माता का पूरा नाम क्या है?"
+      },
+      "explain": {
+        "en": "Write it as it appears on her documents. If her name changed after marriage, use the name on her Aadhaar rather than the one from before.",
+        "hi": "उनके दस्तावेज़ों के अनुसार लिखें। शादी के बाद नाम बदला हो तो पहले वाला नहीं, आधार वाला नाम लिखें।"
+      },
+      "example": "Kamla Devi"
+    },
+    {
+      "id": "print_parent",
+      "label": { "en": "Parent's name to print on the card", "hi": "कार्ड पर छपने वाला अभिभावक का नाम" },
+      "rule": "choice",
+      "source": "ask",
+      "showIf": { "single_parent": "No" },
+      "options": [
+        { "value": "Father", "en": "Father's name", "hi": "पिता का नाम" },
+        { "value": "Mother", "en": "Mother's name", "hi": "माता का नाम" }
+      ],
+      "question": {
+        "en": "Whose name should be printed on your PAN card?",
+        "hi": "आपके पैन कार्ड पर किसका नाम छपे?"
+      },
+      "explain": {
+        "en": "One parent's name is printed under yours on the card. Both are equally valid, and this choice changes nothing else about the application — it is only what appears on the plastic.",
+        "hi": "कार्ड पर आपके नाम के नीचे एक अभिभावक का नाम छपता है। दोनों समान रूप से मान्य हैं, और इस चुनाव से आवेदन में और कुछ नहीं बदलता — यह केवल कार्ड पर दिखने की बात है।"
       }
     }
   ]

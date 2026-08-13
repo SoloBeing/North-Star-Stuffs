@@ -93,7 +93,8 @@ export const STRINGS = {
   whatIsThis: { en: 'What is this?', hi: 'यह क्या है?' },
   next: { en: 'Next', hi: 'आगे' },
   back: { en: 'Back', hi: 'पीछे' },
-  skip: { en: 'Skip for now', hi: 'अभी छोड़ें' },
+  skip: { en: 'I do not have this', hi: 'यह मेरे पास नहीं है' },
+  optional: { en: 'You may leave this empty', hi: 'इसे खाली छोड़ सकते हैं' },
   example: { en: 'Example', hi: 'उदाहरण' },
   micBlocked: {
     en: 'Microphone is not available. Please type your answer.',

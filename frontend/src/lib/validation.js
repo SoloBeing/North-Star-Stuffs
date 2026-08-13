@@ -155,6 +155,12 @@ const EMPTY = {
 export function validateField(field, value, lang = 'hi') {
   const raw = (value ?? '').trim()
 
+  // An optional field may be left empty — an email address the citizen does not
+  // have, a post office they do not know. Empty passes; anything actually
+  // entered is still held to the same rule, because a half-remembered email is
+  // worse than none on a form that gets posted back.
+  if (field.optional && !raw) return { valid: true, value: '', error: null }
+
   // "choice" fields are picked from a list, so the only failure is picking none.
   if (field.rule === 'choice') {
     const allowed = (field.options ?? []).map((o) => o.value)
