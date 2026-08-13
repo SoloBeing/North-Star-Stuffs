@@ -17,19 +17,19 @@
  * of the three privacy promises made on the consent screen, kept.
  */
 
-import { useEffect, useState } from 'react'
-import { Banner, Button, Card, Screen, SpeakButton } from '../components/ui'
-import { buildFilledPdf, downloadPdf } from '../lib/pdf'
-import { buildOfficialPdf } from '../lib/officialPdf'
-import { speak } from '../lib/speech'
-import { t } from '../lib/i18n'
+import { useEffect, useState } from "react";
+import { Banner, Button, Card, Screen, SpeakButton } from "../components/ui";
+import { buildFilledPdf, downloadPdf } from "../lib/pdf";
+import { buildOfficialPdf } from "../lib/officialPdf";
+import { speak } from "../lib/speech";
+import { t } from "../lib/i18n";
 
 /** Notes grouped under the heading that tells the citizen what to do about them. */
 const NOTE_GROUPS = [
-  { kind: 'assumed', title: 'checkTheseTitle', tone: 'info' },
-  { kind: 'truncated', title: 'tooLongTitle', tone: 'warn' },
-  { kind: 'blank', title: 'stillToFillTitle', tone: 'warn' },
-]
+  { kind: "assumed", title: "checkTheseTitle", tone: "info" },
+  { kind: "truncated", title: "tooLongTitle", tone: "warn" },
+  { kind: "blank", title: "stillToFillTitle", tone: "warn" },
+];
 
 export default function Done({
   lang,
@@ -39,74 +39,79 @@ export default function Done({
   onFillAnother,
   onStartOver,
 }) {
-  const [state, setState] = useState('working') // working | ready | error
-  const [error, setError] = useState(null)
-  const [summary, setSummary] = useState(null)
-  const [official, setOfficial] = useState(null) // { blob, notes } | null
+  const [state, setState] = useState("working"); // working | ready | error
+  const [error, setError] = useState(null);
+  const [summary, setSummary] = useState(null);
+  const [official, setOfficial] = useState(null); // { blob, notes } | null
 
-  const summaryName = `${form.id}-formmitra.pdf`
-  const officialName = `${form.id}-official-form.pdf`
+  const summaryName = `${form.id}-formmitra.pdf`;
+  const officialName = `${form.id}-official-form.pdf`;
 
   useEffect(() => {
-    let cancelled = false
+    let cancelled = false;
 
-    ;(async () => {
+    (async () => {
       try {
         const sheet = await buildFilledPdf(form, answers, lang, {
           digilockerUsed: Boolean(profile),
-        })
-        if (cancelled) return
-        setSummary(sheet)
+        });
+        if (cancelled) return;
+        setSummary(sheet);
 
         // Only some templates have an official blank mapped to them. A failure
         // here must not cost the citizen the summary sheet they already have,
         // so it is caught separately rather than failing the whole screen.
-        let filled = null
-        if (form.officialForm) {
+        let filled = null;
+        if (form.id === "rti-application") {
           try {
-            filled = await buildOfficialPdf(answers)
-            if (cancelled) return
-            setOfficial(filled)
+            const { buildRtiOfficialPdf } = await import("../lib/rtipdf.js");
+            filled = await buildRtiOfficialPdf(answers, lang);
           } catch (err) {
-            console.error('official form overlay failed', err)
+            console.error("RTI official form overlay failed", err);
+          }
+        } else if (form.officialForm) {
+          try {
+            filled = await buildOfficialPdf(answers);
+          } catch (err) {
+            console.error("official form overlay failed", err);
           }
         }
 
-        setState('ready')
+        setState("ready");
         // Download the government form first — it is the one that gets submitted.
-        if (filled) downloadPdf(filled.blob, officialName)
-        downloadPdf(sheet, summaryName)
-        speak(t('doneTitle', lang), lang)
+        if (filled) downloadPdf(filled.blob, officialName);
+        downloadPdf(sheet, summaryName);
+        speak(t("doneTitle", lang), lang);
       } catch (err) {
-        if (cancelled) return
-        setError(String(err?.message ?? err))
-        setState('error')
+        if (cancelled) return;
+        setError(String(err?.message ?? err));
+        setState("error");
       }
-    })()
+    })();
 
     return () => {
-      cancelled = true
-    }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+      cancelled = true;
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (state === 'working') {
+  if (state === "working") {
     return (
       <Screen className="pt-16 text-center">
         <div className="mx-auto mb-6 h-16 w-16 animate-spin rounded-full border-4 border-brand-100 border-t-brand-600" />
-        <p className="text-2xl font-bold">{t('creatingPdf', lang)}</p>
+        <p className="text-2xl font-bold">{t("creatingPdf", lang)}</p>
       </Screen>
-    )
+    );
   }
 
-  if (state === 'error') {
+  if (state === "error") {
     return (
       <Screen className="pt-10">
         <Banner tone="bad" className="mb-5">
           {error}
         </Banner>
-        <Button onClick={onStartOver}>{t('startOver', lang)}</Button>
+        <Button onClick={onStartOver}>{t("startOver", lang)}</Button>
       </Screen>
-    )
+    );
   }
 
   return (
@@ -127,7 +132,7 @@ export default function Done({
             <path d="m4 12 6 6L20 6" />
           </svg>
         </div>
-        <h1 className="text-3xl font-extrabold">{t('doneTitle', lang)}</h1>
+        <h1 className="text-3xl font-extrabold">{t("doneTitle", lang)}</h1>
       </div>
 
       {official && (
@@ -135,15 +140,15 @@ export default function Done({
           <div className="flex items-start gap-3">
             <div className="flex-1">
               <h2 className="mb-1 text-xl font-bold text-brand-700">
-                {t('officialFormTitle', lang)}
+                {t("officialFormTitle", lang)}
               </h2>
               <p className="text-lg leading-relaxed">
-                {t('officialFormBody', lang)}
+                {t("officialFormBody", lang)}
               </p>
             </div>
             <SpeakButton
               lang={lang}
-              text={`${t('officialFormTitle', lang)}. ${t('officialFormBody', lang)}`}
+              text={`${t("officialFormTitle", lang)}. ${t("officialFormBody", lang)}`}
             />
           </div>
           <p className="mt-4 flex items-center gap-2 rounded-lg bg-paper px-3 py-2 font-mono text-base break-all">
@@ -157,16 +162,16 @@ export default function Done({
           <div className="flex-1">
             {official && (
               <h2 className="mb-1 text-xl font-bold">
-                {t('summarySheetLabel', lang)}
+                {t("summarySheetLabel", lang)}
               </h2>
             )}
             <p className="text-lg leading-relaxed">
-              {official ? t('summarySheetBody', lang) : t('doneBody', lang)}
+              {official ? t("summarySheetBody", lang) : t("doneBody", lang)}
             </p>
           </div>
           <SpeakButton
             lang={lang}
-            text={official ? t('summarySheetBody', lang) : t('doneBody', lang)}
+            text={official ? t("summarySheetBody", lang) : t("doneBody", lang)}
           />
         </div>
         <p className="mt-4 flex items-center gap-2 rounded-lg bg-paper px-3 py-2 font-mono text-base break-all">
@@ -177,27 +182,27 @@ export default function Done({
       {official && <NoteList notes={official.notes} lang={lang} />}
 
       <Banner tone="warn" className="mb-5">
-        {t('notSubmitted', lang)}
+        {t("notSubmitted", lang)}
       </Banner>
 
       <div className="grid gap-3">
         {official && (
           <Button onClick={() => downloadPdf(official.blob, officialName)}>
-            {t('downloadOfficial', lang)}
+            {t("downloadOfficial", lang)}
           </Button>
         )}
         <Button
-          variant={official ? 'secondary' : 'primary'}
+          variant={official ? "secondary" : "primary"}
           onClick={() => downloadPdf(summary, summaryName)}
         >
-          {t(official ? 'downloadSummary' : 'downloadPdf', lang)}
+          {t(official ? "downloadSummary" : "downloadPdf", lang)}
         </Button>
         <Button variant="secondary" onClick={onFillAnother}>
-          {t('fillAnother', lang)}
+          {t("fillAnother", lang)}
         </Button>
       </div>
     </Screen>
-  )
+  );
 }
 
 /**
@@ -207,23 +212,25 @@ export default function Done({
  * who cannot read a list of caveats printed in small type.
  */
 function NoteList({ notes, lang }) {
-  const pick = (s) => (typeof s === 'string' ? s : (s?.[lang] ?? s?.en ?? ''))
+  const pick = (s) => (typeof s === "string" ? s : (s?.[lang] ?? s?.en ?? ""));
 
   return NOTE_GROUPS.map(({ kind, title, tone }) => {
-    const group = notes.filter((n) => n.kind === kind)
-    if (group.length === 0) return null
+    const group = notes.filter((n) => n.kind === kind);
+    if (group.length === 0) return null;
 
     const spoken = [
       t(title, lang),
-      ...group.map((n) => [pick(n.label), pick(n.detail)].filter(Boolean).join('. ')),
-    ].join('. ')
+      ...group.map((n) =>
+        [pick(n.label), pick(n.detail)].filter(Boolean).join(". "),
+      ),
+    ].join(". ");
 
     return (
       <Card key={kind} className="mb-4">
         <div className="flex items-start gap-3">
           <h2
             className={`flex-1 text-lg font-bold ${
-              tone === 'warn' ? 'text-saffron-600' : 'text-brand-700'
+              tone === "warn" ? "text-saffron-600" : "text-brand-700"
             }`}
           >
             {t(title, lang)}
@@ -243,6 +250,6 @@ function NoteList({ notes, lang }) {
           ))}
         </ul>
       </Card>
-    )
-  })
+    );
+  });
 }

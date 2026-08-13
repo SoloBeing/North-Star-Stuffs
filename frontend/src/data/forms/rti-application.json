@@ -1,5 +1,6 @@
 {
   "id": "rti-application",
+  "officialForm": false,
   "icon": "⚖️",
   "name": {
     "en": "RTI Application (Right to Information)",
@@ -22,9 +23,19 @@
     "information sought"
   ],
   "documents": [
-    { "en": "Aadhaar card or any identity proof", "hi": "आधार कार्ड या कोई पहचान प्रमाण", "digilockerType": "ADHAR" },
-    { "en": "₹10 postal order, court fee stamp, or cash receipt", "hi": "₹10 का पोस्टल ऑर्डर, कोर्ट फीस स्टाम्प, या नकद रसीद" },
-    { "en": "BPL card, if claiming fee exemption", "hi": "बीपीएल कार्ड, अगर शुल्क माफ़ी चाहते हैं" }
+    {
+      "en": "Aadhaar card or any identity proof",
+      "hi": "आधार कार्ड या कोई पहचान प्रमाण",
+      "digilockerType": "ADHAR"
+    },
+    {
+      "en": "₹10 postal order, court fee stamp, or cash receipt",
+      "hi": "₹10 का पोस्टल ऑर्डर, कोर्ट फीस स्टाम्प, या नकद रसीद"
+    },
+    {
+      "en": "BPL card, if claiming fee exemption",
+      "hi": "बीपीएल कार्ड, अगर शुल्क माफ़ी चाहते हैं"
+    }
   ],
   "fields": [
     {
@@ -33,7 +44,10 @@
       "rule": "name",
       "source": "digilocker",
       "profileKey": "name",
-      "question": { "en": "What is your full name?", "hi": "आपका पूरा नाम क्या है?" },
+      "question": {
+        "en": "What is your full name?",
+        "hi": "आपका पूरा नाम क्या है?"
+      },
       "explain": {
         "en": "Any Indian citizen can file an RTI. You do not have to explain who you are or why you want the information.",
         "hi": "कोई भी भारतीय नागरिक आरटीआई दायर कर सकता है। आपको यह बताने की ज़रूरत नहीं कि आप कौन हैं या जानकारी क्यों चाहिए।"
@@ -61,7 +75,10 @@
       "rule": "pincode",
       "source": "digilocker",
       "profileKey": "pincode",
-      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "question": {
+        "en": "What is your PIN code?",
+        "hi": "आपका पिन कोड क्या है?"
+      },
       "explain": {
         "en": "Six digits. Without it the reply can be delayed by weeks.",
         "hi": "छह अंक। इसके बिना जवाब आने में हफ़्तों की देरी हो सकती है।"
@@ -70,7 +87,10 @@
     },
     {
       "id": "public_authority",
-      "label": { "en": "Department you are asking", "hi": "जिस विभाग से पूछ रहे हैं" },
+      "label": {
+        "en": "Department you are asking",
+        "hi": "जिस विभाग से पूछ रहे हैं"
+      },
       "rule": "text",
       "source": "ask",
       "question": {
@@ -85,7 +105,10 @@
     },
     {
       "id": "information_sought",
-      "label": { "en": "Information you want", "hi": "आप कौन सी जानकारी चाहते हैं" },
+      "label": {
+        "en": "Information you want",
+        "hi": "आप कौन सी जानकारी चाहते हैं"
+      },
       "rule": "text",
       "source": "ask",
       "question": {
@@ -100,7 +123,10 @@
     },
     {
       "id": "period_of_information",
-      "label": { "en": "Time period of the information", "hi": "जानकारी की अवधि" },
+      "label": {
+        "en": "Time period of the information",
+        "hi": "जानकारी की अवधि"
+      },
       "rule": "text",
       "source": "ask",
       "question": {
@@ -115,12 +141,23 @@
     },
     {
       "id": "bpl_status",
-      "label": { "en": "Below poverty line?", "hi": "क्या गरीबी रेखा से नीचे हैं?" },
+      "label": {
+        "en": "Below poverty line?",
+        "hi": "क्या गरीबी रेखा से नीचे हैं?"
+      },
       "rule": "choice",
       "source": "ask",
       "options": [
-        { "value": "No", "en": "No — I will pay the ₹10 fee", "hi": "नहीं — मैं ₹10 शुल्क दूँगा/दूँगी" },
-        { "value": "Yes", "en": "Yes — I have a BPL card (no fee)", "hi": "हाँ — मेरे पास बीपीएल कार्ड है (कोई शुल्क नहीं)" }
+        {
+          "value": "No",
+          "en": "No — I will pay the ₹10 fee",
+          "hi": "नहीं — मैं ₹10 शुल्क दूँगा/दूँगी"
+        },
+        {
+          "value": "Yes",
+          "en": "Yes — I have a BPL card (no fee)",
+          "hi": "हाँ — मेरे पास बीपीएल कार्ड है (कोई शुल्क नहीं)"
+        }
       ],
       "question": {
         "en": "Do you have a below poverty line card?",
@@ -136,12 +173,55 @@
       "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
       "rule": "mobile",
       "source": "ask",
-      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
+      "question": {
+        "en": "What is your mobile number?",
+        "hi": "आपका मोबाइल नंबर क्या है?"
+      },
       "explain": {
         "en": "Optional, but useful if the officer needs to clarify your question. By law you must get a reply within 30 days.",
         "hi": "ज़रूरी नहीं, पर अगर अधिकारी को आपका सवाल समझना हो तो काम आता है। कानून के अनुसार आपको 30 दिन में जवाब मिलना चाहिए।"
       },
       "example": "9876543210"
+    },
+    {
+      "id": "guardian_name",
+      "label": { "en": "Father's / Husband's name", "hi": "पिता / पति का नाम" },
+      "rule": "name",
+      "source": "ask",
+      "question": {
+        "en": "What is your father's or husband's name?",
+        "hi": "आपके पिता या पति का नाम क्या है?"
+      },
+      "explain": {
+        "en": "Required for the declaration at the bottom of the form.",
+        "hi": "फॉर्म के नीचे घोषणापत्र के लिए ज़रूरी है।"
+      }
+    },
+    {
+      "id": "delivery_mode",
+      "label": {
+        "en": "How should the reply be sent?",
+        "hi": "जवाब कैसे भेजा जाए?"
+      },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "post", "en": "By Post", "hi": "डाक से" },
+        { "value": "email", "en": "By E-mail", "hi": "ईमेल से" },
+        {
+          "value": "person",
+          "en": "I will collect it in person",
+          "hi": "मैं खुद लेने आऊँगा/आऊँगी"
+        }
+      ],
+      "question": {
+        "en": "How would you like to receive the reply?",
+        "hi": "आप जवाब कैसे पाना चाहते हैं?"
+      },
+      "explain": {
+        "en": "Post is safest — you get a paper copy you can use as evidence.",
+        "hi": "डाक सबसे सुरक्षित है — आपको कागज़ी प्रति मिलती है जो सबूत के रूप में काम करती है।"
+      }
     }
   ]
 }
