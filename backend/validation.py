@@ -75,6 +75,23 @@ def _fn_rule(fn: Callable[[str], bool], en: str, hi: str, normalise: Callable[[s
 _strip_spaces = lambda v: re.sub(r"[\s-]", "", v)  # noqa: E731
 _upper = lambda v: v.strip().upper()  # noqa: E731
 
+# Android's Hindi recogniser returns ०१२३ rather than 0123, and a Devanagari
+# keyboard types them that way too. U+0966-U+096F are contiguous.
+_DEVANAGARI_DIGITS: dict[int, str] = {0x0966 + i: str(i) for i in range(10)}
+_devanagari_to_ascii: Callable[[str], str] = lambda v: v.translate(_DEVANAGARI_DIGITS)  # noqa: E731
+
+
+def _normalise_mobile(value: str) -> str:
+    # Only strip 91 when the length proves it is a country code. A bare
+    # ^\+?91 also eats the first two digits of 9198765432, which is a
+    # perfectly good number someone actually has.
+    digits: str = _strip_spaces(_devanagari_to_ascii(value))
+    if digits.startswith("+91") and len(digits) == 13:
+        return digits[3:]
+    if digits.startswith("91") and len(digits) == 12:
+        return digits[2:]
+    return digits
+
 
 RULES: dict[str, Rule] = {
     # Bank branch code: 4 letters, a literal 0, then 6 alphanumerics.
@@ -88,7 +105,7 @@ RULES: dict[str, Rule] = {
         lambda v: bool(re.fullmatch(r"[2-9]\d{11}", v)) and _verhoeff_valid(v),
         "Aadhaar must be 12 digits and pass the UIDAI checksum. Please re-read the number.",
         "आधार 12 अंकों का होना चाहिए और UIDAI जाँच में सही होना चाहिए। कृपया नंबर दोबारा देखें।",
-        normalise=_strip_spaces,
+        normalise=lambda v: _strip_spaces(_devanagari_to_ascii(v)),
     ),
     "pan": _regex_rule(
         r"^[A-Z]{5}\d{4}[A-Z]$",
@@ -100,31 +117,31 @@ RULES: dict[str, Rule] = {
         r"^[6-9]\d{9}$",
         "Mobile number must be 10 digits starting with 6, 7, 8 or 9.",
         "मोबाइल नंबर 10 अंकों का हो और 6, 7, 8 या 9 से शुरू हो।",
-        normalise=lambda v: _strip_spaces(v).removeprefix("+91").removeprefix("91")
-        if len(_strip_spaces(v)) > 10
-        else _strip_spaces(v),
+        normalise=_normalise_mobile,
     ),
     "pincode": _regex_rule(
         r"^[1-9]\d{5}$",
         "PIN code must be 6 digits and cannot start with 0.",
         "पिन कोड 6 अंकों का होता है और 0 से शुरू नहीं होता।",
-        normalise=_strip_spaces,
+        normalise=lambda v: _strip_spaces(_devanagari_to_ascii(v)),
     ),
     "bank_account": _regex_rule(
         r"^\d{9,18}$",
         "Bank account number must be between 9 and 18 digits.",
         "बैंक खाता संख्या 9 से 18 अंकों के बीच होनी चाहिए।",
-        normalise=_strip_spaces,
+        normalise=lambda v: _strip_spaces(_devanagari_to_ascii(v)),
     ),
     "date": _fn_rule(
         lambda v: _parse_ddmmyyyy(v) is not None,
         "Date must be in DD/MM/YYYY format. Example: 14/08/1961",
         "तारीख DD/MM/YYYY रूप में लिखें। जैसे: 14/08/1961",
+        normalise=lambda v: re.sub(r"[-.]", "/", _devanagari_to_ascii(v).strip()),
     ),
     "date_past": _fn_rule(
         lambda v: (d := _parse_ddmmyyyy(v)) is not None and d < date.today(),
         "Date must be in the past and in DD/MM/YYYY format.",
         "तारीख आज से पहले की होनी चाहिए, DD/MM/YYYY रूप में।",
+        normalise=lambda v: re.sub(r"[-.]", "/", _devanagari_to_ascii(v).strip()),
     ),
     "name": _regex_rule(
         r"^[A-Za-zऀ-ॿ][A-Za-zऀ-ॿ .'-]{1,60}$",
@@ -136,7 +153,7 @@ RULES: dict[str, Rule] = {
         lambda v: bool(re.fullmatch(r"\d{1,9}", v)) and int(v) >= 0,
         "Amount must be a whole number in rupees, without commas.",
         "राशि पूरे रुपये में लिखें, अल्पविराम के बिना।",
-        normalise=lambda v: re.sub(r"[,\s₹]", "", v),
+        normalise=lambda v: _devanagari_to_ascii(re.sub(r"[,\s₹]", "", v)),
     ),
     "email": _regex_rule(
         r"^[^@\s]+@[^@\s.]+\.[A-Za-z]{2,}$",

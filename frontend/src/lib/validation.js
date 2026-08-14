@@ -33,6 +33,14 @@ const P_TABLE = [
   [7, 0, 4, 6, 9, 1, 3, 2, 5, 8],
 ]
 
+// Android's Hindi recogniser returns ०१२३ rather than 0123, and a citizen with
+// a Devanagari keyboard types them that way too. U+0966-U+096F are contiguous,
+// so the offset from ० is the digit. Duplicated from speech.js rather than
+// imported, because that module reads `window` at load and this one is used by
+// the backend-parity checks and must stay pure.
+const devanagariToAscii = (v) =>
+  v.replace(/[०-९]/g, (d) => String(d.charCodeAt(0) - 0x0966))
+
 function verhoeffValid(number) {
   let c = 0
   const digits = number.split('').reverse()
@@ -66,7 +74,7 @@ export const RULES = {
   },
   aadhaar: {
     test: (v) => /^[2-9]\d{11}$/.test(v) && verhoeffValid(v),
-    normalise: stripSpaces,
+    normalise: (v) => stripSpaces(devanagariToAscii(v)),
     en: 'Aadhaar must be 12 digits and pass the UIDAI check. Please read the number again.',
     hi: 'आधार 12 अंकों का होना चाहिए और UIDAI जाँच में सही होना चाहिए। कृपया नंबर दोबारा देखें।',
   },
@@ -79,27 +87,32 @@ export const RULES = {
   mobile: {
     test: (v) => /^[6-9]\d{9}$/.test(v),
     normalise: (v) => {
-      const digits = stripSpaces(v).replace(/^\+?91/, '')
-      return digits
+      // Only strip 91 when the length proves it is a country code. A bare
+      // /^\+?91/ also eats the first two digits of 9198765432, which is a
+      // perfectly good number someone actually has.
+      let s = stripSpaces(devanagariToAscii(v))
+      if (s.startsWith('+91') && s.length === 13) s = s.slice(3)
+      else if (s.startsWith('91') && s.length === 12) s = s.slice(2)
+      return s
     },
     en: 'Mobile number must be 10 digits starting with 6, 7, 8 or 9.',
     hi: 'मोबाइल नंबर 10 अंकों का हो और 6, 7, 8 या 9 से शुरू हो।',
   },
   pincode: {
     test: (v) => /^[1-9]\d{5}$/.test(v),
-    normalise: stripSpaces,
+    normalise: (v) => stripSpaces(devanagariToAscii(v)),
     en: 'PIN code must be 6 digits and cannot start with 0.',
     hi: 'पिन कोड 6 अंकों का होता है और 0 से शुरू नहीं होता।',
   },
   bank_account: {
     test: (v) => /^\d{9,18}$/.test(v),
-    normalise: stripSpaces,
+    normalise: (v) => stripSpaces(devanagariToAscii(v)),
     en: 'Bank account number must be between 9 and 18 digits.',
     hi: 'बैंक खाता संख्या 9 से 18 अंकों के बीच होनी चाहिए।',
   },
   date: {
     test: (v) => parseDate(v) !== null,
-    normalise: (v) => v.trim().replace(/[-.]/g, '/'),
+    normalise: (v) => devanagariToAscii(v).trim().replace(/[-.]/g, '/'),
     en: 'Date must be in DD/MM/YYYY format. Example: 14/08/1961',
     hi: 'तारीख DD/MM/YYYY रूप में लिखें। जैसे: 14/08/1961',
   },
@@ -108,7 +121,7 @@ export const RULES = {
       const d = parseDate(v)
       return d !== null && d < new Date()
     },
-    normalise: (v) => v.trim().replace(/[-.]/g, '/'),
+    normalise: (v) => devanagariToAscii(v).trim().replace(/[-.]/g, '/'),
     en: 'Date must be in the past, in DD/MM/YYYY format.',
     hi: 'तारीख आज से पहले की होनी चाहिए, DD/MM/YYYY रूप में।',
   },
@@ -121,7 +134,7 @@ export const RULES = {
   },
   amount: {
     test: (v) => /^\d{1,9}$/.test(v),
-    normalise: (v) => v.replace(/[,\s₹]/g, ''),
+    normalise: (v) => devanagariToAscii(v.replace(/[,\s₹]/g, '')),
     en: 'Amount must be a whole number in rupees, without commas.',
     hi: 'राशि पूरे रुपये में लिखें, अल्पविराम के बिना।',
   },
