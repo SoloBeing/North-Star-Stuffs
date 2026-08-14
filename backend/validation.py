@@ -8,6 +8,10 @@ This module mirrors frontend/src/lib/validation.js. The browser copy is the one
 that runs during a normal offline session; this copy exists so the API can be
 used by CSC operator tooling and so the rules have a server-side source of
 truth for tests.
+
+The mirroring is enforced, not remembered: shared/validation-cases.json holds
+the cases and `npm run test:rules` runs every one of them through both files,
+failing if they disagree on a cleaned value, a verdict, or a message.
 """
 
 from __future__ import annotations
@@ -103,7 +107,7 @@ RULES: dict[str, Rule] = {
     ),
     "aadhaar": _fn_rule(
         lambda v: bool(re.fullmatch(r"[2-9]\d{11}", v)) and _verhoeff_valid(v),
-        "Aadhaar must be 12 digits and pass the UIDAI checksum. Please re-read the number.",
+        "Aadhaar must be 12 digits and pass the UIDAI check. Please read the number again.",
         "आधार 12 अंकों का होना चाहिए और UIDAI जाँच में सही होना चाहिए। कृपया नंबर दोबारा देखें।",
         normalise=lambda v: _strip_spaces(_devanagari_to_ascii(v)),
     ),
@@ -139,13 +143,13 @@ RULES: dict[str, Rule] = {
     ),
     "date_past": _fn_rule(
         lambda v: (d := _parse_ddmmyyyy(v)) is not None and d < date.today(),
-        "Date must be in the past and in DD/MM/YYYY format.",
+        "Date must be in the past, in DD/MM/YYYY format.",
         "तारीख आज से पहले की होनी चाहिए, DD/MM/YYYY रूप में।",
         normalise=lambda v: re.sub(r"[-.]", "/", _devanagari_to_ascii(v).strip()),
     ),
     "name": _regex_rule(
         r"^[A-Za-zऀ-ॿ][A-Za-zऀ-ॿ .'-]{1,60}$",
-        "Name should be 2-60 letters. Numbers are not allowed.",
+        "Name should be 2 to 60 letters. Numbers are not allowed.",
         "नाम 2 से 60 अक्षरों का हो। अंक न लिखें।",
         normalise=lambda v: re.sub(r"\s+", " ", v.strip()),
     ),

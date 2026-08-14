@@ -1,0 +1,155 @@
+{
+  "_comment": [
+    "Shared truth for both validators. frontend/src/lib/validation.js and",
+    "backend/validation.py must agree on every case here — same cleaned value,",
+    "same verdict. frontend/scripts/check-rule-parity.mjs enforces it.",
+    "",
+    "A 'pass' case is [input, what it must normalise to]. Stating the cleaned",
+    "value is the point: it is what catches a contributor who believes their",
+    "rule transliterates Devanagari letters when it only converts digits.",
+    "A 'fail' case is [input, what it normalises to] and must be rejected.",
+    "",
+    "Every rule in RULES needs an entry here, or the parity check fails."
+  ],
+  "aadhaar": {
+    "pass": [
+      ["234567890124", "234567890124"],
+      ["2345 6789 0124", "234567890124"],
+      ["२३४५६७८९०१२४", "234567890124"]
+    ],
+    "fail": [
+      ["123456789012", "123456789012"],
+      ["234567890123", "234567890123"],
+      ["23456789012", "23456789012"],
+      ["abcdefghijkl", "abcdefghijkl"]
+    ]
+  },
+  "pan": {
+    "pass": [
+      ["ABCDE1234F", "ABCDE1234F"],
+      ["abcde1234f", "ABCDE1234F"],
+      ["abcde 1234 f", "ABCDE1234F"]
+    ],
+    "fail": [
+      ["ABCD1234F", "ABCD1234F"],
+      ["ABCDE1234", "ABCDE1234"],
+      ["1BCDE1234F", "1BCDE1234F"]
+    ]
+  },
+  "ifsc": {
+    "pass": [
+      ["SBIN0001234", "SBIN0001234"],
+      ["sbin0001234", "SBIN0001234"]
+    ],
+    "fail": [
+      ["SBIN1001234", "SBIN1001234"],
+      ["SBI0001234", "SBI0001234"],
+      ["SBIN000123", "SBIN000123"]
+    ]
+  },
+  "mobile": {
+    "pass": [
+      ["9876543210", "9876543210"],
+      ["+91 98765 43210", "9876543210"],
+      ["919876543210", "9876543210"],
+      ["९८७६५४३२१०", "9876543210"],
+      ["9198765432", "9198765432"]
+    ],
+    "fail": [
+      ["5876543210", "5876543210"],
+      ["987654321", "987654321"],
+      ["98765432101", "98765432101"]
+    ]
+  },
+  "pincode": {
+    "pass": [
+      ["302015", "302015"],
+      ["३०२०१७", "302017"]
+    ],
+    "fail": [
+      ["012345", "012345"],
+      ["30201", "30201"],
+      ["3020155", "3020155"]
+    ]
+  },
+  "bank_account": {
+    "pass": [
+      ["123456789", "123456789"],
+      ["30123456789", "30123456789"],
+      ["१२३४५६७८९", "123456789"]
+    ],
+    "fail": [
+      ["12345678", "12345678"],
+      ["1234567890123456789", "1234567890123456789"],
+      ["12345678a", "12345678a"]
+    ]
+  },
+  "date": {
+    "pass": [
+      ["14/08/1961", "14/08/1961"],
+      ["14-08-1961", "14/08/1961"],
+      ["१४/०८/१९६१", "14/08/1961"]
+    ],
+    "fail": [
+      ["31/02/2020", "31/02/2020"],
+      ["1961/08/14", "1961/08/14"],
+      ["14/13/1961", "14/13/1961"]
+    ]
+  },
+  "date_past": {
+    "pass": [
+      ["14/08/1961", "14/08/1961"],
+      ["14/08/2005", "14/08/2005"]
+    ],
+    "fail": [
+      ["14/08/2090", "14/08/2090"],
+      ["31/02/2020", "31/02/2020"]
+    ]
+  },
+  "name": {
+    "pass": [
+      ["Sunita Devi", "Sunita Devi"],
+      ["  Ram   Prasad  ", "Ram Prasad"],
+      ["राम कुमार", "राम कुमार"],
+      ["D'Souza", "D'Souza"]
+    ],
+    "fail": [
+      ["R", "R"],
+      ["Ram2", "Ram2"],
+      ["123", "123"]
+    ]
+  },
+  "amount": {
+    "pass": [
+      ["5000", "5000"],
+      ["₹ 5,000", "5000"],
+      ["१,२३,४५६", "123456"]
+    ],
+    "fail": [
+      ["1234567890", "1234567890"],
+      ["50.50", "50.50"],
+      ["abc", "abc"]
+    ]
+  },
+  "email": {
+    "pass": [
+      ["sunita@example.com", "sunita@example.com"],
+      ["A@B.CO", "a@b.co"]
+    ],
+    "fail": [
+      ["bad@@x.com", "bad@@x.com"],
+      ["no-at-sign.com", "no-at-sign.com"],
+      ["a@b", "a@b"]
+    ]
+  },
+  "text": {
+    "pass": [
+      ["hello", "hello"],
+      ["line one\nline two", "line one line two"],
+      ["  spaced   out  ", "spaced out"]
+    ],
+    "fail": [
+      ["   ", ""]
+    ]
+  }
+}

@@ -5,7 +5,10 @@
  * offline. Every rule is a regex or arithmetic. No model is consulted, so a
  * validation verdict cannot be hallucinated.
  *
- * Mirrors backend/validation.py. If you change a rule, change it in both.
+ * Mirrors backend/validation.py, and that is enforced rather than remembered:
+ * every case in shared/validation-cases.json is run through both files by
+ * `npm run test:rules`, which fails if they disagree on a cleaned value, a
+ * verdict, or a message. A new rule needs an entry in all three places.
  */
 
 /** UIDAI's Verhoeff checksum. Catches nearly all typos and invented numbers. */

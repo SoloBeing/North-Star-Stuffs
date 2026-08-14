@@ -6,8 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "preview": "vite preview",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "check": "npm run lint && npm run check:ui && npm run test:ui && npm run check:contrib && npm run test:contrib && npm run context:check",
+    "check:all": "npm run check && npm run test:rules",
+    "check:ui": "node scripts/check-ui.mjs",
+    "test:ui": "node scripts/check-ui.test.mjs",
+    "check:contrib": "node scripts/check-contribution.mjs",
+    "test:contrib": "node scripts/check-contribution.test.mjs",
+    "test:rules": "node scripts/check-rule-parity.mjs",
+    "context": "node scripts/build-context-packs.mjs",
+    "context:check": "node scripts/build-context-packs.mjs --check"
   },
   "dependencies": {
     "@pdf-lib/fontkit": "^1.1.1",
