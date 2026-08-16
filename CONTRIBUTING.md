@@ -82,6 +82,19 @@ Everything at once:
 npm run check        # lint + templates + checker's own tests + pack freshness
 ```
 
+### If you changed interface text
+
+`i18n.js` holds every word the app says, and `t()` hides its own failures — a
+missing `hi` falls back to English, a missing key renders as the key itself.
+Both ship looking fine to anyone who reads English.
+
+```bash
+npm run check:text
+```
+
+It fails if a key is written twice, if either language is missing or empty, if
+`hi` has no Devanagari in it, or if a screen asks for a string nobody wrote.
+
 ### If you changed a validation rule
 
 Rules live twice — once in JavaScript for the browser, once in Python for the
@@ -99,8 +112,8 @@ You do not need this for a form or a text change.
 ## Two things the checker cannot do
 
 **It cannot tell whether your Hindi is good.** It only knows the `hi` key is
-present and non-empty. Hindi that reads like a machine translated it will be
-sent back by a human.
+present, non-empty, and written in Devanagari rather than transliterated.
+Hindi that reads like a machine translated it will be sent back by a human.
 
 **It cannot tell whether your explanation is true.** If you write that an RTI
 costs ₹20, the checker will happily pass it. Explanations concern people who

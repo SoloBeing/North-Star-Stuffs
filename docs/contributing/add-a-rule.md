@@ -189,13 +189,7 @@ and `hi` messages are not byte-identical across the two files.
 ## How this gets in
 
 1. Save your output to the file path given above.
-2. Run the checker from the `frontend/` directory:
-   ```bash
-   npm run check:contrib
-   ```
-   It validates structure — every required key present, both languages, real
-   rule names, `showIf` pointing at a field that exists. Fix anything it
-   reports before opening the PR.
+2. Run the parity check shown above, and fix anything reported before opening the PR.
 3. Open a pull request with one sentence saying what the change is for.
 
 The checker cannot tell whether your Hindi is *good* or whether your explanation

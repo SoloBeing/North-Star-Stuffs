@@ -277,8 +277,8 @@ name the trap, and write Hindi a person actually speaks.
    npm run check:contrib
    ```
    It validates structure — every required key present, both languages, real
-   rule names, `showIf` pointing at a field that exists. Fix anything it
-   reports before opening the PR.
+   rule names, `showIf` pointing at a field that exists.
+   Fix anything it reports before opening the PR.
 3. Open a pull request with one sentence saying what the change is for.
 
 The checker cannot tell whether your Hindi is *good* or whether your explanation
