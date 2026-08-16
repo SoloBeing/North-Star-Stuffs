@@ -4,8 +4,10 @@
 
 # Adding or fixing interface text
 
-Every word of the interface lives in one file: `frontend/src/lib/i18n.js`.
-Use this pack to add a new string, or to fix an English or Hindi wording.
+Every word a screen shows or speaks lives in one file:
+`frontend/src/lib/i18n.js`. Use this pack to add a new string, or to fix an
+English or Hindi wording. (PDF text and validation messages are separate
+systems, and out of scope for every pack.)
 
 ## What FormMitra is
 
@@ -54,12 +56,68 @@ will read every line you produce.
 
 **Your deliverable:** the new entries only, as `key: { en, hi },` lines ready to paste into the
 `STRINGS` object in `frontend/src/lib/i18n.js`. For a correction, output only
-the entries that change.
+the entries that change. Above the block, state **where the string appears** —
+which screen, and in place of what.
 
 Files that are **out of scope** for every pack — never emit changes to these:
 `App.jsx`, `officialPdf.js`, `pdf.js`, `speech.js`, `ocr.js`,
 `components/ui.jsx`, anything under `backend/` except where a pack says
 otherwise. They need the whole picture and are maintained by the repo owner.
+
+## Before you write anything: the reuse check
+
+A real run of this pack produced `scanLevelHint` — *"Hold your phone level with
+the form and keep the whole page in view"* — when `scanHint` already said *"Hold
+the phone steady above the whole page, in good light"*. Both would have appeared
+on the same screen, and one of them is read aloud.
+
+The list below tells you a **name** is free. It does not tell you the **meaning**
+is free, and that is the one that ships wrong.
+
+So before your code block, write one line:
+
+> Closest existing key: `scanHint` — "Hold the phone steady…". Not reusing it
+> because …
+
+If you cannot finish that sentence with a difference a citizen would actually
+notice, you do not need a new key. Say so and stop.
+
+## When to stop instead of writing
+
+- **An existing key already means it** — the reuse check above.
+- **Nothing on screen would show it.** This pack adds words to a file; it cannot
+  put them in front of anyone. If no screen renders this text today, name the
+  screen that would have to change, and stop.
+- **The feature does not exist.** One run wrote *"this form is temporarily
+  unavailable"* for a form-disabling feature this app has never had. Text for a
+  feature nobody has built cannot be used by anyone.
+
+## How the Hindi has to read
+
+FormMitra exists because government Hindi is unreadable to the people who have
+to obey it. Writing that same Hindi back into the app reproduces the exact
+problem it was built to solve. This is the easiest way to fail here, and a
+checker cannot catch it.
+
+Write what a person would **say out loud** to a neighbour who asked for help.
+
+| do not write | write |
+|---|---|
+| हुई असुविधा के लिए हमें खेद है | अभी दिक्कत हो रही है, माफ़ कीजिए |
+| कृपया प्रतीक्षा करें | थोड़ी देर रुकिए |
+| अस्थायी रूप से उपलब्ध नहीं है | अभी यह काम नहीं कर रहा |
+| आवेदन प्रस्तुत करें | फॉर्म जमा कीजिए |
+
+Two habits of this codebase, both easy to apply:
+
+- **Sentences take the `कीजिए`/`लीजिए` form, not `करें`.** 15 strings in the
+  live file already do: "फोटो लीजिए", "टाइप कीजिए", "फिर कोशिश कीजिए". Keep
+  `करें` for short button labels — "डाउनलोड करें".
+- **No Sanskritised word where an everyday one exists**: प्रतीक्षा → रुकना,
+  असुविधा → दिक्कत, प्रस्तुत → जमा, अस्थायी → अभी।
+
+Hindi is the **default language** — most citizens using this app read Hindi
+only. Write it first if that helps; do not treat it as a translation.
 
 ## The format
 
@@ -76,24 +134,40 @@ Longer strings wrap:
   },
 ```
 
+A string that needs a number or a name written into it uses a `{slot}`:
+
+```js
+  docsAlreadyHave: {
+    en: '{count} of these are already in your DigiLocker',
+    hi: '{count} दस्तावेज़ आपके डिजिलॉकर में पहले से मौजूद हैं',
+  },
+```
+
+Both languages must carry **the same slots**. If one has a slot the other does
+not, the value silently vanishes for whoever reads that language — so
+`check:text` fails the build on it.
+
 Rules that are easy to get wrong:
 
-- **camelCase keys**, named for meaning and not for the screen they sit on.
+- **camelCase keys, named for what the string means.** Where a screen already
+  has a family — `consentTitle`/`consentBody`, `doneTitle`/`doneBody` — follow
+  it rather than inventing a parallel scheme.
+- **Put the entry in the right group.** The file is divided by `// Consent`,
+  `// Home`, `// Scan` comments. Add yours to the group it belongs to, and say
+  which existing entry it goes after. Do not append at the end.
 - **A key must be unique.** `STRINGS` is a plain object, so a repeated key
   silently overrides the earlier one and the wrong text ships. This has happened
-  in this project before. Check the list below before choosing a name.
-- **Never delete or renumber an existing key.** Other screens read it.
-- Hindi is the **default language** — most citizens using this app read Hindi
-  only. Write it first if that helps; do not treat it as a translation.
+  in this project before.
+- **Never delete or rename an existing key.** Other screens read it.
 
 ## Every key that already exists
 
-75 keys. This is a **collision list, not a permitted list** — you are
-adding a new key, so you must choose a name that is not already here. Check
-against it, then name yours freely in camelCase.
+85 keys. This is a **collision list, not a permitted list** — you are
+adding a new key, so choose a name that is not already here, then name yours
+freely in camelCase.
 
-If a key below already says what you need, reuse it instead of adding a
-near-duplicate.
+Read it for **meaning**, not just for names. If a key below already says what
+you need, reuse it and add nothing.
 
 | key | current English |
 |---|---|
@@ -111,6 +185,10 @@ near-duplicate.
 | `scanAnyHint` | Take a photo and we will recognise it |
 | `loginDigilocker` | Login with DigiLocker |
 | `loginHint` | Fills your name, date of birth and address automatically |
+| `loginNeedsInternet` | Login needs internet — everything else works without it. |
+| `loginCancelled` | The DigiLocker login was not completed. Try again, or fill the form without it. |
+| `loginFailed` | DigiLocker could not sign you in just now. Please try again in a little while. |
+| `tryAgain` | Try again |
 | `loggedInAs` | Signed in as |
 | `verified` | DigiLocker verified |
 | `clearAll` | Erase my data |
@@ -120,7 +198,9 @@ near-duplicate.
 | `takePhoto` | Open camera |
 | `choosePhoto` | Choose a photo |
 | `reading` | Reading the form… |
+| `scanPrivacy` | This is happening on your phone — the photo is not being sent anywhere. |
 | `recognised` | This looks like |
+| `scanConfidence` | {percent}% match · {hits} keywords found |
 | `notRecognised` | We could not recognise this form |
 | `pickManually` | Please choose it from the list instead |
 | `yesCorrect` | Yes, that is right |
@@ -129,6 +209,7 @@ near-duplicate.
 | `fieldsTotal` | fields in this form |
 | `autoFilled` | already filled from DigiLocker |
 | `weWillAsk` | we will ask you |
+| `prefilledNotice` | {count} fields are already filled from DigiLocker — you will not be asked those. |
 | `startFilling` | Start filling |
 | `listen` | Listen |
 | `question` | Question |
@@ -145,6 +226,7 @@ near-duplicate.
 | `example` | Example |
 | `micBlocked` | Microphone is not available. Please type your answer. |
 | `didNotHear` | We did not hear anything. Please try again or type it. |
+| `chooseFromOptions` | Please pick or say one of the given options. |
 | `confirmTitle` | Please check your answers |
 | `confirmHint` | We will read each one aloud. Tap any answer to change it. |
 | `readAloud` | Read everything aloud |
@@ -154,6 +236,8 @@ near-duplicate.
 | `allCorrect` | Everything is correct |
 | `checklistTitle` | Documents to carry |
 | `checklistHint` | Take these with you when you submit the form |
+| `docsAlreadyHave` | {count} of these are already in your DigiLocker |
+| `docsNoNeedToArrange` | You do not need to arrange these — you can show them from the DigiLocker app. |
 | `youHaveThis` | You already have this in DigiLocker |
 | `needToArrange` | You need to arrange this |
 | `downloadPdf` | Download filled form |

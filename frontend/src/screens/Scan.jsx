@@ -73,9 +73,7 @@ export default function Scan({ lang, onPickForm, onBack }) {
             />
           </div>
           <p className="mt-2 text-base text-ink-soft">
-            {lang === 'hi'
-              ? 'यह आपके फोन पर ही हो रहा है — फोटो कहीं नहीं भेजी जा रही।'
-              : 'This is happening on your phone — the photo is not being sent anywhere.'}
+            {t('scanPrivacy', lang)}
           </p>
         </Card>
       )}
@@ -96,9 +94,10 @@ export default function Scan({ lang, onPickForm, onBack }) {
             {result.best.form.name[lang]}
           </p>
           <p className="mt-1 text-base text-ink-soft">
-            {Math.round(result.best.confidence * 100)}%{' '}
-            {lang === 'hi' ? 'मिलान' : 'match'} · {result.best.hits.length}{' '}
-            {lang === 'hi' ? 'संकेत मिले' : 'keywords found'}
+            {t('scanConfidence', lang, {
+              percent: Math.round(result.best.confidence * 100),
+              hits: result.best.hits.length,
+            })}
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <Button variant="good" onClick={() => onPickForm(result.best.form)}>

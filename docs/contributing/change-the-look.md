@@ -166,14 +166,14 @@ carry the tap-target and contrast rules with them.
 
 Ask for the one file you are changing and paste it in. Nothing else is needed.
 
-- `src/screens/Checklist.jsx` — 100 lines
+- `src/screens/Checklist.jsx` — 96 lines
 - `src/screens/Consent.jsx` — 108 lines
-- `src/screens/Home.jsx` — 120 lines
+- `src/screens/Home.jsx` — 118 lines
 - `src/screens/Confirm.jsx` — 155 lines
-- `src/screens/Scan.jsx` — 156 lines
-- `src/screens/FormOverview.jsx` — 168 lines
+- `src/screens/Scan.jsx` — 155 lines
+- `src/screens/FormOverview.jsx` — 166 lines
 - `src/screens/Done.jsx` — 249 lines
-- `src/screens/GuidedFill.jsx` — 282 lines
+- `src/screens/GuidedFill.jsx` — 278 lines
 
 `GuidedFill.jsx` and `Confirm.jsx` hold the most logic. Be especially careful
 there that you are changing appearance only.

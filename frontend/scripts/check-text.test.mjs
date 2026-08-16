@@ -43,6 +43,9 @@ const CASES = [
   ['a quoted key', (s) => s.replace(NEXT, "  'next': { en: 'Next', hi: 'आगे' },"), 'not written as plain'],
   ['a file that does not parse', (s) => s.replace('export const STRINGS = {', 'export const STRINGS = {{'), 'does not parse'],
   ['some other file entirely', (s) => s.replaceAll('STRINGS', 'TEXTS'), 'no `STRINGS` object found'],
+  ['a placeholder the Hindi never receives', (s) => s.replace(NEXT, "  next: { en: 'Next {count}', hi: 'आगे' },"), '{count} in en but not in hi'],
+  ['a placeholder the English never receives', (s) => s.replace(NEXT, "  next: { en: 'Next', hi: 'आगे {count}' },"), '{count} in hi but not in en'],
+  ['a renamed placeholder', (s) => s.replace(NEXT, "  next: { en: 'Next {count}', hi: 'आगे {total}' },"), '{count} in en but not in hi'],
 ]
 
 /** A whole strings file, small enough that the usage report stays readable. */
@@ -73,6 +76,13 @@ const USE_CASES = [
     'fail',
   ],
   ['a string no screen ever shows', SMALL, SCREEN.replace("{t('back', lang)}", ''), 'never used by any screen', 'warn'],
+  [
+    'a bilingual string written straight into a screen',
+    SMALL,
+    SCREEN.replace("t('back', lang)", "lang === 'hi' ? 'पीछे' : 'Back'"),
+    "inline \"lang === 'hi'\" string",
+    'fail',
+  ],
   [
     'two keys saying the same thing',
     SMALL.replace("  back: { en: 'Back', hi: 'पीछे' },", "  back: { en: 'Back', hi: 'पीछे' },\n  goBack: { en: 'back', hi: 'वापस' },"),

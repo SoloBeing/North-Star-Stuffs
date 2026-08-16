@@ -50,9 +50,7 @@ export default function Home({
           </Button>
           {offline && (
             <p className="mt-2 text-base text-ink-soft">
-              {lang === 'hi'
-                ? 'लॉगिन के लिए इंटरनेट चाहिए — बाकी सब बिना इंटरनेट चलता है।'
-                : 'Login needs internet — everything else works without it.'}
+              {t('loginNeedsInternet', lang)}
             </p>
           )}
         </Card>

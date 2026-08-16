@@ -1,9 +1,14 @@
 /**
  * UI strings, in both languages.
  *
- * Flat keys, no library. Every string the citizen can see or hear lives here,
- * so a missing translation is a visible gap in one file rather than a hunt
- * through twenty components.
+ * Flat keys, no library. Every word a screen shows or speaks lives here, so a
+ * missing translation is a visible gap in one file rather than a hunt through
+ * twenty components. PDF text and validator messages are their own systems and
+ * deliberately not here.
+ *
+ * A string that needs a value written into it uses a `{name}` placeholder and
+ * is called as `t('key', lang, { name })`. Both languages must carry the same
+ * placeholders; check:text fails the build when they drift apart.
  */
 
 export const STRINGS = {
@@ -46,6 +51,21 @@ export const STRINGS = {
     en: 'Fills your name, date of birth and address automatically',
     hi: 'आपका नाम, जन्म तिथि और पता अपने आप भर देता है',
   },
+  loginNeedsInternet: {
+    en: 'Login needs internet — everything else works without it.',
+    hi: 'लॉगिन के लिए इंटरनेट चाहिए — बाकी सब बिना इंटरनेट चलता है।',
+  },
+  // What the citizen sees instead of a raw exception message. The technical
+  // text goes to the console, where it is useful to us and to nobody else.
+  loginCancelled: {
+    en: 'The DigiLocker login was not completed. Try again, or fill the form without it.',
+    hi: 'डिजिलॉकर लॉगिन पूरा नहीं हुआ। दोबारा कोशिश कीजिए, या बिना लॉगिन के फॉर्म भरिए।',
+  },
+  loginFailed: {
+    en: 'DigiLocker could not sign you in just now. Please try again in a little while.',
+    hi: 'डिजिलॉकर अभी लॉगिन नहीं कर पाया। थोड़ी देर बाद फिर कोशिश कीजिए।',
+  },
+  tryAgain: { en: 'Try again', hi: 'फिर से कोशिश करें' },
   loggedInAs: { en: 'Signed in as', hi: 'साइन इन:' },
   verified: { en: 'DigiLocker verified', hi: 'डिजिलॉकर से सत्यापित' },
   clearAll: { en: 'Erase my data', hi: 'मेरा डेटा मिटाएँ' },
@@ -60,7 +80,15 @@ export const STRINGS = {
   takePhoto: { en: 'Open camera', hi: 'कैमरा खोलें' },
   choosePhoto: { en: 'Choose a photo', hi: 'फोटो चुनें' },
   reading: { en: 'Reading the form…', hi: 'फॉर्म पढ़ा जा रहा है…' },
+  scanPrivacy: {
+    en: 'This is happening on your phone — the photo is not being sent anywhere.',
+    hi: 'यह आपके फोन पर ही हो रहा है — फोटो कहीं नहीं भेजी जा रही।',
+  },
   recognised: { en: 'This looks like', hi: 'यह लगता है' },
+  scanConfidence: {
+    en: '{percent}% match · {hits} keywords found',
+    hi: '{percent}% मिलान · {hits} संकेत मिले',
+  },
   notRecognised: {
     en: 'We could not recognise this form',
     hi: 'हम इस फॉर्म को पहचान नहीं पाए',
@@ -80,6 +108,10 @@ export const STRINGS = {
   fieldsTotal: { en: 'fields in this form', hi: 'जगह इस फॉर्म में' },
   autoFilled: { en: 'already filled from DigiLocker', hi: 'डिजिलॉकर से पहले ही भरे' },
   weWillAsk: { en: 'we will ask you', hi: 'हम आपसे पूछेंगे' },
+  prefilledNotice: {
+    en: '{count} fields are already filled from DigiLocker — you will not be asked those.',
+    hi: 'डिजिलॉकर से {count} जगह पहले ही भर दी गई हैं — वे आपसे नहीं पूछी जाएँगी।',
+  },
   startFilling: { en: 'Start filling', hi: 'भरना शुरू करें' },
   listen: { en: 'Listen', hi: 'सुनिए' },
 
@@ -104,6 +136,10 @@ export const STRINGS = {
     en: 'We did not hear anything. Please try again or type it.',
     hi: 'हमें कुछ सुनाई नहीं दिया। फिर कोशिश कीजिए या टाइप कीजिए।',
   },
+  chooseFromOptions: {
+    en: 'Please pick or say one of the given options.',
+    hi: 'कृपया दिए गए विकल्पों में से एक चुनें या बोलिए।',
+  },
 
   // Confirm
   confirmTitle: { en: 'Please check your answers', hi: 'कृपया अपने जवाब जाँच लें' },
@@ -122,6 +158,14 @@ export const STRINGS = {
   checklistHint: {
     en: 'Take these with you when you submit the form',
     hi: 'फॉर्म जमा करते समय ये साथ ले जाइए',
+  },
+  docsAlreadyHave: {
+    en: '{count} of these are already in your DigiLocker',
+    hi: '{count} दस्तावेज़ आपके डिजिलॉकर में पहले से मौजूद हैं',
+  },
+  docsNoNeedToArrange: {
+    en: 'You do not need to arrange these — you can show them from the DigiLocker app.',
+    hi: 'इन्हें कहीं से बनवाने की ज़रूरत नहीं — डिजिलॉकर ऐप से दिखा सकते हैं।',
   },
   youHaveThis: { en: 'You already have this in DigiLocker', hi: 'यह आपके डिजिलॉकर में पहले से है' },
   needToArrange: { en: 'You need to arrange this', hi: 'यह आपको जुटाना होगा' },
@@ -182,8 +226,14 @@ export const STRINGS = {
   },
 }
 
-export function t(key, lang = 'hi') {
+export function t(key, lang = 'hi', values = null) {
   const entry = STRINGS[key]
   if (!entry) return key
-  return entry[lang] ?? entry.en
+  const text = entry[lang] ?? entry.en
+  if (!values) return text
+  // An unsupplied placeholder is left standing rather than printed as
+  // "undefined" — visibly wrong in review, still readable to a citizen.
+  return text.replace(/\{(\w+)\}/g, (placeholder, name) =>
+    name in values ? String(values[name]) : placeholder,
+  )
 }

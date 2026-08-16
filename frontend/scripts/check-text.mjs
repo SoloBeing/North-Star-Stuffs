@@ -42,6 +42,9 @@ const LANGUAGES = ['en', 'hi']
 /** U+0900–U+097F. Hindi with none of this is English wearing a `hi:` label. */
 const DEVANAGARI = /[ऀ-ॿ]/
 
+/** The `{name}` slots a string expects to be given at render time. */
+const placeholders = (text) => new Set([...text.matchAll(/\{(\w+)\}/g)].map((m) => m[1]))
+
 const errors = []
 const warnings = []
 
@@ -228,6 +231,19 @@ for (const [name, index] of seen) {
       `${at}  "${name}".hi has no Devanagari — "${entry.hi}" is English under a hi label`,
     )
   }
+
+  // A placeholder present in one language and not the other means the value is
+  // silently dropped for whoever reads the other one — usually the Hindi.
+  if (typeof entry.en === 'string' && typeof entry.hi === 'string') {
+    const inEn = placeholders(entry.en)
+    const inHi = placeholders(entry.hi)
+    for (const slot of inEn) {
+      if (!inHi.has(slot)) errors.push(`${at}  "${name}" uses {${slot}} in en but not in hi`)
+    }
+    for (const slot of inHi) {
+      if (!inEn.has(slot)) errors.push(`${at}  "${name}" uses {${slot}} in hi but not in en`)
+    }
+  }
 }
 
 const byEnglish = new Map()
@@ -283,6 +299,19 @@ if (sourceDir) {
         )
       }
     }
+
+    // A bilingual string written straight into a component never reaches this
+    // file, so it is invisible to every check here and to the contributor packs
+    // that list what already exists. That is how near-duplicates get written.
+    if (file.endsWith('.jsx')) {
+      for (const m of text.matchAll(/lang\s*===\s*['"]hi['"]/g)) {
+        errors.push(
+          `${where}:${text.slice(0, m.index).split('\n').length}  an inline "lang === 'hi'" ` +
+            `string — every word a screen shows belongs in i18n.js, with {slots} for values`,
+        )
+      }
+    }
+
     for (const m of text.matchAll(quoted)) mentioned.add(m[1])
   }
 

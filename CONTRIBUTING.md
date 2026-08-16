@@ -93,7 +93,14 @@ npm run check:text
 ```
 
 It fails if a key is written twice, if either language is missing or empty, if
-`hi` has no Devanagari in it, or if a screen asks for a string nobody wrote.
+`hi` has no Devanagari in it, if a screen asks for a string nobody wrote, if a
+`{slot}` appears in one language and not the other, or if a component writes a
+bilingual string inline instead of putting it in `i18n.js`.
+
+That last one matters more than it looks. A string written straight into a
+component is invisible to this checker *and* to the contributor packs, which
+list what already exists so nobody writes it twice. That is exactly how a
+duplicate got written.
 
 ### If you changed a validation rule
 
@@ -112,8 +119,9 @@ You do not need this for a form or a text change.
 ## Two things the checker cannot do
 
 **It cannot tell whether your Hindi is good.** It only knows the `hi` key is
-present, non-empty, and written in Devanagari rather than transliterated.
-Hindi that reads like a machine translated it will be sent back by a human.
+present, non-empty, and written in Devanagari rather than transliterated. It
+cannot tell *sarkari* Hindi from the plain spoken Hindi this app exists to give
+people — the packs say what that means, and a human checks it.
 
 **It cannot tell whether your explanation is true.** If you write that an RTI
 costs ₹20, the checker will happily pass it. Explanations concern people who

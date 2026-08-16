@@ -44,14 +44,10 @@ export default function Checklist({
       {haveCount > 0 && (
         <Card className="mb-5 border-good-500 bg-good-50">
           <p className="text-lg font-bold text-good-600">
-            {lang === 'hi'
-              ? `${haveCount} दस्तावेज़ आपके डिजिलॉकर में पहले से मौजूद हैं`
-              : `${haveCount} of these are already in your DigiLocker`}
+            {t('docsAlreadyHave', lang, { count: haveCount })}
           </p>
           <p className="mt-1 text-base text-ink-soft">
-            {lang === 'hi'
-              ? 'इन्हें कहीं से बनवाने की ज़रूरत नहीं — डिजिलॉकर ऐप से दिखा सकते हैं।'
-              : 'You do not need to arrange these — you can show them from the DigiLocker app.'}
+            {t('docsNoNeedToArrange', lang)}
           </p>
         </Card>
       )}

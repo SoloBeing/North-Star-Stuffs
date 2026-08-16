@@ -269,6 +269,33 @@ Read aloud to someone who cannot read the form. Say what the box is *for* and
 what goes wrong if it is wrong — not a restatement of the label. Be concrete,
 name the trap, and write Hindi a person actually speaks.
 
+## How the Hindi has to read
+
+FormMitra exists because government Hindi is unreadable to the people who have
+to obey it. Writing that same Hindi back into the app reproduces the exact
+problem it was built to solve. This is the easiest way to fail here, and a
+checker cannot catch it.
+
+Write what a person would **say out loud** to a neighbour who asked for help.
+
+| do not write | write |
+|---|---|
+| हुई असुविधा के लिए हमें खेद है | अभी दिक्कत हो रही है, माफ़ कीजिए |
+| कृपया प्रतीक्षा करें | थोड़ी देर रुकिए |
+| अस्थायी रूप से उपलब्ध नहीं है | अभी यह काम नहीं कर रहा |
+| आवेदन प्रस्तुत करें | फॉर्म जमा कीजिए |
+
+Two habits of this codebase, both easy to apply:
+
+- **Sentences take the `कीजिए`/`लीजिए` form, not `करें`.** 15 strings in the
+  live file already do: "फोटो लीजिए", "टाइप कीजिए", "फिर कोशिश कीजिए". Keep
+  `करें` for short button labels — "डाउनलोड करें".
+- **No Sanskritised word where an everyday one exists**: प्रतीक्षा → रुकना,
+  असुविधा → दिक्कत, प्रस्तुत → जमा, अस्थायी → अभी।
+
+Hindi is the **default language** — most citizens using this app read Hindi
+only. Write it first if that helps; do not treat it as a translation.
+
 ## How this gets in
 
 1. Save your output to the file path given above.

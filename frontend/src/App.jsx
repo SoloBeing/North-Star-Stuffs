@@ -18,7 +18,7 @@
  */
 
 import { useCallback, useEffect, useState } from 'react'
-import { Header } from './components/ui'
+import { Header, Button } from './components/ui'
 import Consent from './screens/Consent'
 import Home from './screens/Home'
 import Scan from './screens/Scan'
@@ -34,6 +34,19 @@ import { t } from './lib/i18n'
 
 const LANG_KEY = 'formmitra.lang'
 const CONSENT_KEY = 'formmitra.consented'
+
+/**
+ * Turn a technical failure into a string key the citizen can act on.
+ *
+ * What arrives here is a Python exception rendered by the backend, or a fetch
+ * error like "Failed to fetch". Showing that to someone who cannot read
+ * bureaucratic English is the same failure this app exists to fix, so the raw
+ * cause goes to the console and the citizen gets a sentence.
+ */
+function loginProblem(cause) {
+  console.warn('DigiLocker login failed:', cause)
+  return cause === 'cancelled' ? 'loginCancelled' : 'loginFailed'
+}
 
 export default function App() {
   const [lang, setLang] = useState(
@@ -84,7 +97,7 @@ export default function App() {
     window.history.replaceState({}, '', window.location.pathname)
 
     if (error) {
-      setLoginError(error)
+      setLoginError(loginProblem(error))
       return
     }
 
@@ -99,7 +112,7 @@ export default function App() {
         setProfile(await profileRes.json())
         if (docsRes.ok) setIssuedDocuments((await docsRes.json()).documents)
       } catch (err) {
-        setLoginError(String(err.message ?? err))
+        setLoginError(loginProblem(err.message ?? err))
       }
     })()
   }, [])
@@ -112,7 +125,7 @@ export default function App() {
       const data = await res.json()
       window.location.href = data.authorize_url
     } catch (err) {
-      setLoginError(String(err.message ?? err))
+      setLoginError(loginProblem(err.message ?? err))
       setLoggingIn(false)
     }
   }
@@ -236,8 +249,19 @@ export default function App() {
 
       {loginError && (
         <div className="mx-auto mb-3 w-full max-w-xl px-4">
-          <div className="rounded-xl border-l-4 border-bad-500 bg-bad-50 px-4 py-2 text-base font-semibold text-bad-600">
-            {loginError}
+          <div className="rounded-xl border-l-4 border-bad-500 bg-bad-50 px-4 py-3 text-base font-semibold text-bad-600">
+            {t(loginError, lang)}
+            <Button
+              variant="secondary"
+              className="mt-2"
+              disabled={offline}
+              onClick={() => {
+                setLoginError(null)
+                login()
+              }}
+            >
+              {t('tryAgain', lang)}
+            </Button>
           </div>
         </div>
       )}

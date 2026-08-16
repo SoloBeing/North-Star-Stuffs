@@ -57,9 +57,7 @@ export default function FormOverview({ lang, form, profile, onStart, onBack }) {
 
       {prefilled.length > 0 && (
         <Banner tone="good" className="mb-5">
-          {lang === 'hi'
-            ? `डिजिलॉकर से ${prefilled.length} जगह पहले ही भर दी गई हैं — वे आपसे नहीं पूछी जाएँगी।`
-            : `${prefilled.length} fields are already filled from DigiLocker — you will not be asked those.`}
+          {t('prefilledNotice', lang, { count: prefilled.length })}
         </Banner>
       )}
 

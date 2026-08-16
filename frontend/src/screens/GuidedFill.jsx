@@ -73,11 +73,7 @@ export default function GuidedFill({
           setDraft(matched)
           setError(null)
         } else {
-          setError(
-            lang === 'hi'
-              ? 'कृपया दिए गए विकल्पों में से एक चुनें या बोलिए।'
-              : 'Please pick or say one of the given options.',
-          )
+          setError(t('chooseFromOptions', lang))
         }
         return
       }
