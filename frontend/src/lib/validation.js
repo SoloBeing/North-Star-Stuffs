@@ -54,7 +54,7 @@ function verhoeffValid(number) {
 }
 
 function parseDate(value) {
-  const m = value.trim().match(/^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{4})$/)
+  const m = trimEdges(value).match(/^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{4})$/)
   if (!m) return null
   const [, dd, mm, yyyy] = m.map(Number)
   const d = new Date(yyyy, mm - 1, dd)
@@ -65,8 +65,24 @@ function parseDate(value) {
   return d
 }
 
-const stripSpaces = (v) => v.replace(/[\s-]/g, '')
-const collapse = (v) => v.trim().replace(/\s+/g, ' ')
+// The two languages disagree about what whitespace is. Python's \s and .strip()
+// also take U+001C-U+001F and U+0085; JavaScript's also take U+FEFF. Every code
+// point was compared and those six are the entire difference. Each file spells
+// out the union so both clean a value to the same string — a value cleaned
+// differently is a different value printed on the citizen's form, and a BOM
+// riding in on an OCR scan is the realistic way that happens.
+const WS = '\\s\\u001c-\\u001f\\u0085'
+const WS_EDGES = new RegExp(`^[${WS}]+|[${WS}]+$`, 'g')
+const WS_RUN = new RegExp(`[${WS}]+`, 'g')
+const WS_OR_DASH = new RegExp(`[${WS}-]`, 'g')
+const AMOUNT_NOISE = new RegExp(`[,${WS}₹]`, 'g')
+const EMAIL_SHAPE = new RegExp(`^[^@${WS}]+@[^@${WS}.]+\\.[A-Za-z]{2,}$`)
+
+/** Trim, agreeing with Python. Exported so the parity check trims the same way. */
+export const trimEdges = (v) => v.replace(WS_EDGES, '')
+
+const stripSpaces = (v) => v.replace(WS_OR_DASH, '')
+const collapse = (v) => trimEdges(v).replace(WS_RUN, ' ')
 
 export const RULES = {
   ifsc: {
@@ -115,7 +131,7 @@ export const RULES = {
   },
   date: {
     test: (v) => parseDate(v) !== null,
-    normalise: (v) => devanagariToAscii(v).trim().replace(/[-.]/g, '/'),
+    normalise: (v) => trimEdges(devanagariToAscii(v)).replace(/[-.]/g, '/'),
     en: 'Date must be in DD/MM/YYYY format. Example: 14/08/1961',
     hi: 'तारीख DD/MM/YYYY रूप में लिखें। जैसे: 14/08/1961',
   },
@@ -124,7 +140,7 @@ export const RULES = {
       const d = parseDate(v)
       return d !== null && d < new Date()
     },
-    normalise: (v) => devanagariToAscii(v).trim().replace(/[-.]/g, '/'),
+    normalise: (v) => trimEdges(devanagariToAscii(v)).replace(/[-.]/g, '/'),
     en: 'Date must be in the past, in DD/MM/YYYY format.',
     hi: 'तारीख आज से पहले की होनी चाहिए, DD/MM/YYYY रूप में।',
   },
@@ -137,13 +153,13 @@ export const RULES = {
   },
   amount: {
     test: (v) => /^\d{1,9}$/.test(v),
-    normalise: (v) => devanagariToAscii(v.replace(/[,\s₹]/g, '')),
+    normalise: (v) => devanagariToAscii(v.replace(AMOUNT_NOISE, '')),
     en: 'Amount must be a whole number in rupees, without commas.',
     hi: 'राशि पूरे रुपये में लिखें, अल्पविराम के बिना।',
   },
   email: {
-    test: (v) => /^[^@\s]+@[^@\s.]+\.[A-Za-z]{2,}$/.test(v),
-    normalise: (v) => v.trim().toLowerCase(),
+    test: (v) => EMAIL_SHAPE.test(v),
+    normalise: (v) => trimEdges(v).toLowerCase(),
     en: 'Email must look like name@example.com',
     hi: 'ईमेल इस तरह होना चाहिए: name@example.com',
   },
@@ -169,7 +185,7 @@ const EMPTY = {
  *          `value` is the cleaned-up version — store this, not the raw input.
  */
 export function validateField(field, value, lang = 'hi') {
-  const raw = (value ?? '').trim()
+  const raw = trimEdges(value ?? '')
 
   // An optional field may be left empty — an email address the citizen does not
   // have, a post office they do not know. Empty passes; anything actually

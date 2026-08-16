@@ -9,7 +9,12 @@
     "rule transliterates Devanagari letters when it only converts digits.",
     "A 'fail' case is [input, what it normalises to] and must be rejected.",
     "",
-    "Every rule in RULES needs an entry here, or the parity check fails."
+    "Every rule in RULES needs an entry here, or the parity check fails.",
+    "",
+    "The checker also replays every input below with its digits swapped for",
+    "other Indic scripts and with U+FEFF / U+001C spliced in, requiring only",
+    "that the two files agree. Cases here are what someone thought to write;",
+    "the replay is for what nobody did."
   ],
   "aadhaar": {
     "pass": [
@@ -28,12 +33,14 @@
     "pass": [
       ["ABCDE1234F", "ABCDE1234F"],
       ["abcde1234f", "ABCDE1234F"],
-      ["abcde 1234 f", "ABCDE1234F"]
+      ["abcde 1234 f", "ABCDE1234F"],
+      ["ABCDE1234F\uFEFF", "ABCDE1234F"]
     ],
     "fail": [
       ["ABCD1234F", "ABCD1234F"],
       ["ABCDE1234", "ABCDE1234"],
-      ["1BCDE1234F", "1BCDE1234F"]
+      ["1BCDE1234F", "1BCDE1234F"],
+      ["ABCDE\u09E7\u09E8\u09E9\u09EAF", "ABCDE\u09E7\u09E8\u09E9\u09EAF"]
     ]
   },
   "ifsc": {
@@ -81,7 +88,8 @@
     "fail": [
       ["12345678", "12345678"],
       ["1234567890123456789", "1234567890123456789"],
-      ["12345678a", "12345678a"]
+      ["12345678a", "12345678a"],
+      ["\u09E7\u09E8\u09E9\u09EA\u09EB\u09EC\u09ED\u09EE\u09EF", "\u09E7\u09E8\u09E9\u09EA\u09EB\u09EC\u09ED\u09EE\u09EF"]
     ]
   },
   "date": {
@@ -111,7 +119,8 @@
       ["Sunita Devi", "Sunita Devi"],
       ["  Ram   Prasad  ", "Ram Prasad"],
       ["राम कुमार", "राम कुमार"],
-      ["D'Souza", "D'Souza"]
+      ["D'Souza", "D'Souza"],
+      ["\uFEFFSunita Devi", "Sunita Devi"]
     ],
     "fail": [
       ["R", "R"],
@@ -128,7 +137,8 @@
     "fail": [
       ["1234567890", "1234567890"],
       ["50.50", "50.50"],
-      ["abc", "abc"]
+      ["abc", "abc"],
+      ["\u09E7\u09E8\u09E9\u09EA\u09EB", "\u09E7\u09E8\u09E9\u09EA\u09EB"]
     ]
   },
   "email": {
@@ -146,7 +156,8 @@
     "pass": [
       ["hello", "hello"],
       ["line one\nline two", "line one line two"],
-      ["  spaced   out  ", "spaced out"]
+      ["  spaced   out  ", "spaced out"],
+      ["a\u001Cb", "a b"]
     ],
     "fail": [
       ["   ", ""]

@@ -56,7 +56,7 @@ def _verhoeff_valid(number: str) -> bool:
 def _parse_ddmmyyyy(value: str) -> date | None:
     for sep in ("/", "-", "."):
         try:
-            return datetime.strptime(value.strip(), f"%d{sep}%m{sep}%Y").date()
+            return datetime.strptime(trim_edges(value), f"%d{sep}%m{sep}%Y").date()
         except ValueError:
             continue
     return None
@@ -76,8 +76,25 @@ def _fn_rule(fn: Callable[[str], bool], en: str, hi: str, normalise: Callable[[s
     return {"kind": "fn", "fn": fn, "en": en, "hi": hi, "normalise": normalise}
 
 
-_strip_spaces = lambda v: re.sub(r"[\s-]", "", v)  # noqa: E731
-_upper = lambda v: v.strip().upper()  # noqa: E731
+# The two languages disagree about what whitespace is. Python's \s and .strip()
+# also take U+001C-U+001F and U+0085; JavaScript's also take U+FEFF. Every code
+# point was compared and those six are the entire difference. Each file spells
+# out the union so both clean a value to the same string — a value cleaned
+# differently is a different value printed on the citizen's form, and a BOM
+# riding in on an OCR scan is the realistic way that happens.
+_WS = r"\s\ufeff"
+_WS_EDGES = re.compile(rf"^[{_WS}]+|[{_WS}]+$")
+_WS_RUN = re.compile(rf"[{_WS}]+")
+
+
+def trim_edges(value: str) -> str:
+    """Trim, agreeing with JavaScript. The parity check imports this."""
+    return _WS_EDGES.sub("", value)
+
+
+_strip_spaces = lambda v: re.sub(rf"[{_WS}-]", "", v)  # noqa: E731
+_upper = lambda v: trim_edges(v).upper()  # noqa: E731
+_collapse = lambda v: _WS_RUN.sub(" ", trim_edges(v))  # noqa: E731
 
 # Android's Hindi recogniser returns ०१२३ rather than 0123, and a Devanagari
 # keyboard types them that way too. U+0966-U+096F are contiguous.
@@ -106,31 +123,31 @@ RULES: dict[str, Rule] = {
         normalise=lambda v: _upper(_strip_spaces(v)),
     ),
     "aadhaar": _fn_rule(
-        lambda v: bool(re.fullmatch(r"[2-9]\d{11}", v)) and _verhoeff_valid(v),
+        lambda v: bool(re.fullmatch(r"[2-9][0-9]{11}", v)) and _verhoeff_valid(v),
         "Aadhaar must be 12 digits and pass the UIDAI check. Please read the number again.",
         "आधार 12 अंकों का होना चाहिए और UIDAI जाँच में सही होना चाहिए। कृपया नंबर दोबारा देखें।",
         normalise=lambda v: _strip_spaces(_devanagari_to_ascii(v)),
     ),
     "pan": _regex_rule(
-        r"^[A-Z]{5}\d{4}[A-Z]$",
+        r"^[A-Z]{5}[0-9]{4}[A-Z]$",
         "PAN must be 5 letters, 4 digits, then 1 letter. Example: ABCDE1234F",
         "PAN में 5 अक्षर, 4 अंक, फिर 1 अक्षर होता है। जैसे: ABCDE1234F",
         normalise=lambda v: _upper(_strip_spaces(v)),
     ),
     "mobile": _regex_rule(
-        r"^[6-9]\d{9}$",
+        r"^[6-9][0-9]{9}$",
         "Mobile number must be 10 digits starting with 6, 7, 8 or 9.",
         "मोबाइल नंबर 10 अंकों का हो और 6, 7, 8 या 9 से शुरू हो।",
         normalise=_normalise_mobile,
     ),
     "pincode": _regex_rule(
-        r"^[1-9]\d{5}$",
+        r"^[1-9][0-9]{5}$",
         "PIN code must be 6 digits and cannot start with 0.",
         "पिन कोड 6 अंकों का होता है और 0 से शुरू नहीं होता।",
         normalise=lambda v: _strip_spaces(_devanagari_to_ascii(v)),
     ),
     "bank_account": _regex_rule(
-        r"^\d{9,18}$",
+        r"^[0-9]{9,18}$",
         "Bank account number must be between 9 and 18 digits.",
         "बैंक खाता संख्या 9 से 18 अंकों के बीच होनी चाहिए।",
         normalise=lambda v: _strip_spaces(_devanagari_to_ascii(v)),
@@ -139,37 +156,37 @@ RULES: dict[str, Rule] = {
         lambda v: _parse_ddmmyyyy(v) is not None,
         "Date must be in DD/MM/YYYY format. Example: 14/08/1961",
         "तारीख DD/MM/YYYY रूप में लिखें। जैसे: 14/08/1961",
-        normalise=lambda v: re.sub(r"[-.]", "/", _devanagari_to_ascii(v).strip()),
+        normalise=lambda v: re.sub(r"[-.]", "/", trim_edges(_devanagari_to_ascii(v))),
     ),
     "date_past": _fn_rule(
         lambda v: (d := _parse_ddmmyyyy(v)) is not None and d < date.today(),
         "Date must be in the past, in DD/MM/YYYY format.",
         "तारीख आज से पहले की होनी चाहिए, DD/MM/YYYY रूप में।",
-        normalise=lambda v: re.sub(r"[-.]", "/", _devanagari_to_ascii(v).strip()),
+        normalise=lambda v: re.sub(r"[-.]", "/", trim_edges(_devanagari_to_ascii(v))),
     ),
     "name": _regex_rule(
         r"^[A-Za-zऀ-ॿ][A-Za-zऀ-ॿ .'-]{1,60}$",
         "Name should be 2 to 60 letters. Numbers are not allowed.",
         "नाम 2 से 60 अक्षरों का हो। अंक न लिखें।",
-        normalise=lambda v: re.sub(r"\s+", " ", v.strip()),
+        normalise=_collapse,
     ),
     "amount": _fn_rule(
-        lambda v: bool(re.fullmatch(r"\d{1,9}", v)) and int(v) >= 0,
+        lambda v: bool(re.fullmatch(r"[0-9]{1,9}", v)) and int(v) >= 0,
         "Amount must be a whole number in rupees, without commas.",
         "राशि पूरे रुपये में लिखें, अल्पविराम के बिना।",
-        normalise=lambda v: _devanagari_to_ascii(re.sub(r"[,\s₹]", "", v)),
+        normalise=lambda v: _devanagari_to_ascii(re.sub(rf"[,{_WS}₹]", "", v)),
     ),
     "email": _regex_rule(
-        r"^[^@\s]+@[^@\s.]+\.[A-Za-z]{2,}$",
+        rf"^[^@{_WS}]+@[^@{_WS}.]+\.[A-Za-z]{{2,}}$",
         "Email must look like name@example.com",
         "ईमेल इस तरह होना चाहिए: name@example.com",
-        normalise=lambda v: v.strip().lower(),
+        normalise=lambda v: trim_edges(v).lower(),
     ),
     "text": _regex_rule(
         r"^.{1,200}$",
         "This field cannot be empty.",
         "यह जगह खाली नहीं छोड़ सकते।",
-        normalise=lambda v: re.sub(r"\s+", " ", v.strip()),
+        normalise=_collapse,
     ),
 }
 
@@ -177,7 +194,7 @@ RULES: dict[str, Rule] = {
 def validate(rule_name: str, value: str) -> dict[str, Any]:
     """Check one value against one rule. Returns normalised value + verdict."""
     rule = RULES.get(rule_name)
-    raw = (value or "").strip()
+    raw = trim_edges(value or "")
     if rule is None:
         return {"valid": True, "value": raw, "rule": rule_name, "unknown_rule": True}
 

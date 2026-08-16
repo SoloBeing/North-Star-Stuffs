@@ -12,6 +12,14 @@
  * language and not the other, or has no cases at all — so a contribution that
  * adds a rule to one side cannot be merged.
  *
+ * Hand-written cases only test what someone thought to write down, and that is
+ * how three live rules once disagreed on Bengali digits without anyone noticing:
+ * Python's \d matches every Unicode decimal digit and JavaScript's matches 0-9.
+ * So every declared input is also replayed in variants — its digits swapped for
+ * other Indic scripts, and the two whitespace code points the languages disagree
+ * about spliced in. Those variants assert only that the two files *agree*, not
+ * what they agree on, which is the property that actually has to hold.
+ *
  *   node scripts/check-rule-parity.mjs
  *
  * Needs Python. Only a change to a validation rule needs this check; adding a
@@ -21,15 +29,20 @@
 
 import { readFileSync, writeFileSync, mkdtempSync, rmSync, existsSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { dirname, resolve, join } from 'node:path'
 import { tmpdir } from 'node:os'
 
 const here = dirname(fileURLToPath(import.meta.url))
-const frontend = resolve(here, '..')
-const root = resolve(frontend, '..')
+// Optional argv: a repository root to check instead of this one. Only
+// check-rule-parity.test.mjs passes it, so it can point the whole check at a
+// fixture tree and break one thing at a time.
+const root = process.argv[2] ? resolve(process.argv[2]) : resolve(here, '../..')
+const frontend = resolve(root, 'frontend')
 
-const { RULES } = await import('../src/lib/validation.js')
+const { RULES, trimEdges } = await import(
+  pathToFileURL(resolve(frontend, 'src/lib/validation.js')).href
+)
 const cases = JSON.parse(readFileSync(resolve(root, 'shared/validation-cases.json'), 'utf8'))
 delete cases._comment
 
@@ -61,13 +74,48 @@ if (!python) {
 
 // --- Collect what each side does -------------------------------------------
 
-/** Every input mentioned anywhere, per rule. */
+/**
+ * Variants of a declared input that probe where the two languages differ.
+ *
+ * Digits: Python's \d is every Unicode decimal, JavaScript's is 0-9. Only
+ * Devanagari is normalised away, so any other Indic script reaches the pattern.
+ * Whitespace: Python's \s and .strip() also take U+001C-U+001F and U+0085,
+ * JavaScript's also take U+FEFF — the entire disagreement, by brute force over
+ * every code point.
+ */
+const DIGIT_SCRIPTS = { bengali: 0x09e6, tamil: 0x0be6, arabic: 0x0660 }
+const SPLIT_CHARS = { bom: '﻿', fileSep: '' }
+
+function variantsOf(raw) {
+  const out = []
+  if (typeof raw !== 'string' || !raw) return out
+  for (const [script, base] of Object.entries(DIGIT_SCRIPTS)) {
+    const swapped = raw.replace(/[0-9]/g, (d) => String.fromCodePoint(base + Number(d)))
+    if (swapped !== raw) out.push([`digits:${script}`, swapped])
+  }
+  for (const [name, ch] of Object.entries(SPLIT_CHARS)) {
+    out.push([`${name}:lead`, ch + raw])
+    out.push([`${name}:trail`, raw + ch])
+    if (raw.length > 1) {
+      out.push([`${name}:mid`, raw.slice(0, 1) + ch + raw.slice(1)])
+    }
+  }
+  return out
+}
+
+/** Declared inputs first, then their variants — the split is tracked per rule. */
 const inputsByRule = {}
+const declaredCount = {}
+const variantLabels = {}
 for (const [rule, spec] of Object.entries(cases)) {
-  inputsByRule[rule] = [
+  const declared = [
     ...(spec.pass ?? []).map(([raw]) => raw),
     ...(spec.fail ?? []).map(([raw]) => raw),
   ]
+  const derived = declared.flatMap(variantsOf)
+  declaredCount[rule] = declared.length
+  variantLabels[rule] = derived.map(([label]) => label)
+  inputsByRule[rule] = [...declared, ...derived.map(([, value]) => value)]
 }
 
 function jsSide() {
@@ -79,7 +127,7 @@ function jsSide() {
       en: r.en,
       hi: r.hi,
       results: inputs.map((raw) => {
-        const trimmed = (raw ?? '').trim()
+        const trimmed = trimEdges(raw ?? '')
         const cleaned = trimmed ? (r.normalise ? r.normalise(trimmed) : trimmed) : ''
         return [cleaned, cleaned ? Boolean(r.test(cleaned)) : false]
       }),
@@ -95,7 +143,7 @@ function pySide() {
   const script = `
 import json, sys
 sys.path.insert(0, ${JSON.stringify(root)})
-from backend.validation import RULES
+from backend.validation import RULES, trim_edges
 
 inputs = json.load(open(${JSON.stringify(inFile)}))
 out = {}
@@ -105,7 +153,7 @@ for rule, raws in inputs.items():
         continue
     results = []
     for raw in raws:
-        trimmed = (raw or "").strip()
+        trimmed = trim_edges(raw or "")
         norm = r.get("normalise")
         cleaned = norm(trimmed) if (norm and trimmed) else trimmed
         if not cleaned:
@@ -171,27 +219,39 @@ for (const r of shared) {
   }
 }
 
-// 4. Same cleaned value, same verdict, and the verdict the cases demand.
+// 4. The two files must agree on every input — declared or derived.
 let checked = 0
+let variants = 0
+const disagreed = new Set()
 for (const [rule, spec] of Object.entries(cases)) {
   if (!js.data[rule] || !py.data[rule]) continue
+  const inputs = inputsByRule[rule]
+  const declared = declaredCount[rule]
+
+  inputs.forEach((raw, i) => {
+    const [jc, jv] = js.data[rule].results[i]
+    const [pc, pv] = py.data[rule].results[i]
+    if (i < declared) checked += 1
+    else variants += 1
+    if (jc === pc && jv === pv) return
+
+    disagreed.add(`${rule}:${i}`)
+    const origin = i < declared ? 'declared case' : `variant ${variantLabels[rule][i - declared]}`
+    problems.push(
+      `${rule}(${JSON.stringify(raw)}) the two files disagree — ${origin}\n` +
+        `        js: ${JSON.stringify(jc)} ${jv ? 'accepted' : 'rejected'}\n` +
+        `        py: ${JSON.stringify(pc)} ${pv ? 'accepted' : 'rejected'}`,
+    )
+  })
+
+  // Declared cases additionally have to match what the contributor claimed.
   const expected = [
     ...(spec.pass ?? []).map(([raw, clean]) => ({ raw, clean, valid: true })),
     ...(spec.fail ?? []).map(([raw, clean]) => ({ raw, clean, valid: false })),
   ]
   expected.forEach((want, i) => {
+    if (disagreed.has(`${rule}:${i}`)) return
     const [jc, jv] = js.data[rule].results[i]
-    const [pc, pv] = py.data[rule].results[i]
-    checked += 1
-
-    if (jc !== pc || jv !== pv) {
-      problems.push(
-        `${rule}(${JSON.stringify(want.raw)}) the two files disagree\n` +
-          `        js: ${JSON.stringify(jc)} ${jv ? 'accepted' : 'rejected'}\n` +
-          `        py: ${JSON.stringify(pc)} ${pv ? 'accepted' : 'rejected'}`,
-      )
-      return
-    }
     if (jc !== want.clean) {
       problems.push(
         `${rule}(${JSON.stringify(want.raw)}) should clean to ${JSON.stringify(want.clean)}, both files give ${JSON.stringify(jc)}`,
@@ -205,16 +265,40 @@ for (const [rule, spec] of Object.entries(cases)) {
   })
 }
 
+// 5. A rule whose values are one long alphanumeric run has to be readable
+//    aloud, or the speech engine says it as a word. speakableValue has no
+//    Python twin, so nothing above this line would ever notice.
+const warnings = []
+const jsSource = readFileSync(resolve(frontend, 'src/lib/validation.js'), 'utf8')
+const spoken = new Set(
+  [...jsSource.matchAll(/case '([a-z_]+)':/g)].map((m) => m[1]),
+)
+for (const rule of shared) {
+  if (spoken.has(rule)) continue
+  const passes = (cases[rule]?.pass ?? []).map(([, clean]) => clean)
+  if (passes.length && passes.every((v) => /^[A-Za-z0-9]{5,}$/.test(v))) {
+    warnings.push(
+      `"${rule}" is not in the speakableValue switch in validation.js, and its ` +
+        `values are one unbroken run of letters and digits.\n` +
+        `        A citizen hears it read as a word. Add a case beside "pan" so it is spelled out.`,
+    )
+  }
+}
+
 // --- Report ------------------------------------------------------------------
 
-console.log(`python: ${python}`)
-console.log(`rules:  ${shared.length} in both files`)
-console.log(`cases:  ${checked} values through both implementations`)
+console.log(`python:   ${python}`)
+console.log(`rules:    ${shared.length} in both files`)
+console.log(`cases:    ${checked} declared values through both implementations`)
+console.log(`variants: ${variants} derived values, checked for agreement only`)
 console.log()
+
+for (const w of warnings) console.log(`  WARN ${w}`)
+if (warnings.length) console.log()
 
 if (problems.length) {
   for (const p of problems) console.log(`  FAIL ${p}`)
   console.log(`\n${problems.length} problem(s)`)
   process.exit(1)
 }
-console.log('the two validators agree')
+console.log(`the two validators agree${warnings.length ? ` (${warnings.length} warning(s))` : ''}`)
