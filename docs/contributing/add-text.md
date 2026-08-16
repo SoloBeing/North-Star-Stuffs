@@ -74,13 +74,30 @@ on the same screen, and one of them is read aloud.
 The list below tells you a **name** is free. It does not tell you the **meaning**
 is free, and that is the one that ships wrong.
 
-So before your code block, write one line:
+Find the closest existing key, then choose one of **three** things — not two:
 
-> Closest existing key: `scanHint` — "Hold the phone steady…". Not reusing it
-> because …
+1. **Reuse it.** It already says what you need. Add nothing; name the key.
+2. **Amend it.** It is the right string in the wrong words, and the difference
+   you want belongs *inside* it. Output that one entry with the wording changed.
+   This is a correction, and it is what most "nearly the same" cases actually
+   want.
+3. **Add a new key.** Only when the existing string has to stay exactly as it
+   is, because somewhere else still needs it unchanged.
 
-If you cannot finish that sentence with a difference a citizen would actually
-notice, you do not need a new key. Say so and stop.
+State the choice in one line above your code block:
+
+> Closest existing key: `scanHint` — "Hold the phone steady…". Amending it,
+> because "keep the phone level" belongs in that same instruction.
+
+Both real failures of this pack were option 3 chosen when option 2 was right.
+So:
+
+- **Naming a difference is not the same as needing a new key.** Any two
+  sentences differ somewhere, so that sentence can always be finished. Ask
+  instead whether the difference could sit inside the existing string. If it
+  could, amend.
+- **Two strings that nearly agree are worse than one imperfect string.** On the
+  scan screen they would appear together, and one of them is read aloud.
 
 ## When to stop instead of writing
 
@@ -91,6 +108,27 @@ notice, you do not need a new key. Say so and stop.
 - **The feature does not exist.** One run wrote *"this form is temporarily
   unavailable"* for a form-disabling feature this app has never had. Text for a
   feature nobody has built cannot be used by anyone.
+- **The failure cannot happen.** For anything about an error, a server or a
+  connection, check the list below first.
+
+## What this app talks to
+
+Every `fetch()` in the source, read at generation time:
+
+- `/api/digilocker/authorize`
+- `/api/digilocker/issued-documents`
+- `/api/digilocker/logout`
+- `/api/digilocker/profile`
+- `…forms/form93.pdf`
+
+The **only** server this app calls is DigiLocker, for login and for reading
+the citizen's own documents. Validation, explanations, OCR and the PDF all run
+on the phone. So there is no "the server is down" state separate from a
+DigiLocker failure, and no network error a citizen can reach outside login.
+
+A run of this pack once added a general *"something went wrong on our server"*
+message on exactly that reasoning. Before writing text for a failure state,
+check this list for a failure that can actually happen.
 
 ## How the Hindi has to read
 
@@ -107,10 +145,14 @@ Write what a person would **say out loud** to a neighbour who asked for help.
 | कृपया प्रतीक्षा करें | थोड़ी देर रुकिए |
 | अस्थायी रूप से उपलब्ध नहीं है | अभी यह काम नहीं कर रहा |
 | आवेदन प्रस्तुत करें | फॉर्म जमा कीजिए |
+| फोन को सीधा रखें | फोन को सीधा रखिए |
+
+This is not only about error messages. The last row is an ordinary instruction,
+and it is the one a real run got wrong after getting the others right.
 
 Two habits of this codebase, both easy to apply:
 
-- **Sentences take the `कीजिए`/`लीजिए` form, not `करें`.** 15 strings in the
+- **Sentences take the `कीजिए`/`लीजिए` form, not `करें`.** 19 strings in the
   live file already do: "फोटो लीजिए", "टाइप कीजिए", "फिर कोशिश कीजिए". Keep
   `करें` for short button labels — "डाउनलोड करें".
 - **No Sanskritised word where an everyday one exists**: प्रतीक्षा → रुकना,

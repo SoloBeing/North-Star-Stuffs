@@ -137,9 +137,81 @@ model, and produces a filled printable PDF that never leaves the phone.
 Everything a citizen hears or reads exists in **both English (\`en\`) and Hindi
 (\`hi\`)**. A missing Hindi string is a citizen who cannot use the form.`
 
-/** Instruction sentences already written in the `कीजिए`/`लीजिए` form. */
+/**
+ * Every address the app actually fetches, read from the call sites.
+ *
+ * A run of add-text.md added a "general server problem" message, reasoning that
+ * it was distinct from a DigiLocker failure. There is no such state here — every
+ * API call is DigiLocker — but the pack gave the model no way to know that, so
+ * the reasoning looked sound. Now it is a generated fact.
+ */
+const serverCalls = (() => {
+  const found = new Set()
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name)
+      if (entry.isDirectory()) {
+        walk(full)
+        continue
+      }
+      if (!/\.jsx?$/.test(entry.name)) continue
+      const text = readFileSync(full, 'utf8')
+      const tidy = (url) => url.replace(/\$\{[^}]*\}/g, '…').split('?')[0]
+
+      // Each quote style gets its own group, because a template literal may
+      // legitimately contain `'` — as PDF_URL's `?? '/'` fallback does.
+      for (const m of text.matchAll(/fetch\(\s*(?:`([^`]+)`|'([^']+)'|"([^"]+)")/g)) {
+        found.add(tidy(m[1] ?? m[2] ?? m[3]))
+      }
+      // fetch(SOME_CONST) — resolve it from the same file rather than reporting
+      // a name, which would tell a contributor nothing.
+      for (const m of text.matchAll(/fetch\(\s*([A-Za-z_$][\w$]*)\s*[,)]/g)) {
+        const declared =
+          text.match(new RegExp(`${m[1]}\\s*=\\s*\`([^\`]+)\``)) ??
+          text.match(new RegExp(`${m[1]}\\s*=\\s*'([^']+)'`)) ??
+          text.match(new RegExp(`${m[1]}\\s*=\\s*"([^"]+)"`))
+        found.add(declared ? tidy(declared[1]) : m[1])
+      }
+    }
+  }
+  walk(resolve(frontend, 'src'))
+  return [...found].sort()
+})()
+
+const apiCalls = serverCalls.filter((u) => u.startsWith('/api/'))
+const onlyDigilocker = apiCalls.every((u) => u.startsWith('/api/digilocker/'))
+
+const SERVER_REACH = `## What this app talks to
+
+Every \`fetch()\` in the source, read at generation time:
+
+${serverCalls.map((u) => `- \`${u}\``).join('\n')}
+
+${
+  onlyDigilocker
+    ? `The **only** server this app calls is DigiLocker, for login and for reading
+the citizen's own documents. Validation, explanations, OCR and the PDF all run
+on the phone. So there is no "the server is down" state separate from a
+DigiLocker failure, and no network error a citizen can reach outside login.
+
+A run of this pack once added a general *"something went wrong on our server"*
+message on exactly that reasoning. Before writing text for a failure state,
+check this list for a failure that can actually happen.`
+    : `Check this list before writing text for a failure state: a message about a
+server the app never calls describes something a citizen can never hit.`
+}`
+
+/**
+ * Sentences already written in the polite `-इए` imperative.
+ *
+ * An explicit verb list rather than a pattern on the `िए` ending, which also
+ * matches `चाहिए` ("is needed") and `के लिए` ("for") and inflates the number.
+ * A generated document stating a wrong count is the one thing this script must
+ * not do, so it undercounts by design if a new verb form appears.
+ */
+const POLITE_IMPERATIVES = /(कीजिए|लीजिए|दीजिए|सुनिए|छापिए|भरिए|बोलिए|रखिए|जाइए|पढ़िए)/
 const politeCount = Object.values(STRINGS).filter((s) =>
-  /(कीजिए|लीजिए|सुनिए|छापिए|भरिए|पकड़ें)/.test(s.hi ?? ''),
+  POLITE_IMPERATIVES.test(s.hi ?? ''),
 ).length
 
 /**
@@ -165,6 +237,10 @@ Write what a person would **say out loud** to a neighbour who asked for help.
 | कृपया प्रतीक्षा करें | थोड़ी देर रुकिए |
 | अस्थायी रूप से उपलब्ध नहीं है | अभी यह काम नहीं कर रहा |
 | आवेदन प्रस्तुत करें | फॉर्म जमा कीजिए |
+| फोन को सीधा रखें | फोन को सीधा रखिए |
+
+This is not only about error messages. The last row is an ordinary instruction,
+and it is the one a real run got wrong after getting the others right.
 
 Two habits of this codebase, both easy to apply:
 
@@ -574,13 +650,30 @@ on the same screen, and one of them is read aloud.
 The list below tells you a **name** is free. It does not tell you the **meaning**
 is free, and that is the one that ships wrong.
 
-So before your code block, write one line:
+Find the closest existing key, then choose one of **three** things — not two:
 
-> Closest existing key: \`scanHint\` — "Hold the phone steady…". Not reusing it
-> because …
+1. **Reuse it.** It already says what you need. Add nothing; name the key.
+2. **Amend it.** It is the right string in the wrong words, and the difference
+   you want belongs *inside* it. Output that one entry with the wording changed.
+   This is a correction, and it is what most "nearly the same" cases actually
+   want.
+3. **Add a new key.** Only when the existing string has to stay exactly as it
+   is, because somewhere else still needs it unchanged.
 
-If you cannot finish that sentence with a difference a citizen would actually
-notice, you do not need a new key. Say so and stop.
+State the choice in one line above your code block:
+
+> Closest existing key: \`scanHint\` — "Hold the phone steady…". Amending it,
+> because "keep the phone level" belongs in that same instruction.
+
+Both real failures of this pack were option 3 chosen when option 2 was right.
+So:
+
+- **Naming a difference is not the same as needing a new key.** Any two
+  sentences differ somewhere, so that sentence can always be finished. Ask
+  instead whether the difference could sit inside the existing string. If it
+  could, amend.
+- **Two strings that nearly agree are worse than one imperfect string.** On the
+  scan screen they would appear together, and one of them is read aloud.
 
 ## When to stop instead of writing
 
@@ -591,6 +684,10 @@ notice, you do not need a new key. Say so and stop.
 - **The feature does not exist.** One run wrote *"this form is temporarily
   unavailable"* for a form-disabling feature this app has never had. Text for a
   feature nobody has built cannot be used by anyone.
+- **The failure cannot happen.** For anything about an error, a server or a
+  connection, check the list below first.
+
+${SERVER_REACH}
 
 ${HINDI_VOICE}
 
