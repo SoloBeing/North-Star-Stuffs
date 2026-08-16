@@ -790,6 +790,24 @@ That is why your contribution is three pieces rather than one.
 
 ${ruleTable()}
 
+If one of these already does what you were asked for, **stop and say so** — name
+it and say the field should use it. Reusing a rule is not a change to this file
+at all: it is one word on a field in a form template, \`"rule": "mobile"\`, which
+is what \`edit-a-form.md\` and \`add-a-form.md\` cover. Say that, rather than
+adding a second rule that does the same job.
+
+## A warning about the examples below
+
+Every code block in the rest of this document uses a made-up rule called
+\`vehicle\`. **\`vehicle\` does not exist in this project.** It is not in the table
+above, it is not in either file, and there is nothing to insert your entry
+"after". Two contributions in a row have said "after the existing \`vehicle\`
+entry" and sent a reviewer looking for something that was never there.
+
+The examples show you the **shape** of an entry. When you state the destination,
+say where yours actually goes — "at the end of \`RULES\`" is the right answer
+almost every time.
+
 ## The JavaScript entry
 
 \`frontend/src/lib/validation.js\`, inside \`export const RULES = { ... }\`:
@@ -798,8 +816,8 @@ ${FENCE}js
   vehicle: {
     test: (v) => /^[A-Z]{2}\\d{2}[A-Z]{1,2}\\d{4}$/.test(v),
     normalise: (v) => stripSpaces(v).toUpperCase(),
-    en: 'Vehicle number must look like RJ14AB1234.',
-    hi: 'वाहन नंबर इस तरह होना चाहिए: RJ14AB1234',
+    en: 'Vehicle number must be 2 letters, 2 digits, up to 2 letters, then 4 digits. Example: RJ14AB1234',
+    hi: 'वाहन नंबर में 2 अक्षर, 2 अंक, 1 या 2 अक्षर, फिर 4 अंक होते हैं। जैसे: RJ14AB1234',
   },
 ${FENCE}
 
@@ -817,8 +835,8 @@ ${FENCE}
 ${FENCE}python
     "vehicle": _regex_rule(
         r"^[A-Z]{2}\\d{2}[A-Z]{1,2}\\d{4}$",
-        "Vehicle number must look like RJ14AB1234.",
-        "वाहन नंबर इस तरह होना चाहिए: RJ14AB1234",
+        "Vehicle number must be 2 letters, 2 digits, up to 2 letters, then 4 digits. Example: RJ14AB1234",
+        "वाहन नंबर में 2 अक्षर, 2 अंक, 1 या 2 अक्षर, फिर 4 अंक होते हैं। जैसे: RJ14AB1234",
         normalise=lambda v: _upper(_strip_spaces(v)),
     ),
 ${FENCE}
@@ -827,11 +845,44 @@ Use \`_regex_rule\` for a pattern, \`_fn_rule\` for anything needing arithmetic
 (a checksum, a date comparison). The messages must be **byte-identical** to the
 JavaScript ones.
 
+**Arithmetic goes in a named function, not inside the lambda.** \`validation.py\`
+already keeps \`_verhoeff_valid\` and \`_parse_ddmmyyyy\` above the table for
+exactly this; add yours the same way and pass it to \`_fn_rule\`. A submission
+that folded a checksum into one expression needed a lambda inside a lambda and
+recomputed the same value three times — correct, and unreviewable.
+
+${FENCE}python
+def _scheme_code_valid(value: str) -> bool:
+    total = sum(int(c) for c in value[:-1])
+    return value[-1] == str(total % 10)
+${FENCE}
+
+Write the same helper as an ordinary function in JavaScript, beside
+\`verhoeffValid\`. Keep the two readable side by side — they have to be compared
+by eye every time either changes.
+
 ## Devanagari digits
 
 If the rule accepts digits, it must accept **०१२३४५६७८९** as well as 0123456789.
 An Android phone set to Hindi returns Devanagari digits from voice input. Apply
 \`devanagariToAscii\` (JS) / \`_devanagari_to_ascii\` (Python) in \`normalise\`.
+
+## If your value is read aloud
+
+\`validation.js\` ends with \`speakableValue\`, which spaces a value out so the
+speech engine reads it character by character instead of as a word. Aadhaar,
+mobile, PAN, IFSC, PIN code and bank account are all in it.
+
+If your rule's cleaned value is one unbroken run of letters and digits, add a
+\`case\` beside \`pan\` — one line, in the same \`switch\`:
+
+${FENCE}js
+    case 'scheme_code':
+${FENCE}
+
+Skip it when the value reads fine as words: a name, a date, an address. The
+parity check warns when an identifier-shaped rule is missing from the switch,
+but it cannot tell for certain, so this one is your judgement.
 
 ## The test cases
 
@@ -870,11 +921,19 @@ Run this from the \`frontend/\` directory — it needs Python as well as Node:
 
 ${FENCE}bash
 npm run test:rules
+npm run context
 ${FENCE}
 
-It runs every case through **both** implementations and fails if they disagree,
-if a rule is missing from either file, if a rule has no cases, or if the \`en\`
-and \`hi\` messages are not byte-identical across the two files.
+\`test:rules\` runs every case through **both** implementations and fails if they
+disagree, if a rule is missing from either file, if a rule has no cases, or if
+the \`en\` and \`hi\` messages are not byte-identical across the two files. It also
+replays every case with its digits swapped for other Indic scripts and with
+stray invisible characters spliced in, because the two languages do not agree on
+what \`\\d\` or whitespace means and hand-written cases never covered it.
+
+\`npm run context\` is the one people miss. The rules table in this document is
+generated from \`validation.js\`, so adding a rule makes **three** packs stale and
+CI fails on files you never opened. Run it and commit what changes.
 
 ${HINDI_VOICE}
 
