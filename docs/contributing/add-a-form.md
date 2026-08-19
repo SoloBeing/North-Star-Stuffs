@@ -67,7 +67,7 @@ otherwise. They need the whole picture and are maintained by the repo owner.
 
 FormMitra already has these 10 forms:
 
-`ayushman-card`, `bank-account-opening`, `caste-certificate`, `income-certificate`, `lpg-subsidy`, `nsp-scholarship`, `pan-93`, `pension-life-certificate`, `ration-card`, `rti-application`
+`ayushman-card`, `bank-account-opening`, `caste-certificate`, `income-certificate`, `nsp-scholarship`, `pan-93`, `pension-life-certificate`, `ration-card`, `rti-application`, `ujjwala-kyc`
 
 **If the form you were asked for is in that list, stop.** Say it already exists,
 name it, and say that changing an existing form is a different job needing
@@ -129,7 +129,7 @@ fewer question.
 | `bank_account` | Bank account number must be between 9 and 18 digits. | `30123456789` |
 | `date` | Date must be in DD/MM/YYYY format. Example: 14/08/1961 | — |
 | `date_past` | Date must be in the past, in DD/MM/YYYY format. | `14/08/1961` |
-| `email` | Email must look like name@example.com | `sunita@example.com` |
+| `email` | Email must look like name@example.com | `sunita.devi@example.com` |
 | `ifsc` | IFSC must be 11 characters: 4 letters, a zero, then 6 more. Example: SBIN0001234 | `SBIN0001234` |
 | `mobile` | Mobile number must be 10 digits starting with 6, 7, 8 or 9. | `9876543210` |
 | `name` | Name should be 2 to 60 letters. Numbers are not allowed. | `Sunita Devi` |
@@ -150,7 +150,7 @@ The list below is the vocabulary already in use. Reuse a name when it means the
 same thing — it keeps templates comparable and makes them diffable against each
 other. Invent a clear one when it does not.
 
-`aadhaar`, `account_type`, `address`, `annual_income`, `applicant_name`, `bank_account`, `beneficiary_name`, `bpl_status`, `card_category`, `caste_name`, `category`, `consumer_name`, `consumer_number`, `course_name`, `distributor_name`, `dob`, `email`, `family_members`, `father_name`, `full_name`, `gas_company`, `gender`, `head_name`, `ifsc`, `income_source`, `information_sought`, `institute_name`, `mobile`, `mother_name`, `nominee_name`, `nominee_relation`, `pan`, `pension_type`, `pensioner_name`, `period_of_information`, `pincode`, `post_office`, `ppo_number`, `print_parent`, `public_authority`, `purpose`, `ration_card_number`, `residential_status`, `single_parent`, `source_of_income`, `student_name`
+`aadhaar`, `account_name`, `account_type`, `address`, `annual_income`, `applicant_name`, `bank_account`, `bank_name`, `beneficiary_name`, `bpl_status`, `branch_name`, `burner`, `card_category`, `caste`, `caste_name`, `category`, `course_name`, `cylinder`, `declaration_14point`, `dob`, `email`, `family_members`, `father_name`, `full_name`, `gender`, `head_name`, `ifsc`, `income_source`, `information_sought`, `institute_name`, `migrant`, `migrant_certificate`, `mobile`, `mother_name`, `nominee_name`, `nominee_relation`, `pan`, `pension_type`, `pensioner_name`, `period_of_information`, `pincode`, `poa_code`, `post_office`, `ppo_number`, `print_parent`, `public_authority`, `purpose`, `ration_card_number`, `ration_number`, `ration_state`, `residential_status`, `single_parent`, `source_of_income`, `student_name`
 
 ## Writing the `explain` text
 

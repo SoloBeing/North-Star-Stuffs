@@ -69,12 +69,12 @@ otherwise. They need the whole picture and are maintained by the repo owner.
 - `bank-account-opening.json` — Bank Account Opening Form (KYC) (11 fields)
 - `caste-certificate.json` — Caste Certificate Application (10 fields)
 - `income-certificate.json` — Income Certificate Application (10 fields)
-- `lpg-subsidy.json` — LPG Subsidy Application (PAHAL / Ujjwala) (9 fields)
 - `nsp-scholarship.json` — NSP Scholarship Application (11 fields)
 - `pan-93.json` — PAN Card Application (Form 93) (15 fields)
 - `pension-life-certificate.json` — Pension Life Certificate (Jeevan Pramaan) (8 fields)
 - `ration-card.json` — Ration Card Application (9 fields)
 - `rti-application.json` — RTI Application (Right to Information) (8 fields)
+- `ujjwala-kyc.json` — Ujjwala Gas Connection (KYC Form) (21 fields)
 
 Ask for the one file you need. It is 100–270 lines; you do not need the rest of
 the project.
@@ -255,7 +255,7 @@ From `pan-93.json`:
 | `bank_account` | Bank account number must be between 9 and 18 digits. | `30123456789` |
 | `date` | Date must be in DD/MM/YYYY format. Example: 14/08/1961 | — |
 | `date_past` | Date must be in the past, in DD/MM/YYYY format. | `14/08/1961` |
-| `email` | Email must look like name@example.com | `sunita@example.com` |
+| `email` | Email must look like name@example.com | `sunita.devi@example.com` |
 | `ifsc` | IFSC must be 11 characters: 4 letters, a zero, then 6 more. Example: SBIN0001234 | `SBIN0001234` |
 | `mobile` | Mobile number must be 10 digits starting with 6, 7, 8 or 9. | `9876543210` |
 | `name` | Name should be 2 to 60 letters. Numbers are not allowed. | `Sunita Devi` |

@@ -17,7 +17,7 @@ import bankAccountOpening from './bank-account-opening.json'
 import ayushmanCard from './ayushman-card.json'
 import incomeCertificate from './income-certificate.json'
 import casteCertificate from './caste-certificate.json'
-import lpgSubsidy from './lpg-subsidy.json'
+import ujjwalaKyc from './ujjwala-kyc.json'
 import rtiApplication from './rti-application.json'
 
 export const FORMS = [
@@ -29,7 +29,7 @@ export const FORMS = [
   ayushmanCard,
   incomeCertificate,
   casteCertificate,
-  lpgSubsidy,
+  ujjwalaKyc,
   rtiApplication,
 ]
 

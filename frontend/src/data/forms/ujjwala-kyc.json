@@ -1,0 +1,322 @@
+{
+  "id": "ujjwala-kyc",
+  "icon": "🔥",
+  "name": {
+    "en": "Ujjwala Gas Connection (KYC Form)",
+    "hi": "उज्ज्वला गैस कनेक्शन (केवाईसी फॉर्म)"
+  },
+  "issuer": {
+    "en": "Ministry of Petroleum and Natural Gas",
+    "hi": "पेट्रोलियम एवं प्राकृतिक गैस मंत्रालय"
+  },
+  "summary": {
+    "en": "To get a new free gas connection under Pradhan Mantri Ujjwala Yojana. The connection is given to a woman of the household.",
+    "hi": "प्रधानमंत्री उज्ज्वला योजना में नया मुफ़्त गैस कनेक्शन लेने के लिए। कनेक्शन घर की महिला के नाम पर मिलता है।"
+  },
+  "ocrKeywords": [
+    "ujjwala kyc application",
+    "pradhan mantri ujjwala yojana",
+    "ujjwala",
+    "poa category code",
+    "14 point declaration",
+    "type of burner desired",
+    "type of lpg cylinder desired",
+    "name in bank account"
+  ],
+  "documents": [
+    { "en": "Aadhaar card", "hi": "आधार कार्ड", "digilockerType": "ADHAR" },
+    { "en": "Ration card, or your state's family document", "hi": "राशन कार्ड, या आपके राज्य का परिवार वाला दस्तावेज़" },
+    { "en": "Bank passbook, statement or a cancelled cheque", "hi": "बैंक पासबुक, स्टेटमेंट या रद्द किया हुआ चेक" },
+    { "en": "One address proof from the list printed on the form", "hi": "फॉर्म पर छपी सूची में से पते का एक प्रमाण" },
+    { "en": "The signed 14-point declaration from the gas agency", "hi": "गैस एजेंसी का हस्ताक्षर किया हुआ 14-सूत्री घोषणापत्र" },
+    { "en": "Aadhaar copies of every household member above 18", "hi": "घर के 18 साल से बड़े हर सदस्य के आधार की नकल" }
+  ],
+  "fields": [
+    {
+      "id": "full_name",
+      "label": { "en": "Full name", "hi": "पूरा नाम" },
+      "rule": "name",
+      "source": "digilocker",
+      "profileKey": "name",
+      "question": { "en": "What is your full name?", "hi": "आपका पूरा नाम क्या है?" },
+      "explain": {
+        "en": "This must be exactly the name on your Aadhaar. The gas connection comes in this name, and your bank account must be in the same name — if the two differ, the subsidy never arrives.",
+        "hi": "यह बिल्कुल वही नाम होना चाहिए जो आपके आधार पर है। गैस कनेक्शन इसी नाम पर आएगा, और बैंक खाता भी इसी नाम पर होना चाहिए — दोनों अलग हुए तो सब्सिडी कभी नहीं आती।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "dob",
+      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "rule": "date_past",
+      "source": "digilocker",
+      "profileKey": "dob",
+      "question": { "en": "What is your date of birth?", "hi": "आपकी जन्म तिथि क्या है?" },
+      "explain": {
+        "en": "Write the date that is on your Aadhaar. If the two do not match, the agency sends the form back.",
+        "hi": "आधार पर जो जन्म तिथि है, वही लिखिए। दोनों में फ़र्क हुआ तो एजेंसी फॉर्म वापस कर देती है।"
+      },
+      "example": "14/08/1961"
+    },
+    {
+      "id": "aadhaar",
+      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "rule": "aadhaar",
+      "source": "ask",
+      "question": { "en": "Please say your twelve digit Aadhaar number.", "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।" },
+      "explain": {
+        "en": "An Ujjwala connection is given against Aadhaar. It is also how the agency checks that no gas connection already exists at your house — if one does, this application is refused.",
+        "hi": "उज्ज्वला कनेक्शन आधार पर ही मिलता है। इसी से एजेंसी जाँचती है कि आपके घर पर पहले से कोई गैस कनेक्शन तो नहीं है — अगर है, तो यह आवेदन मंज़ूर नहीं होता।"
+      },
+      "example": "2345 6789 0124"
+    },
+    {
+      "id": "mobile",
+      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
+      "rule": "mobile",
+      "source": "ask",
+      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
+      "explain": {
+        "en": "Every booking and delivery message comes to this number. Give the phone that stays with you, not a shopkeeper's.",
+        "hi": "सिलेंडर बुक करने और डिलीवरी का हर संदेश इसी नंबर पर आएगा। वही फोन बताइए जो आपके पास रहता है, दुकानदार का नहीं।"
+      },
+      "example": "9876543210"
+    },
+    {
+      "id": "caste",
+      "label": { "en": "Caste category", "hi": "जाति वर्ग" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "SC", "en": "Scheduled Caste", "hi": "अनुसूचित जाति" },
+        { "value": "ST", "en": "Scheduled Tribe", "hi": "अनुसूचित जनजाति" },
+        { "value": "Others", "en": "Others", "hi": "अन्य" }
+      ],
+      "question": { "en": "Which caste category are you in?", "hi": "आप किस जाति वर्ग में आती हैं?" },
+      "explain": {
+        "en": "Choose what your caste certificate says. If you are neither Scheduled Caste nor Scheduled Tribe, choose Others — this form has only these three boxes.",
+        "hi": "जो आपके जाति प्रमाणपत्र पर लिखा है, वही चुनिए। अगर आप अनुसूचित जाति या जनजाति में नहीं हैं, तो 'अन्य' चुनिए — इस फॉर्म में यही तीन खाने हैं।"
+      }
+    },
+    {
+      "id": "migrant",
+      "label": { "en": "Moved here from elsewhere", "hi": "कहीं और से आकर रह रही हैं" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "Yes", "en": "Yes", "hi": "हाँ" },
+        { "value": "No", "en": "No", "hi": "नहीं" }
+      ],
+      "question": { "en": "Have you moved here from another place?", "hi": "क्या आप कहीं और से आकर यहाँ रह रही हैं?" },
+      "explain": {
+        "en": "People who have moved usually have no ration card for this place. If that is you, a self-declaration is accepted instead of the ration card.",
+        "hi": "जो लोग कहीं और से आकर रहते हैं, उनके पास यहाँ का राशन कार्ड नहीं होता। अगर आप ऐसी हैं, तो राशन कार्ड की जगह एक स्व-घोषणा चल जाती है।"
+      }
+    },
+    {
+      "id": "migrant_certificate",
+      "label": { "en": "Migrant self-declaration attached", "hi": "प्रवासी स्व-घोषणा साथ लगी है" },
+      "rule": "choice",
+      "source": "ask",
+      "showIf": { "migrant": "Yes" },
+      "options": [
+        { "value": "Yes", "en": "Yes", "hi": "हाँ" },
+        { "value": "No", "en": "No", "hi": "नहीं" }
+      ],
+      "question": { "en": "Are you attaching the migrant self-declaration, Annexure One?", "hi": "क्या आप प्रवासी स्व-घोषणा, यानी अनुबंध-1, साथ लगा रही हैं?" },
+      "explain": {
+        "en": "Annexure One is the page you sign in place of a ration card. The gas agency gives it to you. Without it the form is treated as incomplete.",
+        "hi": "अनुबंध-1 वही कागज़ है जिस पर आप राशन कार्ड की जगह दस्तखत करती हैं। गैस एजेंसी यह कागज़ देती है। इसके बिना फॉर्म अधूरा माना जाता है।"
+      }
+    },
+    {
+      "id": "poa_code",
+      "label": { "en": "Address proof document", "hi": "पते का प्रमाण" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "01", "en": "Aadhaar card", "hi": "आधार कार्ड" },
+        { "value": "04", "en": "Ration card", "hi": "राशन कार्ड" },
+        { "value": "06", "en": "Voter ID card", "hi": "वोटर आईडी कार्ड" },
+        { "value": "09", "en": "Electricity bill from the last 3 months", "hi": "पिछले 3 महीने का बिजली बिल" },
+        { "value": "03", "en": "Bank passbook or statement", "hi": "बैंक पासबुक या स्टेटमेंट" },
+        { "value": "16", "en": "NREGS job card", "hi": "मनरेगा जॉब कार्ड" },
+        { "value": "25", "en": "Self-declaration, for migrants only", "hi": "स्व-घोषणा, केवल प्रवासियों के लिए" },
+        { "value": "other", "en": "Something else on the form's list", "hi": "फॉर्म की सूची में से कोई और" }
+      ],
+      "question": { "en": "Which document are you attaching to prove your address?", "hi": "पते के प्रमाण के लिए आप कौन सा दस्तावेज़ लगा रही हैं?" },
+      "explain": {
+        "en": "The form wants a two digit code for this document, not its name. The full list of twenty-five is printed at the bottom of the form itself. If yours is not offered here, choose the last option and the code will be left for you to copy from that list.",
+        "hi": "फॉर्म में इस दस्तावेज़ का नाम नहीं, दो अंकों का कोड भरना होता है। पूरी पच्चीस दस्तावेज़ों की सूची फॉर्म के नीचे ही छपी है। अगर आपका दस्तावेज़ यहाँ नहीं है, तो आख़िरी विकल्प चुनिए — कोड का खाना खाली छोड़ दिया जाएगा, उसी सूची से देखकर भर लीजिए।"
+      }
+    },
+    {
+      "id": "address",
+      "label": { "en": "Address", "hi": "पता" },
+      "rule": "text",
+      "source": "digilocker",
+      "profileKey": "address",
+      "question": { "en": "What is your full address?", "hi": "आपका पूरा पता क्या है?" },
+      "explain": {
+        "en": "The cylinder will be delivered here, so it must be the house you actually live in, and it must match the address proof you attach.",
+        "hi": "सिलेंडर इसी पते पर आएगा, इसलिए वही घर लिखिए जिसमें आप सचमुच रहती हैं। यह पता आपके लगाए हुए पते के प्रमाण से भी मिलना चाहिए।"
+      },
+      "example": "House No. 42, Ward 7, Gandhi Nagar, Jaipur, Rajasthan"
+    },
+    {
+      "id": "pincode",
+      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "rule": "pincode",
+      "source": "digilocker",
+      "profileKey": "pincode",
+      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "explain": {
+        "en": "The six digit number of your post office. It decides which gas agency your area belongs to.",
+        "hi": "आपके डाकघर का छह अंकों का नंबर। इसी से तय होता है कि आपका इलाका किस गैस एजेंसी में आता है।"
+      },
+      "example": "302015"
+    },
+    {
+      "id": "email",
+      "label": { "en": "Email address", "hi": "ईमेल पता" },
+      "rule": "email",
+      "source": "ask",
+      "optional": true,
+      "question": { "en": "Do you have an email address?", "hi": "क्या आपका कोई ईमेल पता है?" },
+      "explain": {
+        "en": "Not needed. Leave it empty if you do not have one — every message still comes to your mobile.",
+        "hi": "यह ज़रूरी नहीं है। न हो तो खाली छोड़ दीजिए — सारे संदेश फिर भी मोबाइल पर ही आएँगे।"
+      },
+      "example": "sunita.devi@example.com"
+    },
+    {
+      "id": "ration_state",
+      "label": { "en": "State that issued the ration card", "hi": "राशन कार्ड जिस राज्य का है" },
+      "rule": "text",
+      "source": "ask",
+      "question": { "en": "Which state issued your ration card?", "hi": "आपका राशन कार्ड किस राज्य का बना हुआ है?" },
+      "explain": {
+        "en": "The state whose name is printed on the card, which may not be the state you live in now.",
+        "hi": "उसी राज्य का नाम बताइए जो कार्ड पर छपा है। ज़रूरी नहीं कि यह वही राज्य हो जहाँ आप अभी रहती हैं।"
+      },
+      "example": "Rajasthan"
+    },
+    {
+      "id": "ration_number",
+      "label": { "en": "Ration card number", "hi": "राशन कार्ड नंबर" },
+      "rule": "text",
+      "source": "ask",
+      "question": { "en": "What is your ration card number?", "hi": "आपका राशन कार्ड नंबर क्या है?" },
+      "explain": {
+        "en": "The number printed on the front of the ration card. This is what proves who lives in your household. If your state gives a different family document instead, its number goes here.",
+        "hi": "राशन कार्ड के सामने छपा नंबर। इसी से साबित होता है कि आपके घर में कौन-कौन रहता है। अगर आपके राज्य में राशन कार्ड की जगह कोई और परिवार वाला कागज़ मिलता है, तो उसी का नंबर यहाँ लिखिए।"
+      },
+      "example": "RJ13070123456"
+    },
+    {
+      "id": "account_name",
+      "label": { "en": "Name on the bank account", "hi": "बैंक खाते पर लिखा नाम" },
+      "rule": "name",
+      "source": "ask",
+      "question": { "en": "What name is written on your bank account?", "hi": "आपके बैंक खाते पर कौन सा नाम लिखा है?" },
+      "explain": {
+        "en": "Read it off the passbook rather than from memory. The subsidy is paid into the account whose name matches this application — this one mismatch is the commonest reason it never arrives.",
+        "hi": "पासबुक देखकर बताइए, याद से नहीं। सब्सिडी उसी खाते में आती है जिसका नाम इस आवेदन से मिलता है — नाम का यही फ़र्क सबसे बड़ी वजह है कि पैसा नहीं पहुँचता।"
+      },
+      "example": "Sunita Devi"
+    },
+    {
+      "id": "bank_name",
+      "label": { "en": "Bank name", "hi": "बैंक का नाम" },
+      "rule": "text",
+      "source": "ask",
+      "question": { "en": "Which bank is your account in?", "hi": "आपका खाता किस बैंक में है?" },
+      "explain": {
+        "en": "The bank's own name, printed on the front of the passbook.",
+        "hi": "बैंक का अपना नाम, जो पासबुक के सामने छपा होता है।"
+      },
+      "example": "State Bank of India"
+    },
+    {
+      "id": "branch_name",
+      "label": { "en": "Branch name", "hi": "शाखा का नाम" },
+      "rule": "text",
+      "source": "ask",
+      "question": { "en": "Which branch is your account in?", "hi": "आपका खाता किस शाखा में है?" },
+      "explain": {
+        "en": "Usually the name of the place the branch is in, printed just under the bank's name in the passbook.",
+        "hi": "आम तौर पर उस जगह का नाम जहाँ शाखा है। पासबुक में बैंक के नाम के ठीक नीचे छपा होता है।"
+      },
+      "example": "Gandhi Nagar"
+    },
+    {
+      "id": "ifsc",
+      "label": { "en": "IFSC code", "hi": "आईएफएससी कोड" },
+      "rule": "ifsc",
+      "source": "ask",
+      "question": { "en": "What is the IFSC code of your branch?", "hi": "आपकी शाखा का आईएफएससी कोड क्या है?" },
+      "explain": {
+        "en": "Eleven characters, printed on the first page of the passbook and on your cheque book. It tells the government which branch to send the money to.",
+        "hi": "ग्यारह अक्षरों का कोड, जो पासबुक के पहले पन्ने और चेक बुक पर छपा होता है। इसी से सरकार को पता चलता है कि पैसा किस शाखा में भेजना है।"
+      },
+      "example": "SBIN0001234"
+    },
+    {
+      "id": "bank_account",
+      "label": { "en": "Bank account number", "hi": "बैंक खाता संख्या" },
+      "rule": "bank_account",
+      "source": "ask",
+      "question": { "en": "What is your bank account number?", "hi": "आपकी बैंक खाता संख्या क्या है?" },
+      "explain": {
+        "en": "Read it from the passbook, digit by digit. The subsidy for every cylinder is paid into this account.",
+        "hi": "पासबुक देखकर एक-एक अंक बोलिए। हर सिलेंडर की सब्सिडी इसी खाते में आएगी।"
+      },
+      "example": "30123456789"
+    },
+    {
+      "id": "declaration_14point",
+      "label": { "en": "14-point declaration attached", "hi": "14-सूत्री घोषणापत्र साथ लगा है" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "Yes", "en": "Yes", "hi": "हाँ" },
+        { "value": "No", "en": "No", "hi": "नहीं" }
+      ],
+      "question": { "en": "Are you attaching the signed 14-point declaration?", "hi": "क्या आप हस्ताक्षर किया हुआ 14-सूत्री घोषणापत्र साथ लगा रही हैं?" },
+      "explain": {
+        "en": "A separate printed page the gas agency gives you. You sign it and attach it to this form. Without it the agency will not accept the application.",
+        "hi": "यह एक अलग छपा हुआ कागज़ है जो गैस एजेंसी देती है। उस पर दस्तखत करके इसी फॉर्म के साथ लगाना होता है। इसके बिना एजेंसी आवेदन नहीं लेती।"
+      }
+    },
+    {
+      "id": "cylinder",
+      "label": { "en": "Cylinder size", "hi": "सिलेंडर का आकार" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "14.2 kg", "en": "14.2 kg cylinder", "hi": "14.2 किलो वाला सिलेंडर" },
+        { "value": "5 kg", "en": "5 kg cylinder", "hi": "5 किलो वाला सिलेंडर" }
+      ],
+      "question": { "en": "Which size of cylinder do you want?", "hi": "आपको कौन से आकार का सिलेंडर चाहिए?" },
+      "explain": {
+        "en": "The 14.2 kg one is the usual household cylinder and lasts far longer. The 5 kg one is lighter to carry and cheaper to refill each time, but runs out quickly.",
+        "hi": "14.2 किलो वाला घरों में आम तौर पर आता है और बहुत ज़्यादा चलता है। 5 किलो वाला उठाने में हल्का है और हर बार भरवाना सस्ता पड़ता है, पर जल्दी खत्म हो जाता है।"
+      }
+    },
+    {
+      "id": "burner",
+      "label": { "en": "Number of burners", "hi": "चूल्हे में बर्नर" },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        { "value": "2 - Burner", "en": "Two burner stove", "hi": "दो बर्नर वाला चूल्हा" },
+        { "value": "1 - Burner", "en": "One burner stove", "hi": "एक बर्नर वाला चूल्हा" }
+      ],
+      "question": { "en": "Do you want a one burner or a two burner stove?", "hi": "आपको एक बर्नर वाला चूल्हा चाहिए या दो बर्नर वाला?" },
+      "explain": {
+        "en": "Two burners let you cook two things at once. One burner costs less and takes less space. The stove comes with the connection, so choose now — changing it later means buying your own.",
+        "hi": "दो बर्नर पर आप एक साथ दो चीज़ें बना सकती हैं। एक बर्नर वाला सस्ता पड़ता है और जगह कम लेता है। चूल्हा कनेक्शन के साथ ही मिलता है, इसलिए अभी चुन लीजिए — बाद में बदलना हो तो अपने पैसे से खरीदना पड़ेगा।"
+      }
+    }
+  ]
+}
