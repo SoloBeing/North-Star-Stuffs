@@ -121,6 +121,7 @@ Every `fetch()` in the source, read at generation time:
 - `/api/digilocker/logout`
 - `/api/digilocker/profile`
 - `…forms/form93.pdf`
+- `…forms/lpg-pmuy-kyc.pdf`
 
 The **only** server this app calls is DigiLocker, for login and for reading
 the citizen's own documents. Validation, explanations, OCR and the PDF all run

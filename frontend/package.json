@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "lint": "oxlint",
     "check": "npm run lint && npm run check:ui && npm run test:ui && npm run check:text && npm run test:text && npm run check:contrib && npm run test:contrib && npm run context:check",
-    "check:all": "npm run check && npm run test:rules && npm run test:rules:self && npm run test:boxes",
+    "check:all": "npm run check && npm run test:rules && npm run test:rules:self && npm run test:boxes && npm run check:forms",
     "check:ui": "node scripts/check-ui.mjs",
     "test:ui": "node scripts/check-ui.test.mjs",
     "check:text": "node scripts/check-text.mjs",
@@ -19,6 +19,7 @@
     "test:rules": "node scripts/check-rule-parity.mjs",
     "test:rules:self": "node scripts/check-rule-parity.test.mjs",
     "test:boxes": "python3 ../scripts/extract-form-boxes.test.py",
+    "check:forms": "node scripts/check-official-forms.mjs",
     "context": "node scripts/build-context-packs.mjs",
     "context:check": "node scripts/build-context-packs.mjs --check"
   },

@@ -27,6 +27,7 @@ import { Stamper } from './official/stamper.js'
 
 const FORMS = {
   form93: () => import('./official/form93.js'),
+  'ujjwala-kyc': () => import('./official/ujjwalaKyc.js'),
 }
 
 /**
