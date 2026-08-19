@@ -156,7 +156,7 @@ and it is the one a real run got wrong after getting the others right.
 
 Two habits of this codebase, both easy to apply:
 
-- **Sentences take the `कीजिए`/`लीजिए` form, not `करें`.** 19 strings in the
+- **Sentences take the `कीजिए`/`लीजिए` form, not `करें`.** 18 strings in the
   live file already do: "फोटो लीजिए", "टाइप कीजिए", "फिर कोशिश कीजिए". Keep
   `करें` for short button labels — "डाउनलोड करें".
 - **No Sanskritised word where an everyday one exists**: प्रतीक्षा → रुकना,
@@ -208,7 +208,7 @@ Rules that are easy to get wrong:
 
 ## Every key that already exists
 
-85 keys. This is a **collision list, not a permitted list** — you are
+84 keys. This is a **collision list, not a permitted list** — you are
 adding a new key, so choose a name that is not already here, then name yours
 freely in camelCase.
 
@@ -263,7 +263,6 @@ you need, reuse it and add nothing.
 | `tapToSpeak` | Tap and speak |
 | `listening` | Listening… |
 | `typeInstead` | Or type it |
-| `repeatQuestion` | Say it again |
 | `whatIsThis` | What is this? |
 | `next` | Next |
 | `back` | Back |

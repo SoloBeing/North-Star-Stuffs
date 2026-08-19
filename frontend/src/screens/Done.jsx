@@ -22,7 +22,7 @@ import { Banner, Button, Card, Screen, SpeakButton } from '../components/ui'
 import { buildFilledPdf, downloadPdf } from '../lib/pdf'
 import { buildOfficialPdf } from '../lib/officialPdf'
 import { speak } from '../lib/speech'
-import { t } from '../lib/i18n'
+import { pick, t } from '../lib/i18n'
 
 /** Notes grouped under the heading that tells the citizen what to do about them. */
 const NOTE_GROUPS = [
@@ -52,9 +52,7 @@ export default function Done({
 
     ;(async () => {
       try {
-        const sheet = await buildFilledPdf(form, answers, lang, {
-          digilockerUsed: Boolean(profile),
-        })
+        const sheet = await buildFilledPdf(form, answers, lang, { profile })
         if (cancelled) return
         setSummary(sheet)
 
@@ -207,7 +205,7 @@ export default function Done({
  * who cannot read a list of caveats printed in small type.
  */
 function NoteList({ notes, lang }) {
-  const pick = (s) => (typeof s === 'string' ? s : (s?.[lang] ?? s?.en ?? ''))
+  const say = (entry) => pick(entry, lang)
 
   return NOTE_GROUPS.map(({ kind, title, tone }) => {
     const group = notes.filter((n) => n.kind === kind)
@@ -215,7 +213,7 @@ function NoteList({ notes, lang }) {
 
     const spoken = [
       t(title, lang),
-      ...group.map((n) => [pick(n.label), pick(n.detail)].filter(Boolean).join('. ')),
+      ...group.map((n) => [say(n.label), say(n.detail)].filter(Boolean).join('. ')),
     ].join('. ')
 
     return (
@@ -233,10 +231,10 @@ function NoteList({ notes, lang }) {
         <ul className="mt-3 grid gap-2">
           {group.map((n, i) => (
             <li key={i} className="border-l-4 border-line pl-3">
-              <p className="font-semibold">{pick(n.label)}</p>
+              <p className="font-semibold">{say(n.label)}</p>
               {n.detail && (
                 <p className="text-base leading-relaxed text-ink-soft">
-                  {pick(n.detail)}
+                  {say(n.detail)}
                 </p>
               )}
             </li>

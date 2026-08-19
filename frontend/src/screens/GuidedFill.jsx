@@ -35,7 +35,6 @@ import { t } from '../lib/i18n'
 
 export default function GuidedFill({
   lang,
-  form,
   fields,
   answers,
   onAnswer,

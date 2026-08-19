@@ -29,7 +29,7 @@ import Checklist from './screens/Checklist'
 import Done from './screens/Done'
 import { stopSpeaking } from './lib/speech'
 import { releaseOcr } from './lib/ocr'
-import { staleFields, visibleFields } from './lib/fields'
+import { askableFields, isPrefilled, staleFields } from './lib/fields'
 import { t } from './lib/i18n'
 
 const LANG_KEY = 'formmitra.lang'
@@ -165,9 +165,7 @@ export default function App() {
   function pickForm(chosen) {
     const seeded = {}
     for (const field of chosen.fields) {
-      if (field.source === 'digilocker' && profile?.[field.profileKey]) {
-        seeded[field.id] = profile[field.profileKey]
-      }
+      if (isPrefilled(field, profile)) seeded[field.id] = profile[field.profileKey]
     }
     setForm(chosen)
     setAnswers(seeded)
@@ -195,10 +193,9 @@ export default function App() {
 
   // Fields the voice flow needs to ask about — DigiLocker-sourced ones are
   // skipped entirely, which is the whole point of logging in, and so are the
-  // ones an earlier answer has ruled out.
-  const askableFields = visibleFields(form, answers).filter(
-    (f) => !(f.source === 'digilocker' && profile?.[f.profileKey]),
-  )
+  // ones an earlier answer has ruled out. The overview screen counts with the
+  // same helper, so the two can no longer disagree about the size of the form.
+  const pending = askableFields(form, answers, profile)
 
   // Editing one answer can *unlock* a question that was never asked: saying on
   // the confirm screen that you are not a single parent after all brings items
@@ -207,11 +204,11 @@ export default function App() {
   // the citizen back into the fill with exactly what is outstanding.
   useEffect(() => {
     if (screen !== 'confirm') return
-    const pending = askableFields.filter((f) => answers[f.id] === undefined)
-    if (pending.length === 0) return
-    setFillQueue(pending)
+    const outstanding = pending.filter((f) => answers[f.id] === undefined)
+    if (outstanding.length === 0) return
+    setFillQueue(outstanding)
     setScreen('fill')
-    // askableFields is rebuilt every render, so depending on it would loop.
+    // `pending` is rebuilt every render, so depending on it would loop.
     // Screen changes are what can leave a question outstanding.
   }, [screen]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -304,8 +301,7 @@ export default function App() {
                 : 'fill'
           }
           lang={lang}
-          form={form}
-          fields={editField ? [editField] : (fillQueue ?? askableFields)}
+          fields={editField ? [editField] : (fillQueue ?? pending)}
           answers={answers}
           onAnswer={answer}
           onDone={() => {

@@ -16,6 +16,7 @@ import {
   Screen,
   SpeakButton,
 } from '../components/ui'
+import { displayValue, isPrefilled } from '../lib/fields'
 import { speak, stopSpeaking } from '../lib/speech'
 import { speakableValue } from '../lib/validation'
 import { t } from '../lib/i18n'
@@ -45,13 +46,8 @@ export default function Confirm({
     [],
   )
 
-  function displayValue(field) {
-    const raw = answers[field.id]
-    if (field.rule === 'choice') {
-      return field.options?.find((o) => o.value === raw)?.[lang] ?? raw
-    }
-    return raw
-  }
+  /** What the citizen sees for one answer, rendered exactly as the sheet prints it. */
+  const shown = (field) => displayValue(field, answers[field.id], lang)
 
   /** Read every answer in turn: "IFSC code. S B I N ... — is this correct?" */
   async function readAll() {
@@ -69,7 +65,7 @@ export default function Confirm({
       setActiveId(field.id)
       const spoken =
         field.rule === 'choice'
-          ? displayValue(field)
+          ? shown(field)
           : speakableValue(field, answers[field.id])
       await speak(
         `${field.label[lang]}. ${spoken}. ${t('isThisCorrect', lang)}`,
@@ -98,8 +94,7 @@ export default function Confirm({
 
       <div className="mb-6 space-y-2">
         {filled.map((field) => {
-          const fromDigilocker =
-            field.source === 'digilocker' && profile?.[field.profileKey]
+          const fromDigilocker = isPrefilled(field, profile)
           return (
             <Card
               key={field.id}
@@ -120,7 +115,7 @@ export default function Confirm({
                     {field.label[lang]}
                   </p>
                   <p className="mt-0.5 text-xl leading-snug font-bold break-words">
-                    {displayValue(field)}
+                    {shown(field)}
                   </p>
                   {fromDigilocker && (
                     <p className="mt-1 text-sm font-bold text-good-500">

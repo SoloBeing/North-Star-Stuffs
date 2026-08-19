@@ -121,7 +121,6 @@ export const STRINGS = {
   tapToSpeak: { en: 'Tap and speak', hi: 'टैप करके बोलिए' },
   listening: { en: 'Listening…', hi: 'सुन रहे हैं…' },
   typeInstead: { en: 'Or type it', hi: 'या टाइप कीजिए' },
-  repeatQuestion: { en: 'Say it again', hi: 'फिर से बोलिए' },
   whatIsThis: { en: 'What is this?', hi: 'यह क्या है?' },
   next: { en: 'Next', hi: 'आगे' },
   back: { en: 'Back', hi: 'पीछे' },
@@ -224,6 +223,22 @@ export const STRINGS = {
     en: 'Too long for the form’s boxes — shorten by hand',
     hi: 'फॉर्म के खानों के लिए बहुत लंबा — हाथ से छोटा कीजिए',
   },
+}
+
+/**
+ * The right half of a bilingual object that came from data rather than STRINGS.
+ *
+ * Templates, document names and the official-form notes carry their own
+ * { en, hi } pairs; only interface chrome lives in STRINGS above. Three callers
+ * had each grown a one-line version of this, and the three disagreed about what
+ * to do when the value was missing — pdf.js returned an empty string, Confirm
+ * returned the raw stored value, Done also accepted a plain string. All of that
+ * is here now, so the next caller picks a fallback instead of writing a fourth.
+ */
+export function pick(entry, lang = 'hi', fallback = '') {
+  if (entry === undefined || entry === null) return fallback
+  if (typeof entry === 'string') return entry
+  return entry[lang] ?? entry.en ?? fallback
 }
 
 export function t(key, lang = 'hi', values = null) {

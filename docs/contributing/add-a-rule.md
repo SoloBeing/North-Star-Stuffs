@@ -268,7 +268,7 @@ and it is the one a real run got wrong after getting the others right.
 
 Two habits of this codebase, both easy to apply:
 
-- **Sentences take the `कीजिए`/`लीजिए` form, not `करें`.** 19 strings in the
+- **Sentences take the `कीजिए`/`लीजिए` form, not `करें`.** 18 strings in the
   live file already do: "फोटो लीजिए", "टाइप कीजिए", "फिर कोशिश कीजिए". Keep
   `करें` for short button labels — "डाउनलोड करें".
 - **No Sanskritised word where an everyday one exists**: प्रतीक्षा → रुकना,

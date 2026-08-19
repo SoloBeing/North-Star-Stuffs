@@ -18,6 +18,9 @@
  * and it buys guaranteed-correct rendering in every language we will ever add.
  */
 
+import { displayValue, isPrefilled } from './fields.js'
+import { pick } from './i18n.js'
+
 // A4 at 150 DPI. Comfortably sharp when printed, and not a huge file.
 const PAGE_W = 1240
 const PAGE_H = 1754
@@ -165,12 +168,13 @@ class PageWriter {
  * @param {object}  form     the template
  * @param {object}  answers  { fieldId: value }
  * @param {string}  lang     'hi' | 'en'
- * @param {object}  meta     { digilockerUsed: boolean }
+ * @param {object}  meta     { profile: object|null } — the DigiLocker profile,
+ *                           so a value it supplied can be marked as verified
  * @returns {Promise<Blob>}
  */
 export async function buildFilledPdf(form, answers, lang = 'hi', meta = {}) {
   const w = new PageWriter()
-  const t = (obj) => obj?.[lang] ?? obj?.en ?? ''
+  const t = (obj) => pick(obj, lang)
 
   // ── Header ───────────────────────────────────────────────────────────────
   w.ctx.fillStyle = BRAND
@@ -195,16 +199,11 @@ export async function buildFilledPdf(form, answers, lang = 'hi', meta = {}) {
     const raw = answers[field.id]
     if (raw === undefined || raw === '') continue
 
-    // Choice fields store a code ("BSBDA"); print the human label.
-    let shown = raw
-    if (field.rule === 'choice') {
-      const option = field.options?.find((o) => o.value === raw)
-      if (option) shown = t(option)
-    } else if (field.rule === 'amount' && /^\d+$/.test(raw)) {
-      // Indian grouping: a clerk reading "₹1,80,000" checks it at a glance,
-      // where "180000" has to be counted digit by digit.
-      shown = `₹${Number(raw).toLocaleString('en-IN')}`
-    }
+    // A choice field stores a code ("BSBDA") and an amount stores bare digits.
+    // Both are turned into something readable by the same helper the confirm
+    // screen uses, so this sheet cannot print a value the citizen approved in
+    // a different shape.
+    const shown = displayValue(field, raw, lang)
 
     w.ensure(110)
     const labelTop = w.y
@@ -213,7 +212,10 @@ export async function buildFilledPdf(form, answers, lang = 'hi', meta = {}) {
     w.text(shown, { size: 27, weight: '600' })
 
     // Mark which fields came from a verified source rather than being typed.
-    if (field.source === 'digilocker' && meta.digilockerUsed) {
+    // A field can name DigiLocker as its source and still have been typed by
+    // hand, when the profile did not carry that key — the badge has to follow
+    // the value, not the template's intention.
+    if (isPrefilled(field, meta.profile)) {
       w.ctx.font = `600 16px ${FONT}`
       w.ctx.fillStyle = BRAND
       w.ctx.fillText('✓ DigiLocker verified', PAGE_W - MARGIN - 210, labelTop + 2)
