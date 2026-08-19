@@ -85,10 +85,18 @@ def rows(pdf, page):
         bands[(round(yt / SNAP), round(yb / SNAP))].append((x, yt, yb))
 
     def has_h(y, xa, xb):
-        return any(
-            abs(hy - y) <= TOL and hx0 <= xa + TOL and hx1 >= xb - TOL
-            for hx0, hx1, hy in horiz
-        )
+        # A cell's edge is often not one stroke: forms that print a comb draw
+        # it segment by segment, so a cell spanning two of them is closed by a
+        # run of touching collinear strokes rather than a single long one.
+        run = None
+        for hx0, hx1 in sorted((h[0], h[1]) for h in horiz if abs(h[2] - y) <= TOL):
+            if run is None or hx0 > run[1] + TOL:
+                run = [hx0, hx1]
+            else:
+                run[1] = max(run[1], hx1)
+            if run[0] <= xa + TOL and run[1] >= xb - TOL:
+                return True
+        return False
 
     out = []
     for verticals in bands.values():
@@ -96,6 +104,8 @@ def rows(pdf, page):
         yt = sum(v[1] for v in verticals) / len(verticals)
         yb = sum(v[2] for v in verticals) / len(verticals)
         if yb - yt < 5:                       # too short to be a fill row
+            continue
+        if yb <= 0:                           # registration marks off the page
             continue
         cells = []
         for i in range(len(verticals) - 1):
