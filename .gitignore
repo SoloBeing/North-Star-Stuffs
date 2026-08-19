@@ -30,7 +30,7 @@ session_transcripts/
 # matching rule wins, so it silently re-ignores the one env file we do commit.
 .vercel
 
-# Output of frontend/scripts/check-form93.mjs — regenerate with the script
+# Output of frontend/scripts/check-official-forms.mjs — regenerate with the script
 # rather than committing, so a stale PDF is never mistaken for current output.
 frontend/scripts/*.pdf
 
