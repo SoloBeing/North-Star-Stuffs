@@ -1,0 +1,401 @@
+{
+  "pageHeight": 841.92,
+  "slots": {
+    "photo": {
+      "page": 1,
+      "yTop": 91.5,
+      "yBot": 208.5,
+      "cells": [
+        [
+          445.25,
+          554.05
+        ]
+      ]
+    },
+    "aadhaar": {
+      "page": 1,
+      "yTop": 122.9,
+      "yBot": 138.98,
+      "cells": [
+        [
+          301.37,
+          436.39
+        ]
+      ]
+    },
+    "bhamashah": {
+      "page": 1,
+      "yTop": 139.46,
+      "yBot": 155.66,
+      "cells": [
+        [
+          301.37,
+          436.39
+        ]
+      ]
+    },
+    "applicantName": {
+      "page": 1,
+      "yTop": 166.8,
+      "yBot": 187.8,
+      "cells": [
+        [
+          224.8,
+          438.45
+        ]
+      ]
+    },
+    "fatherName": {
+      "page": 1,
+      "yTop": 196.05,
+      "yBot": 217.05,
+      "cells": [
+        [
+          224.8,
+          438.45
+        ]
+      ]
+    },
+    "address.present": {
+      "page": 1,
+      "yTop": 224.0,
+      "yBot": 251.55,
+      "cells": [
+        [
+          224.8,
+          556.6
+        ]
+      ]
+    },
+    "address.permanent": {
+      "page": 1,
+      "yTop": 264.15,
+      "yBot": 292.4,
+      "cells": [
+        [
+          224.8,
+          556.95
+        ]
+      ]
+    },
+    "address.village": {
+      "page": 1,
+      "yTop": 296.67,
+      "yBot": 317.67,
+      "cells": [
+        [
+          148.3,
+          249.55
+        ]
+      ]
+    },
+    "address.tehsil": {
+      "page": 1,
+      "yTop": 296.67,
+      "yBot": 317.67,
+      "cells": [
+        [
+          303.55,
+          404.8
+        ]
+      ]
+    },
+    "address.district": {
+      "page": 1,
+      "yTop": 296.67,
+      "yBot": 317.67,
+      "cells": [
+        [
+          455.05,
+          556.3
+        ]
+      ]
+    },
+    "dobGuide": {
+      "page": 1,
+      "yTop": 327.62,
+      "yBot": 348.62,
+      "cells": [
+        [
+          148.3,
+          284.05
+        ]
+      ]
+    },
+    "age": {
+      "page": 1,
+      "yTop": 327.62,
+      "yBot": 348.62,
+      "cells": [
+        [
+          521.05,
+          556.6
+        ]
+      ]
+    },
+    "birthPlace": {
+      "page": 1,
+      "yTop": 328.4,
+      "yBot": 349.4,
+      "cells": [
+        [
+          354.55,
+          494.05
+        ]
+      ]
+    },
+    "gender.male": {
+      "page": 1,
+      "yTop": 361.0,
+      "yBot": 382.0,
+      "cells": [
+        [
+          147.55,
+          172.3
+        ]
+      ]
+    },
+    "gender.female": {
+      "page": 1,
+      "yTop": 361.0,
+      "yBot": 382.0,
+      "cells": [
+        [
+          217.3,
+          242.05
+        ]
+      ]
+    },
+    "marital.married": {
+      "page": 1,
+      "yTop": 361.0,
+      "yBot": 382.0,
+      "cells": [
+        [
+          393.55,
+          418.3
+        ]
+      ]
+    },
+    "marital.unmarried": {
+      "page": 1,
+      "yTop": 361.0,
+      "yBot": 382.0,
+      "cells": [
+        [
+          476.8,
+          501.55
+        ]
+      ]
+    },
+    "religion.applicant": {
+      "page": 1,
+      "yTop": 393.8,
+      "yBot": 414.8,
+      "cells": [
+        [
+          147.55,
+          242.8
+        ]
+      ]
+    },
+    "caste.applicant": {
+      "page": 1,
+      "yTop": 394.55,
+      "yBot": 415.55,
+      "cells": [
+        [
+          284.8,
+          399.55
+        ]
+      ]
+    },
+    "subCaste.applicant": {
+      "page": 1,
+      "yTop": 394.55,
+      "yBot": 415.55,
+      "cells": [
+        [
+          454.95,
+          556.2
+        ]
+      ]
+    },
+    "religion.father": {
+      "page": 1,
+      "yTop": 422.3,
+      "yBot": 443.3,
+      "cells": [
+        [
+          147.55,
+          242.8
+        ]
+      ]
+    },
+    "caste.father": {
+      "page": 1,
+      "yTop": 423.05,
+      "yBot": 444.05,
+      "cells": [
+        [
+          284.8,
+          399.55
+        ]
+      ]
+    },
+    "subCaste.father": {
+      "page": 1,
+      "yTop": 423.05,
+      "yBot": 444.05,
+      "cells": [
+        [
+          454.95,
+          556.2
+        ]
+      ]
+    },
+    "recordedCaste": {
+      "page": 1,
+      "yTop": 446.75,
+      "yBot": 467.75,
+      "cells": [
+        [
+          412.3,
+          556.2
+        ]
+      ]
+    },
+    "native.yes": {
+      "page": 1,
+      "yTop": 469.05,
+      "yBot": 490.05,
+      "cells": [
+        [
+          373.3,
+          398.05
+        ]
+      ]
+    },
+    "native.no": {
+      "page": 1,
+      "yTop": 472.05,
+      "yBot": 493.05,
+      "cells": [
+        [
+          438.45,
+          463.2
+        ]
+      ]
+    },
+    "mobile": {
+      "page": 1,
+      "yTop": 490.35,
+      "yBot": 511.35,
+      "cells": [
+        [
+          151.65,
+          303.55
+        ]
+      ]
+    },
+    "declarationDate": {
+      "page": 1,
+      "yTop": 567.2,
+      "yBot": 588.2,
+      "cells": [
+        [
+          83.8,
+          219.55
+        ]
+      ]
+    },
+    "declarationPlace": {
+      "page": 1,
+      "yTop": 593.55,
+      "yBot": 613.7,
+      "cells": [
+        [
+          83.8,
+          219.55
+        ]
+      ]
+    },
+    "affidavit.name": {
+      "page": 3,
+      "yTop": 79.0,
+      "yBot": 100.0,
+      "cells": [
+        [
+          53.8,
+          269.05
+        ]
+      ]
+    },
+    "affidavit.fatherName": {
+      "page": 3,
+      "yTop": 79.0,
+      "yBot": 100.0,
+      "cells": [
+        [
+          342.55,
+          557.8
+        ]
+      ]
+    },
+    "affidavit.resident": {
+      "page": 3,
+      "yTop": 108.9,
+      "yBot": 129.9,
+      "cells": [
+        [
+          76.3,
+          557.8
+        ]
+      ]
+    },
+    "affidavit.village": {
+      "page": 3,
+      "yTop": 136.7,
+      "yBot": 157.7,
+      "cells": [
+        [
+          96.55,
+          224.8
+        ]
+      ]
+    },
+    "affidavit.tehsil": {
+      "page": 3,
+      "yTop": 137.45,
+      "yBot": 158.45,
+      "cells": [
+        [
+          268.3,
+          397.3
+        ]
+      ]
+    },
+    "affidavit.district": {
+      "page": 3,
+      "yTop": 137.45,
+      "yBot": 158.45,
+      "cells": [
+        [
+          429.55,
+          557.8
+        ]
+      ]
+    },
+    "affidavit.caste": {
+      "page": 3,
+      "yTop": 186.75,
+      "yBot": 207.75,
+      "cells": [
+        [
+          436.3,
+          557.8
+        ]
+      ]
+    }
+  }
+}
