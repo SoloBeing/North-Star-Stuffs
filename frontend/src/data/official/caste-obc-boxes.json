@@ -1,0 +1,582 @@
+{
+  "pageHeight": 1008.0,
+  "slots": {
+    "photo": {
+      "page": 1,
+      "yTop": 89.9,
+      "yBot": 204.1,
+      "cells": [
+        [
+          445.0,
+          553.8
+        ]
+      ]
+    },
+    "aadhaar": {
+      "page": 1,
+      "yTop": 99.02,
+      "yBot": 115.1,
+      "cells": [
+        [
+          301.61,
+          436.63
+        ]
+      ]
+    },
+    "bhamashah": {
+      "page": 1,
+      "yTop": 115.58,
+      "yBot": 131.78,
+      "cells": [
+        [
+          301.61,
+          436.63
+        ]
+      ]
+    },
+    "applicantName": {
+      "page": 1,
+      "yTop": 139.0,
+      "yBot": 160.0,
+      "cells": [
+        [
+          225.0,
+          438.65
+        ]
+      ]
+    },
+    "fatherName": {
+      "page": 1,
+      "yTop": 168.25,
+      "yBot": 189.25,
+      "cells": [
+        [
+          225.0,
+          438.65
+        ]
+      ]
+    },
+    "address.present": {
+      "page": 1,
+      "yTop": 208.0,
+      "yBot": 243.25,
+      "cells": [
+        [
+          225.0,
+          438.65
+        ]
+      ]
+    },
+    "address.permanent": {
+      "page": 1,
+      "yTop": 250.4,
+      "yBot": 285.25,
+      "cells": [
+        [
+          225.0,
+          557.15
+        ]
+      ]
+    },
+    "address.village": {
+      "page": 1,
+      "yTop": 293.82,
+      "yBot": 314.82,
+      "cells": [
+        [
+          148.5,
+          249.75
+        ]
+      ]
+    },
+    "address.tehsil": {
+      "page": 1,
+      "yTop": 293.82,
+      "yBot": 314.82,
+      "cells": [
+        [
+          303.75,
+          405.0
+        ]
+      ]
+    },
+    "address.district": {
+      "page": 1,
+      "yTop": 293.82,
+      "yBot": 314.82,
+      "cells": [
+        [
+          455.25,
+          556.5
+        ]
+      ]
+    },
+    "birthPlace": {
+      "page": 1,
+      "yTop": 325.55,
+      "yBot": 346.55,
+      "cells": [
+        [
+          354.75,
+          501.75
+        ]
+      ]
+    },
+    "age": {
+      "page": 1,
+      "yTop": 325.55,
+      "yBot": 346.55,
+      "cells": [
+        [
+          529.85,
+          554.6
+        ]
+      ]
+    },
+    "gender.male": {
+      "page": 1,
+      "yTop": 357.55,
+      "yBot": 378.55,
+      "cells": [
+        [
+          147.75,
+          172.5
+        ]
+      ]
+    },
+    "gender.female": {
+      "page": 1,
+      "yTop": 357.55,
+      "yBot": 378.55,
+      "cells": [
+        [
+          216.0,
+          240.75
+        ]
+      ]
+    },
+    "marital.married": {
+      "page": 1,
+      "yTop": 357.55,
+      "yBot": 378.55,
+      "cells": [
+        [
+          392.25,
+          417.0
+        ]
+      ]
+    },
+    "marital.unmarried": {
+      "page": 1,
+      "yTop": 357.55,
+      "yBot": 378.55,
+      "cells": [
+        [
+          477.0,
+          501.75
+        ]
+      ]
+    },
+    "religion": {
+      "page": 1,
+      "yTop": 389.45,
+      "yBot": 410.45,
+      "cells": [
+        [
+          147.75,
+          249.0
+        ]
+      ]
+    },
+    "caste": {
+      "page": 1,
+      "yTop": 390.95,
+      "yBot": 411.95,
+      "cells": [
+        [
+          294.0,
+          395.25
+        ]
+      ]
+    },
+    "subCaste": {
+      "page": 1,
+      "yTop": 391.7,
+      "yBot": 412.7,
+      "cells": [
+        [
+          455.15,
+          556.4
+        ]
+      ]
+    },
+    "listSerial": {
+      "page": 1,
+      "yTop": 425.4,
+      "yBot": 446.4,
+      "cells": [
+        [
+          405.0,
+          556.4
+        ]
+      ]
+    },
+    "native.yes": {
+      "page": 1,
+      "yTop": 456.05,
+      "yBot": 477.05,
+      "cells": [
+        [
+          375.0,
+          399.75
+        ]
+      ]
+    },
+    "native.no": {
+      "page": 1,
+      "yTop": 456.05,
+      "yBot": 477.05,
+      "cells": [
+        [
+          459.65,
+          484.4
+        ]
+      ]
+    },
+    "mobile": {
+      "page": 1,
+      "yTop": 490.55,
+      "yBot": 511.55,
+      "cells": [
+        [
+          159.35,
+          303.75
+        ]
+      ]
+    },
+    "creamy.organisation.mother": {
+      "page": 1,
+      "yTop": 679.88,
+      "yBot": 694.42,
+      "cells": [
+        [
+          196.46,
+          318.89
+        ]
+      ]
+    },
+    "creamy.organisation.father": {
+      "page": 1,
+      "yTop": 679.88,
+      "yBot": 694.42,
+      "cells": [
+        [
+          318.89,
+          441.43
+        ]
+      ]
+    },
+    "creamy.organisation.husband": {
+      "page": 1,
+      "yTop": 679.88,
+      "yBot": 694.42,
+      "cells": [
+        [
+          441.43,
+          563.62
+        ]
+      ]
+    },
+    "creamy.post.mother": {
+      "page": 1,
+      "yTop": 694.9,
+      "yBot": 709.42,
+      "cells": [
+        [
+          196.46,
+          318.89
+        ]
+      ]
+    },
+    "creamy.post.father": {
+      "page": 1,
+      "yTop": 694.9,
+      "yBot": 709.42,
+      "cells": [
+        [
+          318.89,
+          441.43
+        ]
+      ]
+    },
+    "creamy.post.husband": {
+      "page": 1,
+      "yTop": 694.9,
+      "yBot": 709.42,
+      "cells": [
+        [
+          441.43,
+          563.62
+        ]
+      ]
+    },
+    "creamy.payScale.mother": {
+      "page": 1,
+      "yTop": 709.9,
+      "yBot": 724.42,
+      "cells": [
+        [
+          196.46,
+          318.89
+        ]
+      ]
+    },
+    "creamy.payScale.father": {
+      "page": 1,
+      "yTop": 709.9,
+      "yBot": 724.42,
+      "cells": [
+        [
+          318.89,
+          441.43
+        ]
+      ]
+    },
+    "creamy.payScale.husband": {
+      "page": 1,
+      "yTop": 709.9,
+      "yBot": 724.42,
+      "cells": [
+        [
+          441.43,
+          563.62
+        ]
+      ]
+    },
+    "creamy.property.mother": {
+      "page": 1,
+      "yTop": 724.9,
+      "yBot": 750.1,
+      "cells": [
+        [
+          196.46,
+          318.89
+        ]
+      ]
+    },
+    "creamy.property.father": {
+      "page": 1,
+      "yTop": 724.9,
+      "yBot": 750.1,
+      "cells": [
+        [
+          318.89,
+          441.43
+        ]
+      ]
+    },
+    "creamy.property.husband": {
+      "page": 1,
+      "yTop": 724.9,
+      "yBot": 750.1,
+      "cells": [
+        [
+          441.43,
+          563.62
+        ]
+      ]
+    },
+    "familyIncome": {
+      "page": 1,
+      "yTop": 760.6,
+      "yBot": 781.6,
+      "cells": [
+        [
+          501.75,
+          555.75
+        ]
+      ]
+    },
+    "disability.details": {
+      "page": 1,
+      "yTop": 860.3,
+      "yBot": 881.3,
+      "cells": [
+        [
+          186.0,
+          555.75
+        ]
+      ]
+    },
+    "declarationPlace": {
+      "page": 1,
+      "yTop": 934.7,
+      "yBot": 955.7,
+      "cells": [
+        [
+          86.25,
+          222.0
+        ]
+      ]
+    },
+    "affidavit.name": {
+      "page": 4,
+      "yTop": 74.25,
+      "yBot": 95.25,
+      "cells": [
+        [
+          54.0,
+          269.25
+        ]
+      ]
+    },
+    "affidavit.fatherName": {
+      "page": 4,
+      "yTop": 74.25,
+      "yBot": 95.25,
+      "cells": [
+        [
+          342.75,
+          558.0
+        ]
+      ]
+    },
+    "affidavit.resident": {
+      "page": 4,
+      "yTop": 104.15,
+      "yBot": 125.15,
+      "cells": [
+        [
+          76.5,
+          558.0
+        ]
+      ]
+    },
+    "affidavit.village": {
+      "page": 4,
+      "yTop": 131.95,
+      "yBot": 152.95,
+      "cells": [
+        [
+          96.75,
+          225.0
+        ]
+      ]
+    },
+    "affidavit.tehsil": {
+      "page": 4,
+      "yTop": 132.7,
+      "yBot": 153.7,
+      "cells": [
+        [
+          268.5,
+          397.5
+        ]
+      ]
+    },
+    "affidavit.district": {
+      "page": 4,
+      "yTop": 132.7,
+      "yBot": 153.7,
+      "cells": [
+        [
+          429.75,
+          558.0
+        ]
+      ]
+    },
+    "affidavit.caste": {
+      "page": 4,
+      "yTop": 207.55,
+      "yBot": 228.55,
+      "cells": [
+        [
+          82.5,
+          249.75
+        ]
+      ]
+    },
+    "affidavit.parentsPost": {
+      "page": 4,
+      "yTop": 306.3,
+      "yBot": 327.3,
+      "cells": [
+        [
+          269.25,
+          463.5
+        ]
+      ]
+    },
+    "affidavit.parentsIncome": {
+      "page": 4,
+      "yTop": 330.3,
+      "yBot": 351.3,
+      "cells": [
+        [
+          297.75,
+          438.75
+        ]
+      ]
+    },
+    "dob": {
+      "page": 1,
+      "yTop": 324.8,
+      "yBot": 339.29,
+      "guide": true,
+      "cells": [
+        [
+          156.14,
+          183.59
+        ],
+        [
+          187.8,
+          220.76
+        ],
+        [
+          224.96,
+          274.21
+        ]
+      ]
+    },
+    "disability.date": {
+      "page": 1,
+      "yTop": 833.3,
+      "yBot": 847.78,
+      "guide": true,
+      "cells": [
+        [
+          467.38,
+          483.91
+        ],
+        [
+          488.11,
+          510.03
+        ],
+        [
+          514.26,
+          547.1
+        ]
+      ]
+    },
+    "declarationDate": {
+      "page": 1,
+      "yTop": 910.55,
+      "yBot": 925.08,
+      "guide": true,
+      "cells": [
+        [
+          95.42,
+          122.87
+        ],
+        [
+          127.09,
+          160.04
+        ],
+        [
+          164.25,
+          213.5
+        ]
+      ]
+    }
+  }
+}
