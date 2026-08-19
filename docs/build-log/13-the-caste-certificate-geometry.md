@@ -18,8 +18,10 @@ Rajasthan stays the state. That was step 10's open product decision and it is
 now a deliberate choice rather than an accident of the mock profile's Jaipur
 address.
 
-**Result: 36 slots mapped over two pages of the SC/ST form, all confirmed by
-eye.** Three defects found on the way, two of them in code that shipped.
+**Result: both category forms mapped and confirmed by eye — 36 slots on the
+SC/ST form, 50 on the OBC one — and a writer that puts a date on the runs a form
+prints instead of across its slashes.** Three defects found on the way, two of
+them in code that shipped.
 
 ---
 
@@ -54,7 +56,7 @@ curl -L -A "Mozilla/5.0" -o caste-raj-obc.pdf \
   "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_DOCS/GUIDELINE_AND_EFORM/2019/7/30/GAndE_1564475156407.pdf"
 ```
 
-The SC/ST one is mapped here. OBC is not yet.
+Both are mapped here — the SC/ST form first, then the OBC one.
 
 **What this means for the dispatcher: nothing.** `officialForm` stays one id per
 template and the module picks its blank and geometry from the `category` answer.
@@ -159,8 +161,8 @@ not.
 True. The font is `DevLys 010` and `pdftotext` returns `tkfr izek.k i=` for
 जाति प्रमाण पत्र. But it **did not matter**. The glyphs are Devanagari — only
 the character codes are Latin — so the *rendered* page is perfectly legible.
-Every one of the 36 slots was named by cropping the stamped form at 200dpi and
-reading it. Automatic labelling was never needed.
+Every one of the 86 slots across the two forms was named by cropping the stamped
+form at 200dpi and reading it. Automatic labelling was never needed.
 
 **"It is a ruled form, so it needs baseline placement rather than the per-cell
 writer."** Mostly wrong, and this is the good news. Nearly every field on this
@@ -169,8 +171,8 @@ tehsil, district, birthplace, age, religion, caste, sub-caste, the tick boxes,
 mobile, place, and all seven affidavit fields. The Stamper's existing `free()`
 writer serves them with **no new technique at all**.
 
-Exactly two fields are a printed guide rather than a box — and they are boxes
-*containing* a guide:
+Exactly two fields on the SC/ST form are a printed guide rather than a box —
+three on the OBC one — and they are boxes *containing* a guide:
 
 ```
 5 जन्म दिनांक : [ _____/______/_________ ]
@@ -183,9 +185,9 @@ stamped crop shows the X sitting straight on the underscores, which is the
 valid, cell count pinned, spec↔map parity exact, and the output still wrong.
 **Looking is what caught it, again.**
 
-Both are named and left unfilled. The fix is small and it is not guesswork: the
-underscore runs are readable straight out of the text layer, at a shared
-baseline, separated by the printed slashes —
+The fix was small and it is not guesswork: the underscore runs are readable
+straight out of the text layer, at a shared baseline, separated by the printed
+slashes —
 
 ```
 '_' x=155.90 ... '_' x=177.85   '/' x=183.35    <- 5 underscores: day
@@ -193,9 +195,21 @@ baseline, separated by the printed slashes —
 '_' x=224.72 ... '_' x=268.47                   <- 8 underscores: year
 ```
 
-so day, month and year can be placed on their own runs rather than centred over
-the whole box. That generalises to any form in this family, which is most state
+so day, month and year are placed on their own runs rather than centred over the
+whole box. That generalises to any form in this family, which is most state
 forms.
+
+`runs()` in the extractor returns each unbroken run of one repeated character
+with its x-span and baseline. A spec declares them under `guides` with the run
+count pinned, so a re-issued form printing four runs fails the build; each run
+becomes one cell and the slot's `yBot` is the shared baseline.
+`Stamper.guide(name, parts)` writes one part per run, centred, lifted 1.5pt so
+the digits sit above the rule rather than in it.
+
+Confirmed the only way it can be — 400dpi crops of both fields showing
+`14 / 03 / 1991` and `19 / 08 / 2026` clear of the printed slashes. The reader
+has five self-tests of its own, including two rules on different lines that must
+not merge, and a dotted rule found by asking for its own character.
 
 ---
 
@@ -224,6 +238,45 @@ forms.
 
 ---
 
+## The OBC form: the spec shape transferred, the questions did not
+
+The OBC/SBC blank is the same series and the same Word idiom, so `ink=rects`,
+`widest=500` and the spec structure carried straight over. **50 slots over pages
+1 and 4**, all confirmed by eye. What did not carry over is what the form asks —
+worth knowing before assuming one caste template can serve both:
+
+- **Its जाति box is genuinely blank.** On the SC/ST form the same box is
+  pre-printed with the category, so this one has to be written.
+- **Item 8 asks the caste's serial number in the state OBC list**, where SC/ST
+  asks the father's religion. There is no father's religion, caste or sub-caste
+  on the OBC form at all, and no recorded-caste question.
+- One Yes/No row of two cells, where SC/ST has two rows of one cell.
+- **Three date guides, not two** — item 5, section 3's death/disability date,
+  and the declaration date.
+- Legal size with 4 pages, against A4 with 3.
+
+**Both of pages 2 and 3 are witness attestations, and neither is redundant.**
+Section 4 is for an applicant who has an ITR or a government pay slip to show;
+section 6 is for one who has neither. Left unmapped, like the patwari's section.
+
+**The 5×4 table is the creamy-layer declaration** — the mother's, father's and
+husband's organisation, post and pay scale, plus immovable property. Its 12 data
+cells are mapped and **left blank on purpose**. Asking a citizen by voice for
+three relatives' employers and pay scales is a lot of questions, and this table
+is the basis of non-creamy-layer eligibility, so a wrong answer is worse than a
+blank one. Same call as the PMUY household table. Affidavit clauses (3) and (4)
+ask the parents' post and annual income and are left blank for the same reason.
+
+Section 3 (मृत्यु/स्थाई अक्षमता) prints *"यदि लागू नहीं हो तो छोड दीजिये"* —
+leave it out if it does not apply. Mapped so the checker accounts for it, left
+blank.
+
+One form defect: **the स्थान box is drawn twice**, two rectangles a point apart,
+so row 26 is used and row 27 is the duplicate. The General blank does the same;
+the SC/ST one does not.
+
+---
+
 ## Where things are
 
 - `frontend/src/data/official/caste-scst-slots-spec.json` — the judgement, and
@@ -232,6 +285,11 @@ forms.
   Nothing imports it yet.
 - `frontend/public/forms/caste-raj-scst.pdf` — the blank, sha256
   `b28de4e66d99cd8877dcb5e092ae59d182140cbd82f32addf714fd790024c660`.
+- `caste-obc-slots-spec.json`, `caste-obc-boxes.json`, and
+  `frontend/public/forms/caste-raj-obc.pdf`, sha256
+  `6e6798556aba6716d407ba0b265b80de8f017e2fed8a24210b66e99230eb3c70`.
+
+Neither map is imported by anything yet.
 
 Regenerate and re-check:
 
@@ -251,13 +309,24 @@ collision and the dropped `निवासी` box.
 
 ## What is left
 
-1. A writer that places a date on the three underscore runs, so `dobGuide` and
-   `declarationDate` can be filled.
-2. Map the OBC/SBC blank — same series, so the spec shape should transfer.
-3. A `casteCertificate.js` module under `lib/official`, picking blank and
-   geometry from the `category` answer.
-4. Rewrite `caste-certificate.json` against the real forms, the way
-   `ujjwala-kyc.json` replaced `lpg-subsidy.json`. It is missing the father's
-   religion/caste/sub-caste, the recorded-caste item, birthplace, age, marital
-   status and the Bhamashah number.
-5. Answers for both forms in `check-official-forms.mjs`.
+Both maps are done and so is the date writer. Three steps remain, and none of
+them needs new technique:
+
+1. **A `casteCertificate.js` module** under `lib/official`, picking blank and
+   geometry from the `category` answer — SC and ST take `caste-scst-boxes.json`,
+   OBC takes `caste-obc-boxes.json`. `officialPdf.js` needs no change:
+   `officialForm` stays one id per template and the module branches inside.
+   `ujjwalaKyc.js` is the model to follow, including its `NOTES` table of
+   blanks-on-purpose — this form needs entries for the photo, the witness pages,
+   the patwari section, and on OBC the creamy-layer table and section 3.
+2. **Rewrite `caste-certificate.json`** against the real forms, the way
+   `ujjwala-kyc.json` replaced `lpg-subsidy.json`. Missing today: birthplace,
+   age, marital status, religion, sub-caste, the Bhamashah number, the father's
+   religion/caste/sub-caste and recorded caste (SC/ST only), and the state-list
+   serial number (OBC only). Watch the 20-spoken-question limit — the two forms
+   do not ask the same things, so some fields will need a `showIf` on
+   `category`.
+3. **Answers for both forms in `check-official-forms.mjs`.** It discovers
+   modules under `lib/official`, so once the module exists it needs one answer
+   set per category branch, and every mapped slot must be either filled or
+   declared unused with a reason.
