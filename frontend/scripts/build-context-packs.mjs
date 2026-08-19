@@ -175,6 +175,26 @@ const serverCalls = (() => {
     }
   }
   walk(resolve(frontend, 'src'))
+
+  // `officialPdf.js` builds its address out of the form module it has just
+  // loaded, so the call site alone resolves to nothing but ellipsis. That is
+  // accurate and useless: it hides the fact that the app fetches a blank
+  // government form at all. Read the paths out of the modules instead, so a new
+  // official form adds its PDF here without anyone having to remember.
+  const officialDir = resolve(frontend, 'src/lib/official')
+  const officialPdfs = readdirSync(officialDir)
+    .filter((name) => /\.js$/.test(name))
+    .flatMap((name) => [
+      ...readFileSync(join(officialDir, name), 'utf8').matchAll(
+        /pdfPath:\s*'([^']+)'/g,
+      ),
+    ])
+    .map((m) => `\u2026${m[1]}`)
+  if (officialPdfs.length) {
+    for (const url of [...found]) if (/^\u2026+$/.test(url)) found.delete(url)
+    for (const url of officialPdfs) found.add(url)
+  }
+
   return [...found].sort()
 })()
 
@@ -298,7 +318,8 @@ will read every line you produce.
 **Your deliverable:** ${deliverable}
 
 Files that are **out of scope** for every pack — never emit changes to these:
-\`App.jsx\`, \`officialPdf.js\`, \`pdf.js\`, \`speech.js\`, \`ocr.js\`,
+\`App.jsx\`, \`officialPdf.js\`, anything under \`lib/official/\`,
+\`pdf.js\`, \`speech.js\`, \`ocr.js\`,
 \`components/ui.jsx\`, anything under \`backend/\` except where a pack says
 otherwise. They need the whole picture and are maintained by the repo owner.`
 }

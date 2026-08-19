@@ -8,7 +8,7 @@
  *
  *   node scripts/check-form93.mjs [outfile.pdf]
  *
- * Run it after touching form93-boxes.json or officialPdf.js, then look at the
+ * Run it after touching form93-boxes.json or official/form93.js, then look at the
  * PDF. Step 7 of the build log explains why looking is not optional here.
  */
 
@@ -17,7 +17,7 @@ import { registerHooks } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
-// `officialPdf.js` does a plain `import boxes from '...json'`, which the bundler
+// `official/form93.js` does a plain `import boxes from '...json'`, which the bundler
 // accepts and Node rejects without `with { type: 'json' }`. Supplying the
 // attribute here lets this script exercise the real module rather than a
 // near-copy that drifts away from it.
@@ -87,7 +87,7 @@ if (missing.length) {
   process.exitCode = 1
 }
 
-// Every slot in the geometry is either written by officialPdf.js or listed
+// Every slot in the geometry is either written by official/form93.js or listed
 // here as knowingly unused. This is the check that would have caught the four
 // slots (post office, email, mother's name, residential status) that sat
 // extracted but unwritten for two sessions without anything complaining.
@@ -101,7 +101,7 @@ const UNUSED = {
   'comm.ra': 'item 22 — no representative assessee',
   'comm.office': 'item 22 — no office address collected',
 }
-const source = readFileSync(resolve(root, 'src/lib/officialPdf.js'), 'utf8')
+const source = readFileSync(resolve(root, 'src/lib/official/form93.js'), 'utf8')
 const orphans = Object.keys(boxes.slots).filter((name) => {
   // Numbered rows are written in a loop, as `aadhaarName.${i}`.
   const looped = name.replace(/\.\d+$/, '.${')
@@ -120,7 +120,7 @@ for (const [name, answers] of [
   ['complete', complete],
   ['single-parent-skipped', singleParentSkipped],
 ]) {
-  const { blob, notes } = await buildOfficialPdf(answers)
+  const { blob, notes } = await buildOfficialPdf('form93', answers)
   const out = resolve(here, `form93-${name}.pdf`)
   writeFileSync(out, Buffer.from(await blob.arrayBuffer()))
 

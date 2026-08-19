@@ -58,7 +58,8 @@ belongs to and which existing field id it goes after. If you are correcting an
 existing field, output the corrected object in full and name the id it replaces.
 
 Files that are **out of scope** for every pack — never emit changes to these:
-`App.jsx`, `officialPdf.js`, `pdf.js`, `speech.js`, `ocr.js`,
+`App.jsx`, `officialPdf.js`, anything under `lib/official/`,
+`pdf.js`, `speech.js`, `ocr.js`,
 `components/ui.jsx`, anything under `backend/` except where a pack says
 otherwise. They need the whole picture and are maintained by the repo owner.
 

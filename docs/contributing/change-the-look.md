@@ -74,7 +74,8 @@ naming the file and quoting the element's current opening tag so it can be
 located. Never output the whole file.
 
 Files that are **out of scope** for every pack — never emit changes to these:
-`App.jsx`, `officialPdf.js`, `pdf.js`, `speech.js`, `ocr.js`,
+`App.jsx`, `officialPdf.js`, anything under `lib/official/`,
+`pdf.js`, `speech.js`, `ocr.js`,
 `components/ui.jsx`, anything under `backend/` except where a pack says
 otherwise. They need the whole picture and are maintained by the repo owner.
 

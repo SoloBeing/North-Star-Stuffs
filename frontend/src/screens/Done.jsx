@@ -64,7 +64,7 @@ export default function Done({
         let filled = null
         if (form.officialForm) {
           try {
-            filled = await buildOfficialPdf(answers)
+            filled = await buildOfficialPdf(form.officialForm, answers)
             if (cancelled) return
             setOfficial(filled)
           } catch (err) {
