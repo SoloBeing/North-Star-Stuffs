@@ -161,6 +161,7 @@ const FIXTURES = {
       },
     },
   },
+
 }
 
 const templates = readdirSync(resolve(root, 'src/data/forms'))
@@ -207,19 +208,36 @@ for (const file of modules) {
   // listed as knowingly unused. This is the check that would have caught the
   // four slots (post office, email, mother's name, residential status) that
   // sat extracted but unwritten for two sessions without anything complaining.
+  //
+  // A form printed on more than one blank is checked once per blank. It has to
+  // be: the caste certificate's SC/ST blank pre-prints the जाति box that the
+  // OBC blank leaves for the citizen, so a slot legitimately unused on one is
+  // a hole on the other, and a single pass over either would miss it.
   const source = readFileSync(path, 'utf8')
-  const orphans = Object.keys(form.boxes.slots).filter((name) => {
-    // Numbered rows are written in a loop, as `aadhaarName.${i}`.
-    const looped = name.replace(/\.\d+$/, '.${')
-    return (
-      !source.includes(`'${name}'`) &&
-      !source.includes(looped) &&
-      !Object.keys(fixture.unused).some((prefix) => name.startsWith(prefix))
-    )
-  })
-  if (orphans.length) {
-    console.error(`FAIL: ${form.id} slots neither written nor declared unused: ${orphans.join(', ')}`)
-    failed = true
+  const geometries = form.variants
+    ? Object.entries(form.variants).map(([key, v]) => [key, v.boxes])
+    : [[null, form.boxes]]
+
+  const orphansOf = (boxes) =>
+    Object.keys(boxes.slots).filter((name) => {
+      // Numbered rows are written in a loop, as `aadhaarName.${i}`.
+      const looped = name.replace(/\.\d+$/, '.${')
+      return (
+        !source.includes(`'${name}'`) &&
+        !source.includes(looped) &&
+        !Object.keys(fixture.unused).some((prefix) => name.startsWith(prefix))
+      )
+    })
+
+  const orphans = []
+  for (const [key, boxes] of geometries) {
+    const found = orphansOf(boxes)
+    orphans.push(...found)
+    if (found.length) {
+      const which = key ? `${form.id}/${key}` : form.id
+      console.error(`FAIL: ${which} slots neither written nor declared unused: ${found.join(', ')}`)
+      failed = true
+    }
   }
 
   for (const name of names) {
@@ -243,8 +261,12 @@ for (const file of modules) {
     }
   }
 
-  const total = Object.keys(form.boxes.slots).length
-  console.log(`\n${form.id}: ${total} slots in the geometry, ${total - orphans.length} accounted for`)
+  for (const [key, boxes] of geometries) {
+    const total = Object.keys(boxes.slots).length
+    const missed = orphansOf(boxes).length
+    const which = key ? `${form.id}/${key}` : form.id
+    console.log(`\n${which}: ${total} slots in the geometry, ${total - missed} accounted for`)
+  }
 }
 
 if (failed) process.exitCode = 1

@@ -16,7 +16,9 @@
  *
  * Adding a form is: map its boxes (`scripts/build-boxes.py`), write one module
  * under `official/`, add one line here, and put the id on the template. No
- * existing form's code is touched, which is the whole point of the split.
+ * existing form's code is touched, which is the whole point of the split. A
+ * form printed on more than one blank declares `variants` instead of a
+ * `pdfPath` — see `chooseBlank` — and still takes one line and one id.
  *
  * The modules are loaded on demand: a citizen filling a PAN application never
  * downloads the LPG geometry. Vite emits each as its own chunk and the service
@@ -28,6 +30,25 @@ import { Stamper } from './official/stamper.js'
 const FORMS = {
   form93: () => import('./official/form93.js'),
   'ujjwala-kyc': () => import('./official/ujjwalaKyc.js'),
+  'caste-certificate': () => import('./official/casteCertificate.js'),
+}
+
+/**
+ * Which blank a form prints on, and the geometry that goes with it.
+ *
+ * Most forms are one piece of paper and say so with a plain `pdfPath` and
+ * `boxes`. A few are not: Rajasthan prints the caste certificate once per
+ * category, on blanks that ask different questions, so that module declares
+ * `variants` and a `variant(answers)` that picks one. This has to be resolved
+ * here rather than inside `fill`, because the PDF is fetched and the Stamper
+ * built before `fill` is ever called.
+ */
+function chooseBlank(form, answers) {
+  if (!form.variants) return form
+  const key = form.variant(answers)
+  const blank = form.variants[key]
+  if (!blank) throw new Error(`${form.id}: no variant "${key}"`)
+  return blank
 }
 
 /**
@@ -43,7 +64,8 @@ export async function buildOfficialPdf(officialForm, answers = {}) {
   if (!load) throw new Error(`no official form module for id: ${officialForm}`)
   const form = (await load()).default
 
-  const url = `${import.meta.env?.BASE_URL ?? '/'}${form.pdfPath}`
+  const blank = chooseBlank(form, answers)
+  const url = `${import.meta.env?.BASE_URL ?? '/'}${blank.pdfPath}`
   const [{ PDFDocument, StandardFonts }, bytes] = await Promise.all([
     import('pdf-lib'),
     fetch(url).then((r) => {
@@ -54,7 +76,7 @@ export async function buildOfficialPdf(officialForm, answers = {}) {
 
   const pdf = await PDFDocument.load(bytes)
   const font = await pdf.embedFont(StandardFonts.Helvetica)
-  const s = new Stamper(pdf, font, form.boxes, form.notes)
+  const s = new Stamper(pdf, font, blank.boxes, form.notes)
 
   form.fill(s, answers)
 
