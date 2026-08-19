@@ -250,7 +250,7 @@ FormMitra/
 │       ├── components/ui.jsx  # shared UI, all 56px+ tap targets
 │       ├── lib/
 │       │   ├── validation.js  # the rules that actually run
-│       │   ├── fields.js      # which questions apply, given the answers so far
+│       │   ├── fields.js      # which questions apply, which still need asking
 │       │   ├── speech.js      # Web Speech API + spoken-input normalisation
 │       │   ├── ocr.js         # Tesseract pipeline
 │       │   ├── pdf.js         # the summary sheet, in the citizen's language
