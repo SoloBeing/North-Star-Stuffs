@@ -162,6 +162,113 @@ const FIXTURES = {
     },
   },
 
+  'caste-certificate': {
+    unused: {
+      photo: 'top right — a pasted photo, attested by the recommending person',
+      // SC/ST item 7 only. The OBC blank's जाति box is a different slot, named
+      // plainly `caste`, and IS written — the two must not be confused.
+      'caste.applicant': 'SC/ST item 7 — pre-printed "अनुसूचित जाति/जन जाति", the form saying which category it serves',
+      'creamy.': 'OBC section 2 — the creamy-layer table, see the note',
+      familyIncome: 'OBC section 2 clause (I) — family income, part of the same creamy-layer declaration',
+      'disability.': 'OBC section 3 — the form itself says to skip it if it does not apply',
+      'affidavit.parentsPost': 'OBC affidavit clause (3) — the parents\' post, same reason as the table',
+      'affidavit.parentsIncome': 'OBC affidavit clause (4) — the parents\' income, same reason as the table',
+    },
+    cases: {
+      /**
+       * The everyday SC case, every question answered in Latin script.
+       *
+       * `list_serial` is here only because this script requires the first case
+       * to name every field the template can produce. Its `showIf` keeps it
+       * from ever being asked of an SC or ST applicant, and the SC/ST branch of
+       * the module never reads it.
+       */
+      'complete-scst': {
+        applicant_name: 'Sunita Devi Sharma',
+        father_name: 'Ram Prasad Sharma',
+        dob: '14/08/1961',
+        birthplace: 'Kishangarh',
+        gender: 'Female',
+        marital_status: 'Married',
+        address: 'House No. 42, Ward 7, Gandhi Nagar, Jaipur, Rajasthan',
+        village: 'Kishangarh',
+        tehsil: 'Kishangarh',
+        district: 'Ajmer',
+        pincode: '302015',
+        category: 'SC',
+        caste_name: 'Meghwal',
+        sub_caste: 'Balai',
+        religion: 'Hindu',
+        list_serial: '42',
+        father_religion: 'Hindu',
+        father_caste: 'Meghwal',
+        father_sub_caste: 'Balai',
+        recorded_caste: 'Meghwal',
+        native_of_rajasthan: 'Yes',
+        bhamashah: '1234567890',
+        aadhaar: '234567890124',
+        mobile: '9876543210',
+        purpose: 'For college admission',
+      },
+
+      /**
+       * ST, and every free-text answer given in Hindi — which is how a citizen
+       * using this app actually speaks. Helvetica cannot encode Devanagari, so
+       * none of it can be written: the whole point of this case is that the
+       * boxes come out empty and ONE note names every one of them, rather than
+       * the form going out with mojibake or the citizen being told nothing.
+       */
+      'st-answers-in-hindi': {
+        category: 'ST',
+        caste_name: 'मीणा',
+        sub_caste: 'मीणा',
+        religion: 'हिन्दू',
+        birthplace: 'किशनगढ़',
+        village: 'किशनगढ़',
+        tehsil: 'किशनगढ़',
+        district: 'अजमेर',
+        father_religion: 'हिन्दू',
+        father_caste: 'मीणा',
+        father_sub_caste: 'मीणा',
+        recorded_caste: 'मीणा',
+      },
+
+      /**
+       * OBC: a different blank, with different questions. The four father and
+       * recorded-caste answers are `undefined` because `showIf` never asks them
+       * of an OBC applicant — if any of them reached the paper, the gating is
+       * broken.
+       */
+      'complete-obc': {
+        category: 'OBC',
+        caste_name: 'Kumhar',
+        sub_caste: 'Prajapat',
+        father_religion: undefined,
+        father_caste: undefined,
+        father_sub_caste: undefined,
+        recorded_caste: undefined,
+      },
+
+      /**
+       * OBC with the gaps a real applicant turns up with: no Bhamashah card, no
+       * idea of the state list number, and a gender the printed form has no box
+       * for. All three must be reported blanks, never a guess.
+       */
+      'obc-gaps': {
+        category: 'OBC',
+        caste_name: 'Kumhar',
+        sub_caste: 'Prajapat',
+        father_religion: undefined,
+        father_caste: undefined,
+        father_sub_caste: undefined,
+        recorded_caste: undefined,
+        gender: 'Transgender',
+        bhamashah: '',
+        list_serial: '',
+        native_of_rajasthan: 'No',
+      },
+    },
+  },
 }
 
 const templates = readdirSync(resolve(root, 'src/data/forms'))

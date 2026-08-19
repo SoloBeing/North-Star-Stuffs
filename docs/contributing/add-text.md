@@ -120,6 +120,8 @@ Every `fetch()` in the source, read at generation time:
 - `/api/digilocker/issued-documents`
 - `/api/digilocker/logout`
 - `/api/digilocker/profile`
+- `…forms/caste-raj-obc.pdf`
+- `…forms/caste-raj-scst.pdf`
 - `…forms/form93.pdf`
 - `…forms/lpg-pmuy-kyc.pdf`
 

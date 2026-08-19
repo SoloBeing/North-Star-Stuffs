@@ -67,7 +67,7 @@ otherwise. They need the whole picture and are maintained by the repo owner.
 
 - `ayushman-card.json` — Ayushman Bharat Card (PM-JAY) (9 fields)
 - `bank-account-opening.json` — Bank Account Opening Form (KYC) (11 fields)
-- `caste-certificate.json` — Caste Certificate Application (10 fields)
+- `caste-certificate.json` — Caste Certificate Application (Rajasthan) (25 fields)
 - `income-certificate.json` — Income Certificate Application (10 fields)
 - `nsp-scholarship.json` — NSP Scholarship Application (11 fields)
 - `pan-93.json` — PAN Card Application (Form 93) (15 fields)
@@ -219,29 +219,29 @@ From `pan-93.json`:
 
 `showIf` names an earlier field and the answer that unlocks this one. The field named **must appear earlier in the array**. If the citizen goes back and changes that answer, this answer is deleted automatically — do not write anything that depends on it surviving.
 
-From `pan-93.json`:
+From `caste-certificate.json`:
 
 ```json
 {
-  "id": "mother_name",
+  "id": "list_serial",
   "label": {
-    "en": "Mother's full name",
-    "hi": "माता का पूरा नाम"
+    "en": "Serial number in the state OBC list",
+    "hi": "राज्य की ओबीसी सूची में क्रमांक"
   },
-  "rule": "name",
+  "rule": "text",
   "source": "ask",
   "showIf": {
-    "single_parent": "No"
+    "category": "OBC"
   },
   "question": {
-    "en": "What is your mother's full name?",
-    "hi": "आपकी माता का पूरा नाम क्या है?"
+    "en": "What number does your caste have in the state OBC list, if you know it?",
+    "hi": "राज्य की ओबीसी सूची में आपकी जाति का क्रमांक क्या है, अगर आपको पता हो?"
   },
   "explain": {
-    "en": "Write it as it appears on her documents. If her name changed after marriage, use the name on her Aadhaar rather than the one from before.",
-    "hi": "उनके दस्तावेज़ों के अनुसार लिखें। शादी के बाद नाम बदला हो तो पहले वाला नहीं, आधार वाला नाम लिखें।"
+    "en": "Item 8 of the OBC form asks for the number your caste carries in Rajasthan's list. Most people do not know it and it is not compulsory — if you do not have it, say so and the eMitra counter will look it up from your caste name.",
+    "hi": "ओबीसी फॉर्म का बिंदु 8 वह क्रमांक पूछता है जो राजस्थान की सूची में आपकी जाति का है। ज़्यादातर लोगों को यह पता नहीं होता और यह ज़रूरी भी नहीं — अगर आपके पास नहीं है तो बता दीजिए, ईमित्र वाले आपकी जाति के नाम से देख लेंगे।"
   },
-  "example": "Kamla Devi"
+  "example": "42"
 }
 ```
 

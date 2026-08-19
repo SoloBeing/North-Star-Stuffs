@@ -2,50 +2,87 @@
   "id": "caste-certificate",
   "icon": "📜",
   "name": {
-    "en": "Caste Certificate Application",
-    "hi": "जाति प्रमाण पत्र आवेदन"
+    "en": "Caste Certificate Application (Rajasthan)",
+    "hi": "जाति प्रमाण पत्र आवेदन (राजस्थान)"
   },
   "issuer": {
-    "en": "Revenue Department / Sub-Divisional Magistrate (State Government)",
-    "hi": "राजस्व विभाग / उपखंड अधिकारी (राज्य सरकार)"
+    "en": "Revenue Department, Government of Rajasthan (applied through eMitra)",
+    "hi": "राजस्व विभाग, राजस्थान सरकार (ईमित्र के ज़रिए)"
   },
   "summary": {
-    "en": "Official proof of SC, ST or OBC status, for reservation in education and jobs.",
-    "hi": "एससी, एसटी या ओबीसी होने का सरकारी प्रमाण, शिक्षा और नौकरी में आरक्षण के लिए।"
+    "en": "Official proof of SC, ST or OBC status, for reservation in education and jobs. This fills Rajasthan's own printed form.",
+    "hi": "एससी, एसटी या ओबीसी होने का सरकारी प्रमाण, शिक्षा और नौकरी में आरक्षण के लिए। यह राजस्थान का अपना छपा फॉर्म भरता है।"
   },
+  "officialForm": "caste-certificate",
   "ocrKeywords": [
     "caste certificate",
     "jati praman patra",
     "scheduled caste",
     "scheduled tribe",
     "other backward class",
-    "community certificate"
+    "community certificate",
+    "anusuchit jati",
+    "pichhda varg"
   ],
   "documents": [
-    { "en": "Aadhaar card", "hi": "आधार कार्ड", "digilockerType": "ADHAR" },
-    { "en": "Father's or grandfather's caste certificate, if the family has one", "hi": "पिता या दादा का जाति प्रमाण पत्र, अगर परिवार में हो", "digilockerType": "CASTE" },
-    { "en": "School leaving certificate showing caste", "hi": "जाति दर्शाने वाला स्कूल छोड़ने का प्रमाण पत्र" },
-    { "en": "Proof of residence", "hi": "निवास प्रमाण" },
-    { "en": "Self-declaration affidavit on stamp paper", "hi": "स्टाम्प पेपर पर स्वघोषणा शपथ पत्र" },
-    { "en": "Income certificate (only for OBC non-creamy layer)", "hi": "आय प्रमाण पत्र (केवल ओबीसी नॉन-क्रीमी लेयर के लिए)", "digilockerType": "INCMC" }
+    {
+      "en": "Aadhaar card",
+      "hi": "आधार कार्ड",
+      "digilockerType": "ADHAR"
+    },
+    {
+      "en": "Father's or grandfather's caste certificate, if the family has one",
+      "hi": "पिता या दादा का जाति प्रमाण पत्र, अगर परिवार में हो",
+      "digilockerType": "CASTE"
+    },
+    {
+      "en": "School leaving certificate showing caste",
+      "hi": "जाति दर्शाने वाला स्कूल छोड़ने का प्रमाण पत्र"
+    },
+    {
+      "en": "Proof of residence",
+      "hi": "निवास प्रमाण"
+    },
+    {
+      "en": "Self-declaration affidavit on stamp paper",
+      "hi": "स्टाम्प पेपर पर स्वघोषणा शपथ पत्र"
+    },
+    {
+      "en": "Bhamashah card, if your family has one",
+      "hi": "भामाशाह कार्ड, अगर परिवार के पास हो"
+    },
+    {
+      "en": "Income certificate (only for OBC non-creamy layer)",
+      "hi": "आय प्रमाण पत्र (केवल ओबीसी नॉन-क्रीमी लेयर के लिए)",
+      "digilockerType": "INCMC"
+    }
   ],
   "fields": [
     {
       "id": "applicant_name",
-      "label": { "en": "Applicant's full name", "hi": "आवेदक का पूरा नाम" },
+      "label": {
+        "en": "Applicant's full name",
+        "hi": "आवेदक का पूरा नाम"
+      },
       "rule": "name",
       "source": "digilocker",
       "profileKey": "name",
-      "question": { "en": "What is your full name?", "hi": "आपका पूरा नाम क्या है?" },
+      "question": {
+        "en": "What is your full name?",
+        "hi": "आपका पूरा नाम क्या है?"
+      },
       "explain": {
         "en": "Use the name exactly as it appears on your school records. This certificate stays valid for life, so an error here follows you for decades.",
-        "hi": "नाम बिल्कुल वैसा लिखें जैसा आपके स्कूल के रिकॉर्ड में है। यह प्रमाण पत्र जीवन भर मान्य रहता है, इसलिए यहाँ की गलती दशकों तक साथ चलती है।"
+        "hi": "नाम बिल्कुल वैसा लिखिए जैसा आपके स्कूल के रिकॉर्ड में है। यह प्रमाण पत्र जीवन भर चलता है, इसलिए यहाँ की गलती दशकों तक साथ रहती है।"
       },
       "example": "Sunita Devi"
     },
     {
       "id": "father_name",
-      "label": { "en": "Father's full name", "hi": "पिता का पूरा नाम" },
+      "label": {
+        "en": "Father's full name",
+        "hi": "पिता का पूरा नाम"
+      },
       "rule": "name",
       "source": "ask",
       "question": {
@@ -53,74 +90,197 @@
         "hi": "आपके पिता का पूरा नाम क्या है?"
       },
       "explain": {
-        "en": "Caste is recorded through the father's line in government records, so the office verifies your claim against his records.",
-        "hi": "सरकारी रिकॉर्ड में जाति पिता के वंश से दर्ज होती है, इसलिए कार्यालय आपके दावे को उन्हीं के रिकॉर्ड से जाँचता है।"
+        "en": "Caste is recorded through the father's line in government records, so the office checks your claim against his papers. The form asks for his name twice, on the first page and again in the affidavit.",
+        "hi": "सरकारी रिकॉर्ड में जाति पिता के वंश से दर्ज होती है, इसलिए दफ़्तर आपके दावे को उन्हीं के कागज़ों से मिलाता है। फॉर्म यह नाम दो बार पूछता है, पहले पन्ने पर और शपथ-पत्र में भी।"
       },
       "example": "Ram Prasad"
     },
     {
       "id": "dob",
-      "label": { "en": "Date of birth", "hi": "जन्म तिथि" },
+      "label": {
+        "en": "Date of birth",
+        "hi": "जन्म तिथि"
+      },
       "rule": "date_past",
       "source": "digilocker",
       "profileKey": "dob",
-      "question": { "en": "What is your date of birth?", "hi": "आपकी जन्म तिथि क्या है?" },
+      "question": {
+        "en": "What is your date of birth?",
+        "hi": "आपकी जन्म तिथि क्या है?"
+      },
       "explain": {
-        "en": "Must match your Class 10 marksheet, which is the document the office trusts most.",
-        "hi": "यह दसवीं की अंकतालिका से मिलनी चाहिए, कार्यालय उसी दस्तावेज़ पर सबसे ज़्यादा भरोसा करता है।"
+        "en": "Must match your Class 10 marksheet, which is the document the office trusts most. Your age is worked out from this, so the form's age box does not have to be asked separately.",
+        "hi": "यह दसवीं की अंकतालिका से मिलनी चाहिए, दफ़्तर उसी कागज़ पर सबसे ज़्यादा भरोसा करता है। उम्र इसी से निकाल ली जाती है, इसलिए उम्र अलग से नहीं पूछी जाती।"
       },
       "example": "14/08/1961"
     },
     {
-      "id": "category",
-      "label": { "en": "Category", "hi": "श्रेणी" },
+      "id": "birthplace",
+      "label": {
+        "en": "Place of birth",
+        "hi": "जन्म स्थान"
+      },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "Where were you born?",
+        "hi": "आपका जन्म कहाँ हुआ था?"
+      },
+      "explain": {
+        "en": "The village or town you were born in. Give the name as it is written in your school records, not the district.",
+        "hi": "जिस गाँव या शहर में आपका जन्म हुआ। नाम वैसे ही बताइए जैसा आपके स्कूल के कागज़ों में लिखा है, ज़िला नहीं।"
+      },
+      "example": "Kishangarh"
+    },
+    {
+      "id": "gender",
+      "label": {
+        "en": "Gender",
+        "hi": "लिंग"
+      },
+      "rule": "choice",
+      "source": "digilocker",
+      "profileKey": "gender",
+      "options": [
+        {
+          "value": "Male",
+          "en": "Male",
+          "hi": "पुरुष"
+        },
+        {
+          "value": "Female",
+          "en": "Female",
+          "hi": "महिला"
+        },
+        {
+          "value": "Transgender",
+          "en": "Transgender",
+          "hi": "ट्रांसजेंडर"
+        }
+      ],
+      "question": {
+        "en": "Gender?",
+        "hi": "लिंग?"
+      },
+      "explain": {
+        "en": "Choose what appears on your Aadhaar so the two records agree. The printed form has only two boxes; if neither fits you, we leave both untouched and tell you to write your answer beside them.",
+        "hi": "वही चुनिए जो आपके आधार पर है, ताकि दोनों रिकॉर्ड मिलते रहें। छपे फॉर्म में सिर्फ़ दो खाने हैं; अगर उनमें से कोई आप पर लागू नहीं होता तो हम दोनों खाली छोड़ देते हैं और आपको बता देते हैं कि जवाब पास में लिख दीजिए।"
+      }
+    },
+    {
+      "id": "marital_status",
+      "label": {
+        "en": "Marital status",
+        "hi": "वैवाहिक स्थिति"
+      },
       "rule": "choice",
       "source": "ask",
       "options": [
-        { "value": "SC", "en": "Scheduled Caste (SC)", "hi": "अनुसूचित जाति (एससी)" },
-        { "value": "ST", "en": "Scheduled Tribe (ST)", "hi": "अनुसूचित जनजाति (एसटी)" },
-        { "value": "OBC", "en": "Other Backward Class (OBC)", "hi": "अन्य पिछड़ा वर्ग (ओबीसी)" }
+        {
+          "value": "Married",
+          "en": "Married",
+          "hi": "विवाहित"
+        },
+        {
+          "value": "Unmarried",
+          "en": "Unmarried",
+          "hi": "अविवाहित"
+        }
       ],
       "question": {
-        "en": "Which category are you applying under?",
-        "hi": "आप किस श्रेणी में आवेदन कर रहे हैं?"
+        "en": "Are you married?",
+        "hi": "क्या आप विवाहित हैं?"
       },
       "explain": {
-        "en": "Each state keeps its own official list of which caste falls in which category, and the same caste can be in different categories in different states. The office will check your caste against your state's list.",
-        "hi": "हर राज्य की अपनी आधिकारिक सूची होती है कि कौन सी जाति किस श्रेणी में आती है, और एक ही जाति अलग-अलग राज्यों में अलग श्रेणी में हो सकती है। कार्यालय आपकी जाति को आपके राज्य की सूची से मिलाएगा।"
+        "en": "The form has a box for this next to the gender boxes.",
+        "hi": "फॉर्म में लिंग वाले खानों के साथ ही इसका खाना बना है।"
       }
-    },
-    {
-      "id": "caste_name",
-      "label": { "en": "Caste name", "hi": "जाति का नाम" },
-      "rule": "text",
-      "source": "ask",
-      "question": { "en": "What is your caste?", "hi": "आपकी जाति क्या है?" },
-      "explain": {
-        "en": "Write the caste name exactly as it is spelled in your state's official list. A different spelling from the one in the government list is a very common reason for rejection.",
-        "hi": "जाति का नाम बिल्कुल वैसे लिखें जैसा आपके राज्य की आधिकारिक सूची में है। सरकारी सूची से अलग वर्तनी होना अस्वीकार होने की बहुत आम वजह है।"
-      },
-      "example": "Meghwal"
     },
     {
       "id": "address",
-      "label": { "en": "Full residential address", "hi": "पूरा निवास पता" },
+      "label": {
+        "en": "Full residential address",
+        "hi": "पूरा निवास पता"
+      },
       "rule": "text",
       "source": "digilocker",
       "profileKey": "address",
-      "question": { "en": "What is your full address?", "hi": "आपका पूरा पता क्या है?" },
+      "question": {
+        "en": "What is your full address?",
+        "hi": "आपका पूरा पता क्या है?"
+      },
       "explain": {
-        "en": "Caste certificates are issued by the state where your family has lived, not where you happen to be now. Give your permanent family address.",
-        "hi": "जाति प्रमाण पत्र उसी राज्य से बनता है जहाँ आपका परिवार रहता आया है, न कि जहाँ आप इस समय हैं। अपना स्थायी पारिवारिक पता दें।"
+        "en": "A caste certificate is issued by the state where your family belongs, not where you happen to be now. Give your permanent family address. The form asks for a current and a permanent address separately, and we write this one into both, so check the second line before handing it in.",
+        "hi": "जाति प्रमाण पत्र उसी राज्य से बनता है जहाँ आपके परिवार का मूल है, न कि जहाँ आप इस समय हैं। अपना स्थायी पारिवारिक पता बताइए। फॉर्म वर्तमान और स्थाई पता अलग-अलग माँगता है, और हम यही पता दोनों जगह लिख देते हैं, इसलिए देने से पहले दूसरी पंक्ति जाँच लीजिए।"
       }
     },
     {
+      "id": "village",
+      "label": {
+        "en": "Village or town",
+        "hi": "गाँव या शहर"
+      },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "Which village or town do you live in?",
+        "hi": "आप किस गाँव या शहर में रहते हैं?"
+      },
+      "explain": {
+        "en": "The form has its own box for this, apart from the full address, because the patwari who verifies your application works by village. It is also written as the place beside your signature.",
+        "hi": "पूरे पते से अलग, फॉर्म में इसका अपना खाना है, क्योंकि जो पटवारी आपका आवेदन जाँचेंगे वे गाँव के हिसाब से काम करते हैं। यही दस्तखत के साथ जगह के तौर पर भी लिखा जाता है।"
+      },
+      "example": "Kishangarh"
+    },
+    {
+      "id": "tehsil",
+      "label": {
+        "en": "Tehsil",
+        "hi": "तहसील"
+      },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "Which tehsil is that in?",
+        "hi": "वह किस तहसील में आता है?"
+      },
+      "explain": {
+        "en": "The tehsil your village or town falls under. It is printed on any older certificate or land paper your family has, if you are not sure.",
+        "hi": "आपका गाँव या शहर जिस तहसील में आता है। अगर ठीक से पता न हो तो परिवार के किसी पुराने प्रमाण पत्र या ज़मीन के कागज़ पर यह लिखा मिल जाएगा।"
+      },
+      "example": "Kishangarh"
+    },
+    {
+      "id": "district",
+      "label": {
+        "en": "District",
+        "hi": "ज़िला"
+      },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "Which district?",
+        "hi": "कौन सा ज़िला?"
+      },
+      "explain": {
+        "en": "The certificate is issued by this district's office, so it has to be the district your permanent address falls in.",
+        "hi": "प्रमाण पत्र इसी ज़िले के दफ़्तर से बनता है, इसलिए यह वही ज़िला होना चाहिए जिसमें आपका स्थाई पता आता है।"
+      },
+      "example": "Ajmer"
+    },
+    {
       "id": "pincode",
-      "label": { "en": "PIN code", "hi": "पिन कोड" },
+      "label": {
+        "en": "PIN code",
+        "hi": "पिन कोड"
+      },
       "rule": "pincode",
       "source": "digilocker",
       "profileKey": "pincode",
-      "question": { "en": "What is your PIN code?", "hi": "आपका पिन कोड क्या है?" },
+      "question": {
+        "en": "What is your PIN code?",
+        "hi": "आपका पिन कोड क्या है?"
+      },
       "explain": {
         "en": "Six digits of your area's postal code.",
         "hi": "आपके इलाके के डाक कोड के छह अंक।"
@@ -128,8 +288,263 @@
       "example": "302015"
     },
     {
+      "id": "category",
+      "label": {
+        "en": "Category",
+        "hi": "श्रेणी"
+      },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        {
+          "value": "SC",
+          "en": "Scheduled Caste (SC)",
+          "hi": "अनुसूचित जाति (एससी)"
+        },
+        {
+          "value": "ST",
+          "en": "Scheduled Tribe (ST)",
+          "hi": "अनुसूचित जनजाति (एसटी)"
+        },
+        {
+          "value": "OBC",
+          "en": "Other Backward Class (OBC)",
+          "hi": "अन्य पिछड़ा वर्ग (ओबीसी)"
+        }
+      ],
+      "question": {
+        "en": "Which category are you applying under?",
+        "hi": "आप किस श्रेणी में आवेदन कर रहे हैं?"
+      },
+      "explain": {
+        "en": "This decides which printed form you get: SC and ST share one, OBC has a different one that asks different questions. Each state keeps its own list of which caste falls in which category, and the office will check your caste against Rajasthan's list.",
+        "hi": "इसी से तय होता है कि आपको कौन सा छपा फॉर्म मिलेगा: एससी और एसटी का एक ही है, ओबीसी का अलग है और उसमें सवाल भी अलग हैं। हर राज्य की अपनी सूची होती है कि कौन सी जाति किस श्रेणी में आती है, और दफ़्तर आपकी जाति को राजस्थान की सूची से मिलाएगा।"
+      }
+    },
+    {
+      "id": "caste_name",
+      "label": {
+        "en": "Caste name",
+        "hi": "जाति का नाम"
+      },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "What is your caste?",
+        "hi": "आपकी जाति क्या है?"
+      },
+      "explain": {
+        "en": "Write the caste name exactly as it is spelled in Rajasthan's official list. A different spelling from the one in the government list is a very common reason for rejection.",
+        "hi": "जाति का नाम बिल्कुल वैसे लिखिए जैसा राजस्थान की सरकारी सूची में है। सरकारी सूची से अलग वर्तनी होना अस्वीकार होने की बहुत आम वजह है।"
+      },
+      "example": "Meghwal"
+    },
+    {
+      "id": "sub_caste",
+      "label": {
+        "en": "Sub-caste",
+        "hi": "उपजाति"
+      },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "What is your sub-caste?",
+        "hi": "आपकी उपजाति क्या है?"
+      },
+      "explain": {
+        "en": "The form asks for the sub-caste separately from the caste, and the patwari's report names it too. If your caste has no sub-caste, say the caste name again.",
+        "hi": "फॉर्म जाति से अलग उपजाति भी पूछता है, और पटवारी की रिपोर्ट में भी वही आती है। अगर आपकी जाति में उपजाति नहीं है तो जाति का नाम ही दोबारा बता दीजिए।"
+      },
+      "example": "Balai"
+    },
+    {
+      "id": "religion",
+      "label": {
+        "en": "Religion",
+        "hi": "धर्म"
+      },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "What is your religion?",
+        "hi": "आपका धर्म क्या है?"
+      },
+      "explain": {
+        "en": "The form asks this next to your caste.",
+        "hi": "फॉर्म में यह आपकी जाति के साथ ही पूछा जाता है।"
+      },
+      "example": "Hindu"
+    },
+    {
+      "id": "list_serial",
+      "label": {
+        "en": "Serial number in the state OBC list",
+        "hi": "राज्य की ओबीसी सूची में क्रमांक"
+      },
+      "rule": "text",
+      "source": "ask",
+      "showIf": {
+        "category": "OBC"
+      },
+      "question": {
+        "en": "What number does your caste have in the state OBC list, if you know it?",
+        "hi": "राज्य की ओबीसी सूची में आपकी जाति का क्रमांक क्या है, अगर आपको पता हो?"
+      },
+      "explain": {
+        "en": "Item 8 of the OBC form asks for the number your caste carries in Rajasthan's list. Most people do not know it and it is not compulsory — if you do not have it, say so and the eMitra counter will look it up from your caste name.",
+        "hi": "ओबीसी फॉर्म का बिंदु 8 वह क्रमांक पूछता है जो राजस्थान की सूची में आपकी जाति का है। ज़्यादातर लोगों को यह पता नहीं होता और यह ज़रूरी भी नहीं — अगर आपके पास नहीं है तो बता दीजिए, ईमित्र वाले आपकी जाति के नाम से देख लेंगे।"
+      },
+      "example": "42"
+    },
+    {
+      "id": "father_religion",
+      "label": {
+        "en": "Father's religion",
+        "hi": "पिता का धर्म"
+      },
+      "rule": "text",
+      "source": "ask",
+      "showIf": {
+        "category": [
+          "SC",
+          "ST"
+        ]
+      },
+      "question": {
+        "en": "What is your father's religion?",
+        "hi": "आपके पिता का धर्म क्या है?"
+      },
+      "explain": {
+        "en": "The SC and ST form asks about your father separately at item 8, because caste is traced through his line. The OBC form does not ask this at all.",
+        "hi": "एससी और एसटी वाला फॉर्म बिंदु 8 में आपके पिता के बारे में अलग से पूछता है, क्योंकि जाति उन्हीं के वंश से देखी जाती है। ओबीसी वाला फॉर्म यह बिल्कुल नहीं पूछता।"
+      },
+      "example": "Hindu"
+    },
+    {
+      "id": "father_caste",
+      "label": {
+        "en": "Father's caste",
+        "hi": "पिता की जाति"
+      },
+      "rule": "text",
+      "source": "ask",
+      "showIf": {
+        "category": [
+          "SC",
+          "ST"
+        ]
+      },
+      "question": {
+        "en": "What is your father's caste?",
+        "hi": "आपके पिता की जाति क्या है?"
+      },
+      "explain": {
+        "en": "Normally the same as yours. Spell it the way it appears on his papers, because that is what the office compares against.",
+        "hi": "आम तौर पर यह आपकी जाति ही होती है। वर्तनी वैसी ही रखिए जैसी उनके कागज़ों पर है, दफ़्तर उसी से मिलान करता है।"
+      },
+      "example": "Meghwal"
+    },
+    {
+      "id": "father_sub_caste",
+      "label": {
+        "en": "Father's sub-caste",
+        "hi": "पिता की उपजाति"
+      },
+      "rule": "text",
+      "source": "ask",
+      "showIf": {
+        "category": [
+          "SC",
+          "ST"
+        ]
+      },
+      "question": {
+        "en": "And your father's sub-caste?",
+        "hi": "और पिता की उपजाति?"
+      },
+      "explain": {
+        "en": "The form asks for his sub-caste as well as his caste. If there is none, say the caste name again.",
+        "hi": "फॉर्म उनकी जाति के साथ उपजाति भी पूछता है। अगर कोई उपजाति नहीं है तो जाति का नाम ही दोबारा बता दीजिए।"
+      },
+      "example": "Balai"
+    },
+    {
+      "id": "recorded_caste",
+      "label": {
+        "en": "Caste recorded in your school and work papers",
+        "hi": "शिक्षा और व्यवसाय के कागज़ों में दर्ज जाति"
+      },
+      "rule": "text",
+      "source": "ask",
+      "showIf": {
+        "category": [
+          "SC",
+          "ST"
+        ]
+      },
+      "question": {
+        "en": "Which caste is written in your school and work papers?",
+        "hi": "आपके स्कूल और काम के कागज़ों में कौन सी जाति लिखी है?"
+      },
+      "explain": {
+        "en": "Item 9 asks this because the office compares it with what you have claimed here. If the two differ, say what the papers actually say rather than what you are claiming — a mismatch found later is what gets an application rejected.",
+        "hi": "बिंदु 9 यह इसलिए पूछता है कि दफ़्तर इसे आपके दावे से मिलाता है। अगर दोनों में फ़र्क है तो वही बताइए जो कागज़ों में सचमुच लिखा है, न कि जो आप दावा कर रहे हैं — बाद में पकड़ा गया फ़र्क ही आवेदन रद्द कराता है।"
+      },
+      "example": "Meghwal"
+    },
+    {
+      "id": "native_of_rajasthan",
+      "label": {
+        "en": "Native of Rajasthan",
+        "hi": "राजस्थान के मूल निवासी"
+      },
+      "rule": "choice",
+      "source": "ask",
+      "options": [
+        {
+          "value": "Yes",
+          "en": "Yes",
+          "hi": "हाँ"
+        },
+        {
+          "value": "No",
+          "en": "No",
+          "hi": "नहीं"
+        }
+      ],
+      "question": {
+        "en": "Are you or your family original residents of Rajasthan?",
+        "hi": "क्या आप या आपका परिवार राजस्थान के मूल निवासी हैं?"
+      },
+      "explain": {
+        "en": "Rajasthan issues this certificate to its own original residents, so the form asks it directly. On the OBC form the same question is printed twice, and the second one has no box, so you have to copy your answer onto that line by hand.",
+        "hi": "राजस्थान यह प्रमाण पत्र अपने मूल निवासियों को देता है, इसलिए फॉर्म यह सीधे पूछता है। ओबीसी वाले फॉर्म में यही सवाल दो बार छपा है, और दूसरी जगह खाना नहीं है, इसलिए वहाँ जवाब आपको हाथ से लिखना पड़ेगा।"
+      }
+    },
+    {
+      "id": "bhamashah",
+      "label": {
+        "en": "Bhamashah card number",
+        "hi": "भामाशाह कार्ड संख्या"
+      },
+      "rule": "text",
+      "source": "ask",
+      "question": {
+        "en": "What is your family's Bhamashah card number, if you have one?",
+        "hi": "आपके परिवार की भामाशाह कार्ड संख्या क्या है, अगर हो तो?"
+      },
+      "explain": {
+        "en": "The form asks for the Bhamashah number of the head of your family, at the top. It is not compulsory — if your family does not have the card, say so and the box is left empty.",
+        "hi": "फॉर्म ऊपर परिवार के मुखिया की भामाशाह संख्या माँगता है। यह ज़रूरी नहीं है — अगर आपके परिवार के पास कार्ड नहीं है तो बता दीजिए, खाना खाली छोड़ दिया जाएगा।"
+      },
+      "example": "1234567890"
+    },
+    {
       "id": "aadhaar",
-      "label": { "en": "Aadhaar number", "hi": "आधार संख्या" },
+      "label": {
+        "en": "Aadhaar number",
+        "hi": "आधार संख्या"
+      },
       "rule": "aadhaar",
       "source": "ask",
       "question": {
@@ -137,14 +552,35 @@
         "hi": "कृपया अपना बारह अंकों का आधार नंबर बोलिए।"
       },
       "explain": {
-        "en": "Used to confirm your identity and link the certificate to you permanently.",
-        "hi": "आपकी पहचान की पुष्टि करने और प्रमाण पत्र को स्थायी रूप से आपसे जोड़ने के लिए।"
+        "en": "It goes at the very top of the form, and links the certificate to you permanently.",
+        "hi": "यह फॉर्म में सबसे ऊपर जाता है, और प्रमाण पत्र को हमेशा के लिए आपसे जोड़ देता है।"
       },
       "example": "2345 6789 0124"
     },
     {
+      "id": "mobile",
+      "label": {
+        "en": "Mobile number",
+        "hi": "मोबाइल नंबर"
+      },
+      "rule": "mobile",
+      "source": "ask",
+      "question": {
+        "en": "What is your mobile number?",
+        "hi": "आपका मोबाइल नंबर क्या है?"
+      },
+      "explain": {
+        "en": "The form says this is the number the SMS about your application will come to.",
+        "hi": "फॉर्म कहता है कि आवेदन से जुड़ा एसएमएस इसी नंबर पर आएगा।"
+      },
+      "example": "9876543210"
+    },
+    {
       "id": "purpose",
-      "label": { "en": "Purpose of the certificate", "hi": "प्रमाण पत्र का उद्देश्य" },
+      "label": {
+        "en": "Purpose of the certificate",
+        "hi": "प्रमाण पत्र का उद्देश्य"
+      },
       "rule": "text",
       "source": "ask",
       "question": {
@@ -152,22 +588,10 @@
         "hi": "आपको यह प्रमाण पत्र किस लिए चाहिए?"
       },
       "explain": {
-        "en": "For example, for college admission, for a government job application, or for a scholarship.",
-        "hi": "जैसे कॉलेज में दाखिले के लिए, सरकारी नौकरी के आवेदन के लिए, या छात्रवृत्ति के लिए।"
+        "en": "For example, for college admission, for a government job application, or for a scholarship. The printed form has no box for this, but the counter asks, so it is kept on your FormMitra sheet.",
+        "hi": "जैसे कॉलेज में दाखिले के लिए, सरकारी नौकरी के आवेदन के लिए, या छात्रवृत्ति के लिए। छपे फॉर्म में इसका खाना नहीं है, पर काउंटर पर पूछा जाता है, इसलिए यह आपकी फॉर्ममित्र शीट पर रहता है।"
       },
       "example": "For college admission"
-    },
-    {
-      "id": "mobile",
-      "label": { "en": "Mobile number", "hi": "मोबाइल नंबर" },
-      "rule": "mobile",
-      "source": "ask",
-      "question": { "en": "What is your mobile number?", "hi": "आपका मोबाइल नंबर क्या है?" },
-      "explain": {
-        "en": "You will get an SMS when the certificate is ready.",
-        "hi": "प्रमाण पत्र तैयार होने पर आपको एसएमएस मिलेगा।"
-      },
-      "example": "9876543210"
     }
   ]
 }
