@@ -32,109 +32,558 @@
     "has to say so rather than silently drop a character.",
     "",
     "LEFT UNNAMED ON PURPOSE: R10 cells 8-25, R19 and R20 cells 21-33. Combs",
-    "with no printed label anywhere near them; this form leaves stray grid."
+    "with no printed label anywhere near them; this form leaves stray grid.",
+    "",
+    "DOB TRAP: row 8 is the printed 'D D M M Y Y Y Y' guide, not an entry row.",
+    "The boxes the citizen writes in are row 10 cells 18-25, directly under it",
+    "and at the same x span (424.9-538.3). Mapping dob to row 8 overstruck the",
+    "guide letters and left the real boxes empty; caught by looking at the",
+    "stamped output, not by any checker. Row 10 therefore carries two unrelated",
+    "fields, which is why it is named casteDob."
   ],
   "pageHeight": 841.89,
-
   "rows": {
-    "migrant":      {"page": 1, "row": 0,  "cells": 7},
-    "nameFirst":    {"page": 1, "row": 3,  "cells": 24},
-    "nameMiddle":   {"page": 1, "row": 4,  "cells": 24},
-    "nameLast":     {"page": 1, "row": 5,  "cells": 24},
-    "aadhaar":      {"page": 1, "row": 7,  "cells": 24},
-    "dob":          {"page": 1, "row": 8,  "cells": 8},
-    "mobile":       {"page": 1, "row": 9,  "cells": 24},
-    "caste":        {"page": 1, "row": 10, "cells": 26},
-    "poa":          {"page": 1, "row": 12, "cells": 25},
-    "house":        {"page": 1, "row": 13, "cells": 34},
-    "building":     {"page": 1, "row": 14, "cells": 34},
-    "street":       {"page": 1, "row": 15, "cells": 33},
-    "city":         {"page": 1, "row": 16, "cells": 31},
-    "village":      {"page": 1, "row": 17, "cells": 34},
-    "block":        {"page": 1, "row": 18, "cells": 23},
-    "district":     {"page": 1, "row": 19, "cells": 34},
-    "state":        {"page": 1, "row": 20, "cells": 34},
-    "household1":   {"page": 1, "row": 24, "cells": 31},
-    "household2":   {"page": 1, "row": 25, "cells": 31},
-    "household3":   {"page": 1, "row": 26, "cells": 31},
-    "household4":   {"page": 1, "row": 27, "cells": 31},
-    "household5":   {"page": 1, "row": 28, "cells": 31},
-    "household6":   {"page": 1, "row": 29, "cells": 31},
-    "bankName1":    {"page": 1, "row": 31, "cells": 34},
-    "bankName2":    {"page": 1, "row": 32, "cells": 34},
-    "branchIfsc":   {"page": 1, "row": 33, "cells": 30},
-    "bankAccount":  {"page": 1, "row": 34, "cells": 34},
-    "rationState":  {"page": 1, "row": 36, "cells": 27},
-    "rationNumber": {"page": 1, "row": 37, "cells": 27},
-    "declaration":  {"page": 1, "row": 38, "cells": 8},
-    "certificate":  {"page": 1, "row": 39, "cells": 8},
-    "cylinder":     {"page": 1, "row": 41, "cells": 16},
-    "burner":       {"page": 1, "row": 42, "cells": 17}
+    "migrant": {
+      "page": 1,
+      "row": 0,
+      "cells": 7
+    },
+    "nameFirst": {
+      "page": 1,
+      "row": 3,
+      "cells": 24
+    },
+    "nameMiddle": {
+      "page": 1,
+      "row": 4,
+      "cells": 24
+    },
+    "nameLast": {
+      "page": 1,
+      "row": 5,
+      "cells": 24
+    },
+    "aadhaar": {
+      "page": 1,
+      "row": 7,
+      "cells": 24
+    },
+    "mobile": {
+      "page": 1,
+      "row": 9,
+      "cells": 24
+    },
+    "casteDob": {
+      "page": 1,
+      "row": 10,
+      "cells": 26
+    },
+    "poa": {
+      "page": 1,
+      "row": 12,
+      "cells": 25
+    },
+    "house": {
+      "page": 1,
+      "row": 13,
+      "cells": 34
+    },
+    "building": {
+      "page": 1,
+      "row": 14,
+      "cells": 34
+    },
+    "street": {
+      "page": 1,
+      "row": 15,
+      "cells": 33
+    },
+    "city": {
+      "page": 1,
+      "row": 16,
+      "cells": 31
+    },
+    "village": {
+      "page": 1,
+      "row": 17,
+      "cells": 34
+    },
+    "block": {
+      "page": 1,
+      "row": 18,
+      "cells": 23
+    },
+    "district": {
+      "page": 1,
+      "row": 19,
+      "cells": 34
+    },
+    "state": {
+      "page": 1,
+      "row": 20,
+      "cells": 34
+    },
+    "household1": {
+      "page": 1,
+      "row": 24,
+      "cells": 31
+    },
+    "household2": {
+      "page": 1,
+      "row": 25,
+      "cells": 31
+    },
+    "household3": {
+      "page": 1,
+      "row": 26,
+      "cells": 31
+    },
+    "household4": {
+      "page": 1,
+      "row": 27,
+      "cells": 31
+    },
+    "household5": {
+      "page": 1,
+      "row": 28,
+      "cells": 31
+    },
+    "household6": {
+      "page": 1,
+      "row": 29,
+      "cells": 31
+    },
+    "bankName1": {
+      "page": 1,
+      "row": 31,
+      "cells": 34
+    },
+    "bankName2": {
+      "page": 1,
+      "row": 32,
+      "cells": 34
+    },
+    "branchIfsc": {
+      "page": 1,
+      "row": 33,
+      "cells": 30
+    },
+    "bankAccount": {
+      "page": 1,
+      "row": 34,
+      "cells": 34
+    },
+    "rationState": {
+      "page": 1,
+      "row": 36,
+      "cells": 27
+    },
+    "rationNumber": {
+      "page": 1,
+      "row": 37,
+      "cells": 27
+    },
+    "declaration": {
+      "page": 1,
+      "row": 38,
+      "cells": 8
+    },
+    "certificate": {
+      "page": 1,
+      "row": 39,
+      "cells": 8
+    },
+    "cylinder": {
+      "page": 1,
+      "row": 41,
+      "cells": 16
+    },
+    "burner": {
+      "page": 1,
+      "row": 42,
+      "cells": 17
+    }
   },
-
   "slots": {
-    "migrant.yes":  {"row": "migrant", "take": [3]},
-    "migrant.no":   {"row": "migrant", "take": [5]},
-
-    "name.first":   {"row": "nameFirst",  "take": [[2, 23]]},
-    "name.middle":  {"row": "nameMiddle", "take": [[2, 23]]},
-    "name.last":    {"row": "nameLast",   "take": [[2, 23]]},
-    "aadhaar":      {"row": "aadhaar",    "take": [[2, 13]]},
-    "dob":          {"row": "dob",        "take": [[0, 7]]},
-    "mobile":       {"row": "mobile",     "take": [[2, 11]]},
-
-    "caste.sc":     {"row": "caste", "take": [3]},
-    "caste.st":     {"row": "caste", "take": [5]},
-    "caste.others": {"row": "caste", "take": [7]},
-
-    "poa.code":     {"row": "poa", "take": [[5, 6]]},
-    "contactMobile": {"row": "poa", "take": [[13, 24]]},
-
-    "address.houseNo":         {"row": "house",    "take": [[2, 20]]},
-    "address.floorNo":         {"row": "house",    "take": [[22, 33]]},
-    "address.building":        {"row": "building", "take": [[2, 20]]},
-    "address.landmark":        {"row": "building", "take": [[22, 33]]},
-    "address.street":          {"row": "street",   "take": [[2, 20]]},
-    "address.areaPostOffice":  {"row": "street",   "take": [[21, 32]]},
-    "address.city":            {"row": "city",     "take": [[2, 20]]},
-    "address.areaPostOffice2": {"row": "city",     "take": [[21, 30]]},
-    "address.village":         {"row": "village",  "take": [[2, 20]]},
-    "address.pincode":         {"row": "village",  "take": [[22, 27]]},
-    "address.block":           {"row": "block",    "take": [[2, 20]]},
-    "address.email":           {"row": "block",    "take": [22]},
-    "address.district":        {"row": "district", "take": [[2, 20]]},
-    "address.state":           {"row": "state",    "take": [[2, 20]]},
-
-    "bank.accountName":   {"row": "bankName1",   "take": [[2, 18], [20, 33]]},
-    "bank.bankName":      {"row": "bankName2",   "take": [[2, 18], [20, 33]]},
-    "bank.branchName":    {"row": "branchIfsc",  "take": [[2, 18]]},
-    "bank.ifsc":          {"row": "branchIfsc",  "take": [[20, 29]]},
-    "bank.accountNumber": {"row": "bankAccount", "take": [[2, 18], [20, 33]]},
-
-    "ration.stateOfIssue": {"row": "rationState",  "take": [[2, 26]]},
-    "ration.number":       {"row": "rationNumber", "take": [[2, 26]]},
-
-    "declaration14Point.yes": {"row": "declaration", "take": [5]},
-    "declaration14Point.no":  {"row": "declaration", "take": [7]},
-    "migrantCertificate.yes": {"row": "certificate", "take": [5]},
-    "migrantCertificate.no":  {"row": "certificate", "take": [7]},
-
-    "cylinder.5kg":   {"row": "cylinder", "take": [5]},
-    "cylinder.14kg":  {"row": "cylinder", "take": [7]},
-    "burner.single":  {"row": "burner",   "take": [5]},
-    "burner.double":  {"row": "burner",   "take": [7]}
+    "migrant.yes": {
+      "row": "migrant",
+      "take": [
+        3
+      ]
+    },
+    "migrant.no": {
+      "row": "migrant",
+      "take": [
+        5
+      ]
+    },
+    "name.first": {
+      "row": "nameFirst",
+      "take": [
+        [
+          2,
+          23
+        ]
+      ]
+    },
+    "name.middle": {
+      "row": "nameMiddle",
+      "take": [
+        [
+          2,
+          23
+        ]
+      ]
+    },
+    "name.last": {
+      "row": "nameLast",
+      "take": [
+        [
+          2,
+          23
+        ]
+      ]
+    },
+    "aadhaar": {
+      "row": "aadhaar",
+      "take": [
+        [
+          2,
+          13
+        ]
+      ]
+    },
+    "dob": {
+      "row": "casteDob",
+      "take": [
+        [
+          18,
+          25
+        ]
+      ]
+    },
+    "mobile": {
+      "row": "mobile",
+      "take": [
+        [
+          2,
+          11
+        ]
+      ]
+    },
+    "caste.sc": {
+      "row": "casteDob",
+      "take": [
+        3
+      ]
+    },
+    "caste.st": {
+      "row": "casteDob",
+      "take": [
+        5
+      ]
+    },
+    "caste.others": {
+      "row": "casteDob",
+      "take": [
+        7
+      ]
+    },
+    "poa.code": {
+      "row": "poa",
+      "take": [
+        [
+          5,
+          6
+        ]
+      ]
+    },
+    "contactMobile": {
+      "row": "poa",
+      "take": [
+        [
+          13,
+          24
+        ]
+      ]
+    },
+    "address.houseNo": {
+      "row": "house",
+      "take": [
+        [
+          2,
+          20
+        ]
+      ]
+    },
+    "address.floorNo": {
+      "row": "house",
+      "take": [
+        [
+          22,
+          33
+        ]
+      ]
+    },
+    "address.building": {
+      "row": "building",
+      "take": [
+        [
+          2,
+          20
+        ]
+      ]
+    },
+    "address.landmark": {
+      "row": "building",
+      "take": [
+        [
+          22,
+          33
+        ]
+      ]
+    },
+    "address.street": {
+      "row": "street",
+      "take": [
+        [
+          2,
+          20
+        ]
+      ]
+    },
+    "address.areaPostOffice": {
+      "row": "street",
+      "take": [
+        [
+          21,
+          32
+        ]
+      ]
+    },
+    "address.city": {
+      "row": "city",
+      "take": [
+        [
+          2,
+          20
+        ]
+      ]
+    },
+    "address.areaPostOffice2": {
+      "row": "city",
+      "take": [
+        [
+          21,
+          30
+        ]
+      ]
+    },
+    "address.village": {
+      "row": "village",
+      "take": [
+        [
+          2,
+          20
+        ]
+      ]
+    },
+    "address.pincode": {
+      "row": "village",
+      "take": [
+        [
+          22,
+          27
+        ]
+      ]
+    },
+    "address.block": {
+      "row": "block",
+      "take": [
+        [
+          2,
+          20
+        ]
+      ]
+    },
+    "address.email": {
+      "row": "block",
+      "take": [
+        22
+      ]
+    },
+    "address.district": {
+      "row": "district",
+      "take": [
+        [
+          2,
+          20
+        ]
+      ]
+    },
+    "address.state": {
+      "row": "state",
+      "take": [
+        [
+          2,
+          20
+        ]
+      ]
+    },
+    "bank.accountName": {
+      "row": "bankName1",
+      "take": [
+        [
+          2,
+          18
+        ],
+        [
+          20,
+          33
+        ]
+      ]
+    },
+    "bank.bankName": {
+      "row": "bankName2",
+      "take": [
+        [
+          2,
+          18
+        ],
+        [
+          20,
+          33
+        ]
+      ]
+    },
+    "bank.branchName": {
+      "row": "branchIfsc",
+      "take": [
+        [
+          2,
+          18
+        ]
+      ]
+    },
+    "bank.ifsc": {
+      "row": "branchIfsc",
+      "take": [
+        [
+          20,
+          29
+        ]
+      ]
+    },
+    "bank.accountNumber": {
+      "row": "bankAccount",
+      "take": [
+        [
+          2,
+          18
+        ],
+        [
+          20,
+          33
+        ]
+      ]
+    },
+    "ration.stateOfIssue": {
+      "row": "rationState",
+      "take": [
+        [
+          2,
+          26
+        ]
+      ]
+    },
+    "ration.number": {
+      "row": "rationNumber",
+      "take": [
+        [
+          2,
+          26
+        ]
+      ]
+    },
+    "declaration14Point.yes": {
+      "row": "declaration",
+      "take": [
+        5
+      ]
+    },
+    "declaration14Point.no": {
+      "row": "declaration",
+      "take": [
+        7
+      ]
+    },
+    "migrantCertificate.yes": {
+      "row": "certificate",
+      "take": [
+        5
+      ]
+    },
+    "migrantCertificate.no": {
+      "row": "certificate",
+      "take": [
+        7
+      ]
+    },
+    "cylinder.5kg": {
+      "row": "cylinder",
+      "take": [
+        5
+      ]
+    },
+    "cylinder.14kg": {
+      "row": "cylinder",
+      "take": [
+        7
+      ]
+    },
+    "burner.single": {
+      "row": "burner",
+      "take": [
+        5
+      ]
+    },
+    "burner.double": {
+      "row": "burner",
+      "take": [
+        7
+      ]
+    }
   },
-
   "tables": [
     {
       "prefix": "household",
-      "rows": ["household1", "household2", "household3",
-               "household4", "household5", "household6"],
+      "rows": [
+        "household1",
+        "household2",
+        "household3",
+        "household4",
+        "household5",
+        "household6"
+      ],
       "slots": {
-        "relationship": [1],
-        "name": [[2, 16]],
-        "gender": [17],
-        "aadhaar": [[18, 29]]
+        "relationship": [
+          1
+        ],
+        "name": [
+          [
+            2,
+            16
+          ]
+        ],
+        "gender": [
+          17
+        ],
+        "aadhaar": [
+          [
+            18,
+            29
+          ]
+        ]
       }
     }
   ]
