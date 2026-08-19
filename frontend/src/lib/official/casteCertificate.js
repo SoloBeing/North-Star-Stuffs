@@ -27,7 +27,13 @@
 
 import obcBoxes from '../../data/official/caste-obc-boxes.json'
 import scstBoxes from '../../data/official/caste-scst-boxes.json'
-import { SHARED_NOTES, digitsOf, todayDdMmYyyy, toBoxText } from './stamper.js'
+import {
+  LABELS,
+  SHARED_NOTES,
+  digitsOf,
+  toBoxText,
+  todayDdMmYyyy,
+} from './stamper.js'
 
 /** Which blank each category is printed on. SC and ST share one. */
 const BLANK_FOR = { SC: 'scst', ST: 'scst', OBC: 'obc' }
@@ -169,9 +175,7 @@ const inFours = (digits) => digits.replace(/(\d{4})(?=\d)/g, '$1 ')
 function fill(s, answers) {
   const isObc = answers.category === 'OBC'
 
-  const NAME_LABEL = { en: 'Your name', hi: 'आपका नाम' }
   const FATHER_LABEL = { en: 'Your father’s name', hi: 'आपके पिता का नाम' }
-  const ADDRESS_LABEL = { en: 'Your address', hi: 'आपका पता' }
   const VILLAGE_LABEL = { en: 'Village or town', hi: 'गाँव या शहर' }
   const TEHSIL_LABEL = { en: 'Tehsil', hi: 'तहसील' }
   const DISTRICT_LABEL = { en: 'District', hi: 'ज़िला' }
@@ -198,25 +202,22 @@ function fill(s, answers) {
   }
 
   // ── The header: Aadhaar and Bhamashah ───────────────────────────────────
-  const aadhaar = digitsOf(answers.aadhaar)
-  if (aadhaar.length === 12) {
-    s.free('aadhaar', inFours(aadhaar), { en: 'Aadhaar number', hi: 'आधार संख्या' })
-  } else if (answers.aadhaar) {
-    s.note('badValue', { en: 'Aadhaar number', hi: 'आधार संख्या' })
-  }
+  s.digits(answers.aadhaar, 12, LABELS.aadhaar, (d) =>
+    s.free('aadhaar', inFours(d), LABELS.aadhaar),
+  )
 
   const bhamashah = digitsOf(answers.bhamashah)
   if (bhamashah) s.free('bhamashah', bhamashah, { en: 'Bhamashah number', hi: 'भामाशाह संख्या' })
   else s.note('bhamashah')
 
   // ── Items 1-4: who and where ────────────────────────────────────────────
-  write('applicantName', answers.applicant_name, NAME_LABEL)
+  write('applicantName', answers.applicant_name, LABELS.name)
   write('fatherName', answers.father_name, FATHER_LABEL)
 
   // The form wants a current address and a permanent one. We hold a single
   // address string, so both get it and the citizen is told to check the second.
-  if (write('address.present', answers.address, ADDRESS_LABEL)) {
-    write('address.permanent', answers.address, ADDRESS_LABEL)
+  if (write('address.present', answers.address, LABELS.address)) {
+    write('address.permanent', answers.address, LABELS.address)
     s.note('bothAddresses')
   }
 
@@ -227,8 +228,10 @@ function fill(s, answers) {
   // ── Item 5: birth ───────────────────────────────────────────────────────
   // Not a box. The form prints ____/____/______ inside one, so each part goes
   // on its own run and the printed slashes are left standing.
-  const dob = String(answers.dob ?? '').split('/')
-  if (dob.length === 3 && s.guide('dob', dob)) {
+  const wroteDob = s.digits(answers.dob, 8, LABELS.dob, (d) =>
+    s.guide('dob', [d.slice(0, 2), d.slice(2, 4), d.slice(4)]),
+  )
+  if (wroteDob) {
     const age = ageFromDob(answers.dob)
     if (age) {
       s.free('age', age, { en: 'Age', hi: 'उम्र' })
@@ -237,8 +240,6 @@ function fill(s, answers) {
         hi: `आपकी जन्म तिथि से उम्र ${age} साल निकाली गई है। फॉर्म जमा करने के दिन के हिसाब से जाँच लीजिए।`,
       })
     }
-  } else if (answers.dob) {
-    s.note('badValue', { en: 'Date of birth', hi: 'जन्म तिथि' })
   }
 
   write('birthPlace', answers.birthplace, BIRTHPLACE_LABEL)
@@ -284,9 +285,9 @@ function fill(s, answers) {
     if (isObc) s.note('nativeAskedTwice')
   }
 
-  const mobile = digitsOf(answers.mobile)
-  if (mobile.length === 10) s.free('mobile', mobile, { en: 'Mobile number', hi: 'मोबाइल नंबर' })
-  else if (answers.mobile) s.note('badValue', { en: 'Mobile number', hi: 'मोबाइल नंबर' })
+  s.digits(answers.mobile, 10, LABELS.mobile, (d) =>
+    s.free('mobile', d, LABELS.mobile),
+  )
 
   // ── The declaration under page 1 ────────────────────────────────────────
   s.guide('declarationDate', todayDdMmYyyy().split('/'))
@@ -298,9 +299,9 @@ function fill(s, answers) {
   }
 
   // ── The affidavit, which repeats page 1 from the same answers ───────────
-  write('affidavit.name', answers.applicant_name, NAME_LABEL)
+  write('affidavit.name', answers.applicant_name, LABELS.name)
   write('affidavit.fatherName', answers.father_name, FATHER_LABEL)
-  write('affidavit.resident', answers.address, ADDRESS_LABEL)
+  write('affidavit.resident', answers.address, LABELS.address)
   write('affidavit.village', answers.village, VILLAGE_LABEL)
   write('affidavit.tehsil', answers.tehsil, TEHSIL_LABEL)
   write('affidavit.district', answers.district, DISTRICT_LABEL)

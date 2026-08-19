@@ -12,10 +12,10 @@
 
 import boxes from '../../data/official/form93-boxes.json'
 import {
+  LABELS,
   SHARED_NOTES,
   digitsOf,
   splitAddress,
-  splitName,
   toBoxText,
   todayDdMmYyyy,
 } from './stamper.js'
@@ -164,69 +164,54 @@ const PRINT_PARENT_SLOT = {
 }
 
 function fill(s, answers) {
-  const NAME_LABEL = { en: 'Your name', hi: 'आपका नाम' }
-  const ADDRESS_LABEL = { en: 'Your address', hi: 'आपका पता' }
-
   // ── Name ────────────────────────────────────────────────────────────────
-  const name = splitName(answers.full_name)
-  if (name) {
-    s.comb('name.first', name.first, NAME_LABEL)
-    s.comb('name.middle', name.middle, NAME_LABEL)
-    s.comb('name.last', name.last, NAME_LABEL)
-    if (name.middle) {
-      s.note('nameSplit', {
-        en: `First “${name.first}”, middle “${name.middle}”, last “${name.last}”.`,
-        hi: `पहला “${name.first}”, बीच का “${name.middle}”, अंतिम “${name.last}”।`,
-      })
-    }
+  const wroteName = s.name(
+    ['name.first', 'name.middle', 'name.last'],
+    answers.full_name,
+    LABELS.name,
+  )
+  if (wroteName) {
     // "Name as per Aadhaar" is the same name, wrapped across three rows.
     const full = toBoxText(answers.full_name)
     const perRow = boxes.slots['aadhaarName.0'].cells.length
     for (let i = 0; i < 3; i++) {
       s.comb(`aadhaarName.${i}`, full.slice(i * perRow, (i + 1) * perRow))
     }
-  } else if (answers.full_name) {
-    s.note('notLatin')
   }
 
   // ── Gender ──────────────────────────────────────────────────────────────
   if (GENDER_SLOT[answers.gender]) s.tick(GENDER_SLOT[answers.gender])
 
   // ── Date of birth (stored dd/mm/yyyy) ───────────────────────────────────
-  const dob = digitsOf(answers.dob)
-  if (dob.length === 8) {
+  // Three separate rows on this form: day, month, year.
+  s.digits(answers.dob, 8, LABELS.dob, (dob) => {
     s.comb('dob.dd', dob.slice(0, 2))
     s.comb('dob.mm', dob.slice(2, 4))
     s.comb('dob.yyyy', dob.slice(4, 8))
-  } else if (answers.dob) {
-    s.note('badValue', { en: 'Date of birth', hi: 'जन्म तिथि' })
-  }
+  })
 
   // ── Aadhaar ─────────────────────────────────────────────────────────────
-  const aadhaar = digitsOf(answers.aadhaar)
-  if (aadhaar.length === 12) s.comb('aadhaar', aadhaar)
-  else if (answers.aadhaar) s.note('badValue', { en: 'Aadhaar number', hi: 'आधार संख्या' })
+  s.digits(answers.aadhaar, 12, LABELS.aadhaar, (d) => s.comb('aadhaar', d))
 
   // ── Residence address ───────────────────────────────────────────────────
   const addr = splitAddress(answers.address)
   if (addr) {
-    s.comb('res.flat', toBoxText(addr.flat), ADDRESS_LABEL)
-    s.comb('res.road', toBoxText(addr.road), ADDRESS_LABEL)
-    s.comb('res.area', toBoxText(addr.area), ADDRESS_LABEL)
-    s.comb('res.district', toBoxText(addr.district), ADDRESS_LABEL)
-    s.free('res.state', toBoxText(addr.state), ADDRESS_LABEL)
+    s.comb('res.flat', toBoxText(addr.flat), LABELS.address)
+    s.comb('res.road', toBoxText(addr.road), LABELS.address)
+    s.comb('res.area', toBoxText(addr.area), LABELS.address)
+    s.comb('res.district', toBoxText(addr.district), LABELS.address)
+    s.free('res.state', toBoxText(addr.state), LABELS.address)
     s.free('res.country', 'INDIA')
     s.note('addressSplit')
   }
 
   // Optional, so an empty answer is a choice the citizen made, not a gap we
   // failed to fill — but they should still be told the box went out blank.
-  if (!s.comb('res.po', toBoxText(answers.post_office), ADDRESS_LABEL)) {
+  if (!s.comb('res.po', toBoxText(answers.post_office), LABELS.address)) {
     s.note('postOffice')
   }
 
-  const pin = digitsOf(answers.pincode)
-  if (pin) s.comb('res.pin', pin, { en: 'PIN code', hi: 'पिन कोड' })
+  s.comb('res.pin', digitsOf(answers.pincode), LABELS.pincode)
 
   // ── Residential status (Part A, item 7) ─────────────────────────────────
   // A legal declaration, so it is ticked only from an explicit answer, never
@@ -238,13 +223,10 @@ function fill(s, answers) {
   }
 
   // ── Contact ─────────────────────────────────────────────────────────────
-  const mobile = digitsOf(answers.mobile)
-  if (mobile.length === 10) {
+  s.digits(answers.mobile, 10, LABELS.mobile, (mobile) => {
     s.comb('mobile.cc', '91')
     s.comb('mobile.number', mobile)
-  } else if (answers.mobile) {
-    s.note('badValue', { en: 'Mobile number', hi: 'मोबाइल नंबर' })
-  }
+  })
 
   // Case is preserved here alone: every other box on this form wants block
   // capitals, but the local part of an address is case-sensitive by the spec
@@ -264,23 +246,13 @@ function fill(s, answers) {
     s.tick(SINGLE_PARENT_SLOT[answers.single_parent])
   }
 
-  const father = splitName(answers.father_name)
-  if (father) {
-    s.comb('father.first', father.first)
-    s.comb('father.middle', father.middle)
-    s.comb('father.last', father.last)
-  } else if (answers.father_name) {
-    s.note('notLatin')
-  }
+  const father = s.name(
+    ['father.first', 'father.middle', 'father.last'],
+    answers.father_name,
+  )
 
-  const mother = splitName(answers.mother_name)
-  if (mother) {
-    s.comb('mother.first', mother.first)
-    s.comb('mother.middle', mother.middle)
-    s.comb('mother.last', mother.last)
-  } else if (answers.mother_name) {
-    s.note('notLatin')
-  } else if (answers.single_parent === 'No') {
+  s.name(['mother.first', 'mother.middle', 'mother.last'], answers.mother_name)
+  if (!answers.mother_name && answers.single_parent === 'No') {
     // The question applies and has no answer. The flow tries hard not to let
     // this happen, but a blank row on a government form must never be silent.
     s.note('motherMissing')

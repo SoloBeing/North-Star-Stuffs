@@ -20,10 +20,10 @@
 
 import boxes from '../../data/official/lpg-boxes.json'
 import {
+  LABELS,
   SHARED_NOTES,
   digitsOf,
   splitAddress,
-  splitName,
   toBoxText,
 } from './stamper.js'
 
@@ -100,38 +100,21 @@ const CYLINDER_SLOT = { '5 kg': 'cylinder.5kg', '14.2 kg': 'cylinder.14kg' }
 const BURNER_SLOT = { '1 - Burner': 'burner.single', '2 - Burner': 'burner.double' }
 
 function fill(s, answers) {
-  const NAME_LABEL = { en: 'Your name', hi: 'आपका नाम' }
-  const ADDRESS_LABEL = { en: 'Your address', hi: 'आपका पता' }
   const BANK_LABEL = { en: 'Your bank details', hi: 'आपके बैंक की जानकारी' }
 
   // ── a) Consumer details ─────────────────────────────────────────────────
-  const name = splitName(answers.full_name)
-  if (name) {
-    s.comb('name.first', name.first, NAME_LABEL)
-    s.comb('name.middle', name.middle, NAME_LABEL)
-    s.comb('name.last', name.last, NAME_LABEL)
-    if (name.middle) {
-      s.note('nameSplit', {
-        en: `First “${name.first}”, middle “${name.middle}”, last “${name.last}”.`,
-        hi: `पहला “${name.first}”, बीच का “${name.middle}”, अंतिम “${name.last}”।`,
-      })
-    }
-  } else if (answers.full_name) {
-    s.note('notLatin')
-  }
+  s.name(
+    ['name.first', 'name.middle', 'name.last'],
+    answers.full_name,
+    LABELS.name,
+  )
 
-  const aadhaar = digitsOf(answers.aadhaar)
-  if (aadhaar.length === 12) s.comb('aadhaar', aadhaar)
-  else if (answers.aadhaar) s.note('badValue', { en: 'Aadhaar number', hi: 'आधार संख्या' })
+  s.digits(answers.aadhaar, 12, LABELS.aadhaar, (d) => s.comb('aadhaar', d))
 
   // The form prints D D M M Y Y Y Y over eight boxes, which is how we store it.
-  const dob = digitsOf(answers.dob)
-  if (dob.length === 8) s.comb('dob', dob)
-  else if (answers.dob) s.note('badValue', { en: 'Date of birth', hi: 'जन्म तिथि' })
+  s.digits(answers.dob, 8, LABELS.dob, (d) => s.comb('dob', d))
 
-  const mobile = digitsOf(answers.mobile)
-  if (mobile.length === 10) s.comb('mobile', mobile)
-  else if (answers.mobile) s.note('badValue', { en: 'Mobile number', hi: 'मोबाइल नंबर' })
+  s.digits(answers.mobile, 10, LABELS.mobile, (d) => s.comb('mobile', d))
 
   if (CASTE_SLOT[answers.caste]) s.tick(CASTE_SLOT[answers.caste])
   if (MIGRANT_SLOT[answers.migrant]) s.tick(MIGRANT_SLOT[answers.migrant])
@@ -151,19 +134,18 @@ function fill(s, answers) {
   // which a city. Only the four that can be assigned from position are filled.
   const addr = splitAddress(answers.address)
   if (addr) {
-    s.comb('address.houseNo', toBoxText(addr.flat), ADDRESS_LABEL)
-    s.comb('address.street', toBoxText(addr.road), ADDRESS_LABEL)
-    s.comb('address.areaPostOffice', toBoxText(addr.area), ADDRESS_LABEL)
-    s.comb('address.district', toBoxText(addr.district), ADDRESS_LABEL)
-    s.comb('address.state', toBoxText(addr.state), ADDRESS_LABEL)
+    s.comb('address.houseNo', toBoxText(addr.flat), LABELS.address)
+    s.comb('address.street', toBoxText(addr.road), LABELS.address)
+    s.comb('address.areaPostOffice', toBoxText(addr.area), LABELS.address)
+    s.comb('address.district', toBoxText(addr.district), LABELS.address)
+    s.comb('address.state', toBoxText(addr.state), LABELS.address)
     s.note('addressSplit', {
       en: 'Your address was split across the house number, street, area, district and state rows. The rows for city, village, block, building, floor and landmark were left empty, because your address does not say which part is which. Check every line and write in what is missing.',
       hi: 'आपका पता मकान नंबर, गली, इलाका, ज़िला और राज्य वाली पंक्तियों में बाँटा गया है। शहर, गाँव, ब्लॉक, इमारत, मंज़िल और लैंडमार्क वाली पंक्तियाँ खाली छोड़ी गई हैं, क्योंकि आपके पते से यह पता नहीं चलता कि कौन सा हिस्सा कौन सा है। हर पंक्ति जाँचिए और छूटी हुई जानकारी लिख दीजिए।',
     })
   }
 
-  const pin = digitsOf(answers.pincode)
-  if (pin) s.comb('address.pincode', pin, { en: 'PIN code', hi: 'पिन कोड' })
+  s.comb('address.pincode', digitsOf(answers.pincode), LABELS.pincode)
 
   // Case is preserved here alone: every other box on this form wants block
   // capitals, but the local part of an address is case-sensitive by the spec.

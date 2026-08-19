@@ -21,6 +21,13 @@
  * not which cell means what. A form's geometry, its slot names, its notes and
  * the order it fills things in all live in its own module under `official/`.
  * `officialPdf.js` maps a template's `officialForm` id to one of those.
+ *
+ * The line between the two moved once already. `digits` and `name` started as
+ * blocks copied between modules, and every copy carried the same judgement —
+ * an Aadhaar number is written at twelve digits or not at all, a middle name is
+ * an assumption the citizen has to be told about. Judgement shared by every
+ * form belongs here, where a new module inherits it instead of remembering it.
+ * A form module should read as the paper's own order of boxes and nothing else.
  */
 
 /** Helvetica has no glyphs beyond WinAnsi — Devanagari would throw on encode. */
@@ -70,6 +77,25 @@ export const SHARED_NOTES = {
     kind: 'blank',
     label: { en: 'Could not be read', hi: 'पढ़ा नहीं जा सका' },
   },
+}
+
+/**
+ * The labels a note or a truncation warning is filed under.
+ *
+ * A label is what the citizen reads on the last screen — "Aadhaar number could
+ * not be read" — so the same box has to be called the same thing whichever form
+ * it appears on. Each of these was written out separately in each of the three
+ * modules, identically so far, and identical by luck rather than by anything
+ * holding them together. A form with a box only it has still names it locally;
+ * these are the ones every form has.
+ */
+export const LABELS = {
+  name: { en: 'Your name', hi: 'आपका नाम' },
+  address: { en: 'Your address', hi: 'आपका पता' },
+  aadhaar: { en: 'Aadhaar number', hi: 'आधार संख्या' },
+  dob: { en: 'Date of birth', hi: 'जन्म तिथि' },
+  mobile: { en: 'Mobile number', hi: 'मोबाइल नंबर' },
+  pincode: { en: 'PIN code', hi: 'पिन कोड' },
 }
 
 /**
@@ -248,6 +274,70 @@ export class Stamper {
       size,
       font: this.font,
     })
+    return true
+  }
+
+  /**
+   * Write a value that means nothing at any length but one.
+   *
+   * An Aadhaar number is twelve digits, a mobile ten, a date eight. Anything
+   * else is not a shorter version of one of those, it is a different value, and
+   * writing part of it into a government form is how a citizen's application
+   * comes back rejected weeks later. Every module had this spelled out per
+   * field — take the digits, check the length, write them, otherwise leave the
+   * boxes alone and report that the value could not be read.
+   *
+   * The writer is a callback because the forms genuinely disagree about how to
+   * draw a date — three combs on Form 93, eight cells on PMUY, three printed
+   * runs on the Rajasthan one — while agreeing completely about when to draw
+   * it. Returning false from the writer says it declined; anything else counts
+   * as written.
+   *
+   * The note fires only when the citizen actually gave something. An absent
+   * answer is a question that was never asked, which a form's own notes cover.
+   */
+  digits(value, expected, label, write) {
+    const found = digitsOf(value)
+    if (found.length === expected) return write(found) !== false
+    if (value) this.note('badValue', label)
+    return false
+  }
+
+  /**
+   * Write a full name into a form's first / middle / last boxes.
+   *
+   * Two modules carried this block verbatim, down to the wording of the note
+   * telling the citizen how their name had been split.
+   *
+   * The three slots are passed in full rather than built from a prefix, which
+   * would read better here and cost more than it is worth. `check-official-forms`
+   * accounts for every box in a geometry by looking for its name spelled out in
+   * the module's own source: that is what caught four extracted-but-unwritten
+   * slots, and it is the check that lets a new form be trusted. A helper that
+   * assembles `${prefix}.first` out of sight of the module hides three boxes
+   * from it. The literals stay where the check can see them.
+   *
+   * The split note fires only when a label is given, which is how both forms
+   * already behaved: the applicant's own name is the one they are asked to
+   * check, and a parent's is written without comment. Worth revisiting — a PAN
+   * card prints the father's name too — but that is a change to what the
+   * citizen is told, not to how it gets written, so it is not made here.
+   */
+  name([first, middle, last], value, label) {
+    const parts = splitName(value)
+    if (!parts) {
+      if (value) this.note('notLatin')
+      return false
+    }
+    this.comb(first, parts.first, label)
+    this.comb(middle, parts.middle, label)
+    this.comb(last, parts.last, label)
+    if (label && parts.middle) {
+      this.note('nameSplit', {
+        en: `First “${parts.first}”, middle “${parts.middle}”, last “${parts.last}”.`,
+        hi: `पहला “${parts.first}”, बीच का “${parts.middle}”, अंतिम “${parts.last}”।`,
+      })
+    }
     return true
   }
 
