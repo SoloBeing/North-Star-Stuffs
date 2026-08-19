@@ -113,6 +113,13 @@ export const STRINGS = {
     hi: 'डिजिलॉकर से {count} जगह पहले ही भर दी गई हैं — वे आपसे नहीं पूछी जाएँगी।',
   },
   startFilling: { en: 'Start filling', hi: 'भरना शुरू करें' },
+  // Shown when a form has questions that only unlock once an earlier answer is
+  // given. Promising 25 questions and asking 21 reads as a broken app; saying
+  // "21, and possibly more" is both true at the time and true afterwards.
+  moreMayFollow: {
+    en: 'A few more questions may follow, depending on your answers.',
+    hi: 'आपके जवाबों के हिसाब से कुछ सवाल और भी पूछे जा सकते हैं।',
+  },
   listen: { en: 'Listen', hi: 'सुनिए' },
 
   // Guided fill

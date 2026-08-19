@@ -208,7 +208,7 @@ Rules that are easy to get wrong:
 
 ## Every key that already exists
 
-84 keys. This is a **collision list, not a permitted list** — you are
+85 keys. This is a **collision list, not a permitted list** — you are
 adding a new key, so choose a name that is not already here, then name yours
 freely in camelCase.
 
@@ -257,6 +257,7 @@ you need, reuse it and add nothing.
 | `weWillAsk` | we will ask you |
 | `prefilledNotice` | {count} fields are already filled from DigiLocker — you will not be asked those. |
 | `startFilling` | Start filling |
+| `moreMayFollow` | A few more questions may follow, depending on your answers. |
 | `listen` | Listen |
 | `question` | Question |
 | `of` | of |

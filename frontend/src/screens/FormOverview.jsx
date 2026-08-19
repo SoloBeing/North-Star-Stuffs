@@ -5,6 +5,14 @@
  * telling you what a field actually means and what happens if you get it wrong.
  * Every explanation is pre-written and human-reviewed. No model is consulted,
  * here or anywhere else in template mode.
+ *
+ * It counts and lists what is certain at this moment, not every row in the
+ * template. A form with `showIf` questions cannot know its own length before
+ * any answer exists — the caste certificate is 25 rows, of which an OBC
+ * applicant is asked 21 and an SC/ST one 24 — and this screen used to promise
+ * the largest of those numbers, then hand the citizen a fill screen counting
+ * down from a smaller one. Now the two share `askableFields`, and the questions
+ * that may still unlock are named as a possibility rather than a promise.
  */
 
 import { useState } from 'react'
@@ -12,21 +20,28 @@ import {
   Banner,
   BottomBar,
   Button,
-  Card,
   Screen,
   SpeakButton,
 } from '../components/ui'
+import { askableFields, isPrefilled, visibleFields } from '../lib/fields'
 import { t } from '../lib/i18n'
 
-export default function FormOverview({ lang, form, profile, onStart, onBack }) {
+export default function FormOverview({
+  lang,
+  form,
+  answers,
+  profile,
+  onStart,
+  onBack,
+}) {
   const [openField, setOpenField] = useState(null)
 
-  const prefilled = form.fields.filter(
-    (f) => f.source === 'digilocker' && profile?.[f.profileKey],
-  )
-  const willAsk = form.fields.filter(
-    (f) => !(f.source === 'digilocker' && profile?.[f.profileKey]),
-  )
+  // Everything that applies given what is known now: the always-on fields plus
+  // any already unlocked by a seeded DigiLocker answer.
+  const certain = visibleFields(form, answers)
+  const prefilled = certain.filter((f) => isPrefilled(f, profile))
+  const willAsk = askableFields(form, answers, profile)
+  const conditional = form.fields.length - certain.length
 
   return (
     <Screen>
@@ -46,7 +61,7 @@ export default function FormOverview({ lang, form, profile, onStart, onBack }) {
       </div>
 
       <div className="my-5 grid grid-cols-3 gap-2 text-center">
-        <Stat value={form.fields.length} label={t('fieldsTotal', lang)} />
+        <Stat value={certain.length} label={t('fieldsTotal', lang)} />
         <Stat
           value={prefilled.length}
           label={t('autoFilled', lang)}
@@ -61,14 +76,19 @@ export default function FormOverview({ lang, form, profile, onStart, onBack }) {
         </Banner>
       )}
 
+      {conditional > 0 && (
+        <Banner tone="info" className="mb-5">
+          {t('moreMayFollow', lang)}
+        </Banner>
+      )}
+
       <div className="mb-3 flex items-center gap-3">
         <h2 className="text-xl font-bold">{t('tapToUnderstand', lang)}</h2>
       </div>
 
       <div className="mb-6 space-y-2">
-        {form.fields.map((field) => {
-          const isPrefilled =
-            field.source === 'digilocker' && profile?.[field.profileKey]
+        {certain.map((field) => {
+          const seeded = isPrefilled(field, profile)
           const open = openField === field.id
           return (
             <div
@@ -86,7 +106,7 @@ export default function FormOverview({ lang, form, profile, onStart, onBack }) {
                   <span className="block text-lg font-semibold">
                     {field.label[lang]}
                   </span>
-                  {isPrefilled && (
+                  {seeded && (
                     <span className="mt-0.5 block text-sm font-semibold text-good-500">
                       ✓ {profile[field.profileKey]}
                     </span>
