@@ -232,7 +232,7 @@ FormMitra/
 │   ├── digilocker.py          # OAuth 2.0 + PKCE, and the mock provider
 │   └── validation.py          # server-side mirror of the rules
 ├── scripts/                   # the official-form pipeline, in the order you use it
-│   ├── extract-form-boxes.py  # reads box coordinates out of an official PDF
+│   ├── extract-form-boxes.py  # reads box coordinates out of an official PDF (--ink, --widest)
 │   ├── row-detail.py          # one row's cells, and the words printed in them
 │   ├── band-ink.py            # what ink sits in a y-band, when a row looks wrong
 │   ├── label-form-rows.py     # guesses a name for each row from nearby text
@@ -330,3 +330,4 @@ broke, and what is still missing:
 | `10-sourcing-the-other-blanks.md` | Which of the other nine forms can be filled, and which have no paper form at all |
 | `11-deploying.md` | Going live on Vercel, and the in-memory session bug serverless forced us to fix |
 | `12-filling-more-of-form-93.md` | From 9 of the form's 24 items to 17, and the coverage check that found a real bug |
+| `13-the-caste-certificate-geometry.md` | The Rajasthan SC/ST form mapped, the wrong blank step 10 collected, and two boxes the extractor could not see |

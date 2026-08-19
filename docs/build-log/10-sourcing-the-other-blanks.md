@@ -19,7 +19,7 @@ Of the nine remaining templates, **one** is ready to do next session.
 | Template | Official blank? | Usable? |
 |---|---|---|
 | LPG subsidy (PMUY) | yes | **ready — same technique as PAN** |
-| Caste certificate | yes (Rajasthan) | different technique needed |
+| Caste certificate | yes (Rajasthan) | **wrong blank — see step 13** |
 | Ration card | yes (Rajasthan) | scanned image |
 | Income certificate | yes (Rajasthan) | scanned image |
 | Bank account opening | yes (SBI) | file is corrupt |
@@ -62,6 +62,18 @@ under a second filename — different bytes, byte-identical extracted text. Use
 one; do not treat them as two forms.
 
 ### 2. Caste certificate — Rajasthan, General category ⚠️
+
+> **Corrected by [step 13](13-the-caste-certificate-geometry.md), 19 August
+> 2026.** This is the wrong blank. There are three forms in this series, one per
+> category, and `caste-certificate.json` offers SC, ST and OBC — never General,
+> so this PDF is one the template can never want. The two we need are newer and
+> on the same official domain; step 13 has the URLs and maps the SC/ST one.
+>
+> Two calls below also turned out differently. The legacy font really does stop
+> labels being matched, but that did not matter — the *rendered* page is legible,
+> so slots were named by looking. And it is not the ruled form it appears to be:
+> nearly every field is a real four-sided box that the existing per-cell writer
+> serves. Only the two date fields are a printed guide.
 
 ```bash
 curl -L -A "Mozilla/5.0" -o caste-cert-raj-general.pdf \
@@ -180,7 +192,7 @@ technique. Realistically a session's work including verification.
 coordinate extraction. Produces a genuinely submittable document. Arguably
 higher value per hour than anything else on this list.
 
-**3. Caste certificate — needs a second writer.** Add baseline placement
+**3. Caste certificate — mostly done in step 13.** Add baseline placement
 (text on a ruled line) alongside the existing per-cell writer, and identify
 slots by position because the legacy font makes labels unreadable. New
 technique, but it generalises: most state forms are ruled, not boxed.
@@ -306,7 +318,7 @@ those three it is the whole job.
 |---|---|---|---|
 | PAN Form 93 | **done** | — | no — statutory (Rule 158) |
 | LPG PMUY KYC | **ready** | — | no — prescribed by the OMCs |
-| Caste certificate (Raj) | needs line writer + positional slots | — | no — statutory |
+| Caste certificate (Raj) | **SC/ST mapped, step 13** | — | no — statutory |
 | Ration card (Raj) | no vector data | possible, 6 pages, non-A4 | no — statutory (NFSA) |
 | Income certificate (Raj) | no vector data | possible, but we lack the canonical form | no — statutory |
 | Bank account opening (SBI) | file corrupt | possible if a clean scan is found | no — the bank's own form |
