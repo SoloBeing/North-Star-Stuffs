@@ -188,6 +188,56 @@ def segments(pdf, page, ink=COMBS):
     return _rect_segments(xml) if ink == RECTS else _comb_segments(xml)
 
 
+def _glyphs(xml: str) -> list[tuple[str, float, float, float]]:
+    """Every printed glyph as (character, x, baseline in top-down y, width)."""
+    out: list[tuple[str, float, float, float]] = []
+    tx: float = 0.0
+    ty: float = 0.0
+    size: float = 0.0
+    for raw in xml.splitlines():
+        line: str = raw.strip()
+        if line.startswith("<fill_text") or line.startswith("<stroke_text"):
+            m = re.search(r'transform="([-\d.e ]+)"', line)
+            if m:
+                _, _, _, _, tx, ty = (float(v) for v in m.group(1).split())
+        elif line.startswith("<span"):
+            m = re.search(r'trm="([-\d.e ]+)"', line)
+            if m:
+                size = abs(float(m.group(1).split()[0]))
+        elif line.startswith("<g "):
+            m = re.search(r'unicode="([^"]*)".*?x="([-\d.e]+)" '
+                          r'y="([-\d.e]+)" adv="([-\d.e]+)"', line)
+            if m:
+                out.append((m.group(1), float(m.group(2)) + tx,
+                            ty - float(m.group(3)),
+                            float(m.group(4)) * size))
+    return out
+
+
+def runs(pdf, page, char="_"):
+    """Every run of one repeated printed character, as a fill-in rule.
+
+    Some fields are not a box at all: the form prints `____/____/______` and the
+    guide *is* the field. Each run comes back with the x-span it covers and the
+    baseline the citizen writes on, so a date can go on the three runs rather
+    than be centred over the whole thing and strike the printed slashes.
+    """
+    marks = [g for g in _glyphs(_trace(pdf, page)) if g[0] == char]
+    marks.sort(key=lambda g: (round(g[2], 1), g[1]))
+
+    found: list[dict] = []
+    x1: float = 0.0
+    for _, x, y, w in marks:
+        if found and abs(found[-1]["baseline"] - y) <= TOL and x - x1 <= TOL:
+            x1 = x + w
+            found[-1]["x1"] = round(x1, 2)
+            continue
+        x1 = x + w
+        found.append({"page": page, "x0": round(x, 2), "x1": round(x1, 2),
+                      "baseline": round(y, 2)})
+    return found
+
+
 def rows(pdf, page, ink=COMBS, widest=WIDEST):
     horiz, vert = [], []
     for (x0, y0), (x1, y1) in segments(pdf, page, ink):

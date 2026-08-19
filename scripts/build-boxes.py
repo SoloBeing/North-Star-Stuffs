@@ -18,6 +18,12 @@ members cost four lines rather than twenty-four.
 still be, and are pinned for the same reason the cell counts are: read a
 Word-drawn form with the default parse and the rows come back different, so
 every index in the spec would point somewhere else.
+
+`guides` are for a field the form prints rather than draws — `____/____/______`
+inside a box. Each run of underscores becomes one cell, and the slot's yBot is
+the baseline they sit on, so a writer puts day, month and year on their own runs
+instead of striking the printed slashes. The run count is pinned like a cell
+count is.
 """
 
 import json
@@ -90,6 +96,41 @@ def take_cells(row: dict, take: list[Take]) -> list[Cell]:
     return cells
 
 
+def build_guides(module: ModuleType, pdf: Path, spec: dict,
+                 rows: dict[str, dict]) -> tuple[dict[str, dict], list[str]]:
+    guides: dict[str, dict] = {}
+    problems: list[str] = []
+    found: dict[tuple[int, str], list[dict]] = {}
+
+    for name, want in spec.get("guides", {}).items():
+        row_id: str = want["row"]
+        if row_id not in rows:
+            problems.append(f'guide "{name}": row "{row_id}" was not resolved')
+            continue
+        row: dict = rows[row_id]
+        page: int = row["page"]
+        char: str = want.get("char", "_")
+        if (page, char) not in found:
+            found[page, char] = module.runs(str(pdf), page, char)
+
+        x0, x1 = row["cells"][want["cell"]]
+        inside: list[dict] = [
+            r for r in found[page, char]
+            if row["yTop"] - 1 <= r["baseline"] <= row["yBot"] + 1
+            and r["x0"] >= x0 - 1 and r["x1"] <= x1 + 1
+        ]
+        if len(inside) != want["runs"]:
+            problems.append(
+                f'guide "{name}" (row "{row_id}" cell {want["cell"]}): spec says '
+                f'{want["runs"]} runs of "{char}", form has {len(inside)}')
+            continue
+
+        guides[name] = {"page": page, "yTop": row["yTop"],
+                        "yBot": inside[0]["baseline"], "guide": True,
+                        "cells": [[r["x0"], r["x1"]] for r in inside]}
+    return guides, problems
+
+
 def build_slots(spec: dict, rows: dict[str, dict]) -> tuple[dict[str, dict], list[str]]:
     slots: dict[str, dict] = {}
     problems: list[str] = []
@@ -134,7 +175,13 @@ def main() -> None:
     widest: float = float(spec.get("widest", module.WIDEST))
     rows, row_problems = resolve_rows(module, pdf, spec["rows"], ink, widest)
     slots, slot_problems = build_slots(spec, rows)
-    problems: list[str] = row_problems + slot_problems
+    guides, guide_problems = build_guides(module, pdf, spec, rows)
+    for name, guide in guides.items():
+        if name in slots:
+            guide_problems.append(f'guide "{name}" is also a slot')
+            continue
+        slots[name] = guide
+    problems: list[str] = row_problems + slot_problems + guide_problems
     for problem in problems:
         logger.error("  %s", problem)
     if problems:

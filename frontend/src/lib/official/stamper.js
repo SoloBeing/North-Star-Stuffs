@@ -26,6 +26,9 @@
 /** Helvetica has no glyphs beyond WinAnsi — Devanagari would throw on encode. */
 const ENCODABLE = /^[\x20-\x7E]*$/
 
+/** How far above a printed rule the writing sits, so the two do not merge. */
+const LIFT = 1.5
+
 /**
  * The notes any form might need, in both languages.
  *
@@ -268,5 +271,43 @@ export class Stamper {
       end: { x: x0 + w * 0.8, y: yb + h * 0.75 },
       ...opts,
     })
+  }
+
+  /**
+   * One part per run of underscores the form printed, e.g. a date.
+   *
+   * Some fields are not a box: the form prints `____/____/______` inside one,
+   * and the slashes are its ink. Centring a date over the whole box writes
+   * across them, which is the step 12 `dob` bug in a new form. A guide slot's
+   * cells are the runs themselves and its yBot is the baseline they sit on, so
+   * each part lands on its own run with the printed slashes left alone.
+   */
+  guide(name, parts) {
+    const slot = this.slot(name)
+    if (!slot.guide) throw new Error(`slot is not a guide: ${name}`)
+    if (parts.some((part) => !part)) return false
+    if (parts.length !== slot.cells.length) {
+      throw new Error(
+        `guide ${name} has ${slot.cells.length} runs, given ${parts.length} parts`,
+      )
+    }
+
+    const page = this.pdf.getPage(slot.page - 1)
+    // LIFT keeps the digits clear of the printed rule instead of sitting in it.
+    const y = this.pageH - slot.yBot + LIFT
+    const h = slot.yBot - slot.yTop
+
+    for (let i = 0; i < parts.length; i++) {
+      const [x0, x1] = slot.cells[i]
+      const w = x1 - x0
+      let size = Math.min(h * 0.72, 11)
+      while (size > 4 && this.font.widthOfTextAtSize(parts[i], size) > w - 2) {
+        size -= 0.25
+      }
+      const tw = this.font.widthOfTextAtSize(parts[i], size)
+      page.drawText(parts[i], { x: x0 + (w - tw) / 2, y, size, font: this.font })
+    }
+
+    return true
   }
 }

@@ -91,6 +91,31 @@ def box(x0: float, y_top: float, x1: float, y_bot: float) -> list[Point]:
     return [(x0, y_top), (x1, y_top), (x1, y_bot), (x0, y_bot)]
 
 
+def glyph_xml(marks: list[tuple[str, float, float]], size: float = 10.0,
+              adv: float = 0.5, page_height: float = 1000.0) -> str:
+    """A trace document of printed glyphs, given as (character, x, baseline)."""
+    out: list[str] = ['<?xml version="1.0"?>', '<document name="t.pdf">',
+                      f'<page mediabox="0 0 612 {page_height}">',
+                      f'<fill_text transform="1 0 0 -1 0 {page_height}">',
+                      f'<span font="Test" trm="{size} 0 0 {size}">']
+    for char, x, baseline in marks:
+        out.append(f'<g unicode="{char}" glyph="1" x="{x}" '
+                   f'y="{page_height - baseline}" adv="{adv}"/>')
+    out += ["</span>", "</fill_text>", "</page>", "</document>"]
+    return "\n".join(out)
+
+
+def underscores(xs: list[float], baseline: float) -> list[tuple[str, float, float]]:
+    return [("_", x, baseline) for x in xs]
+
+
+def runs_from_xml(xml: str, char: str = "_") -> list[tuple[float, float, float]]:
+    module: ModuleType = load_extractor()
+    module._trace = lambda pdf, page: xml
+    return [(r["x0"], r["x1"], r["baseline"])
+            for r in module.runs("unused.pdf", 1, char)]
+
+
 def cells_from_xml(xml: str, ink: str, widest: float | None = None) -> list[Cell]:
     """Run the real XML parser — the half of the extractor segs cases skip.
 
@@ -256,6 +281,48 @@ def parser_cases() -> list[tuple[str, str, str, list[Cell], float | None]]:
     ]
 
 
+def run_cases() -> list[tuple[str, str, str, list[tuple[float, float, float]]]]:
+    """Cases for the printed-guide reader.
+
+    A date field on this family of form is not a box: the form prints
+    `____/____/______` and the runs between its slashes are the field. Reading
+    them wrong puts a date across the form's own ink.
+    """
+    return [
+        (
+            "three runs split by the printed slashes",
+            glyph_xml(underscores([10.0, 15.0, 20.0], 100.0)
+                      + [("/", 25.0, 100.0)]
+                      + underscores([30.0, 35.0], 100.0)
+                      + [("/", 40.0, 100.0)]
+                      + underscores([45.0, 50.0, 55.0, 60.0], 100.0)),
+            "_",
+            [(10.0, 25.0, 100.0), (30.0, 40.0, 100.0), (45.0, 65.0, 100.0)],
+        ),
+        (
+            "one unbroken rule is one run",
+            glyph_xml(underscores([10.0, 15.0, 20.0], 100.0)),
+            "_", [(10.0, 25.0, 100.0)],
+        ),
+        (
+            "two rules on different lines are not one run",
+            glyph_xml(underscores([10.0, 15.0], 100.0)
+                      + underscores([10.0, 15.0], 130.0)),
+            "_", [(10.0, 20.0, 100.0), (10.0, 20.0, 130.0)],
+        ),
+        (
+            "a dotted rule is found by asking for its own character",
+            glyph_xml([(".", 10.0, 100.0), (".", 15.0, 100.0)]),
+            ".", [(10.0, 20.0, 100.0)],
+        ),
+        (
+            "and the underscore reader ignores it",
+            glyph_xml([(".", 10.0, 100.0), (".", 15.0, 100.0)]),
+            "_", [],
+        ),
+    ]
+
+
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     module: ModuleType = load_extractor()
@@ -283,6 +350,17 @@ def main() -> None:
             logger.error("  FAIL  [%s] %s", ink, name)
             logger.error("        expected %s", expected)
             logger.error("        got      %s", actual)
+
+    for name, xml, char, expected_runs in run_cases():
+        total += 1
+        found: list[tuple[float, float, float]] = runs_from_xml(xml, char)
+        if found == expected_runs:
+            logger.info("  ok    [runs] %s", name)
+        else:
+            failures += 1
+            logger.error("  FAIL  [runs] %s", name)
+            logger.error("        expected %s", expected_runs)
+            logger.error("        got      %s", found)
 
     if failures:
         logger.error("%d of %d cases failed", failures, total)
