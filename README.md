@@ -231,11 +231,19 @@ FormMitra/
 │   ├── main.py                # FastAPI app + endpoints
 │   ├── digilocker.py          # OAuth 2.0 + PKCE, and the mock provider
 │   └── validation.py          # server-side mirror of the rules
-├── scripts/
-│   └── extract-form-boxes.py  # reads box coordinates out of an official PDF
+├── scripts/                   # the official-form pipeline, in the order you use it
+│   ├── extract-form-boxes.py  # reads box coordinates out of an official PDF
+│   ├── row-detail.py          # one row's cells, and the words printed in them
+│   ├── band-ink.py            # what ink sits in a y-band, when a row looks wrong
+│   ├── label-form-rows.py     # guesses a name for each row from nearby text
+│   ├── build-boxes.py         # spec + PDF -> the slot map, coordinates re-read
+│   ├── crop-form.sh           # renders one band to PNG — the "look at it" step
+│   └── pdf-same.sh            # do two PDFs draw the same marks? (dates ignored)
 ├── frontend/
 │   ├── scripts/
-│   │   └── check-form93.mjs   # stamps the form and checks every slot is used
+│   │   ├── check-official-forms.mjs  # stamps every form, checks every slot is used
+│   │   ├── stamp-form-boxes.mjs      # draws the raw grid, to check the extraction
+│   │   └── stamp-slots.mjs           # writes each slot's name across its own cells
 │   └── src/
 │       ├── App.jsx            # flow control
 │       ├── screens/           # the 8 screens
@@ -246,7 +254,8 @@ FormMitra/
 │       │   ├── speech.js      # Web Speech API + spoken-input normalisation
 │       │   ├── ocr.js         # Tesseract pipeline
 │       │   ├── pdf.js         # the summary sheet, in the citizen's language
-│       │   ├── officialPdf.js # stamping answers into the government's own form
+│       │   ├── officialPdf.js # dispatches to the right form module by id
+│       │   ├── official/      # stamper.js + one module per government form
 │       │   └── i18n.js        # every UI string, both languages
 │       ├── data/forms/        # the 10 templates ← the actual product
 │       └── data/official/     # box coordinates for the real government forms
