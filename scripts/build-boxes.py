@@ -13,6 +13,11 @@ rather than an x-span: indices survive a form that shifts on the page.
 
 Tables declare one row shape and the rows it repeats over, so six household
 members cost four lines rather than twenty-four.
+
+`ink` and `widest` say how the form draws its boxes and how wide a box may
+still be, and are pinned for the same reason the cell counts are: read a
+Word-drawn form with the default parse and the rows come back different, so
+every index in the spec would point somewhere else.
 """
 
 import json
@@ -48,15 +53,15 @@ def page_height(pdf: Path) -> float:
     return float(match.group(2))
 
 
-def resolve_rows(module: ModuleType, pdf: Path,
-                 declared: dict[str, dict]) -> tuple[dict[str, dict], list[str]]:
+def resolve_rows(module: ModuleType, pdf: Path, declared: dict[str, dict],
+                 ink: str, widest: float) -> tuple[dict[str, dict], list[str]]:
     found: dict[int, list[dict]] = {}
     rows: dict[str, dict] = {}
     problems: list[str] = []
     for row_id, want in declared.items():
         page: int = want["page"]
         if page not in found:
-            found[page] = module.rows(str(pdf), page)
+            found[page] = module.rows(str(pdf), page, ink, widest)
         on_page: list[dict] = found[page]
         index: int = want["row"]
         if index >= len(on_page):
@@ -123,7 +128,11 @@ def main() -> None:
                          f"{pdf.name} is {height}")
 
     module: ModuleType = load_extractor()
-    rows, row_problems = resolve_rows(module, pdf, spec["rows"])
+    ink: str = spec.get("ink", module.COMBS)
+    if ink not in module.INKS:
+        raise SystemExit(f'spec ink "{ink}" is not one of {", ".join(module.INKS)}')
+    widest: float = float(spec.get("widest", module.WIDEST))
+    rows, row_problems = resolve_rows(module, pdf, spec["rows"], ink, widest)
     slots, slot_problems = build_slots(spec, rows)
     problems: list[str] = row_problems + slot_problems
     for problem in problems:

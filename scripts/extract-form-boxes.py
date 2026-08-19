@@ -38,6 +38,12 @@ whose fourth side is a `closepath`, and a table's borders are 0.5pt filled
 rectangles. `--ink=rects` reads both of those; `combs` is the default and the
 parse both shipped maps were measured under. Do not change what `combs`
 returns without re-deriving them — their specs pin rows by position.
+
+`--widest` is the same kind of knob. A cell wider than it is taken for a gutter
+or the page frame, and 400pt suits the two comb forms — but the caste
+certificate's affidavit has a 481pt address box, which that silently drops.
+Raising the default instead would find three more rows in PMUY and two more
+cells in Form 93, renumbering both.
 """
 
 import re
@@ -53,6 +59,7 @@ RECTS: str = "rects"   # closed rectangles, and table borders drawn as thin fill
 INKS: tuple[str, ...] = (COMBS, RECTS)
 
 HAIRLINE = 2.0   # a filled rectangle this thin is a rule, not a shape
+WIDEST = 400.0   # anything wider is a gutter or the page frame, not a cell
 
 
 def _pt(line):
@@ -181,7 +188,7 @@ def segments(pdf, page, ink=COMBS):
     return _rect_segments(xml) if ink == RECTS else _comb_segments(xml)
 
 
-def rows(pdf, page, ink=COMBS):
+def rows(pdf, page, ink=COMBS, widest=WIDEST):
     horiz, vert = [], []
     for (x0, y0), (x1, y1) in segments(pdf, page, ink):
         if abs(y1 - y0) < 0.3 and abs(x1 - x0) > 1.0:
@@ -219,7 +226,7 @@ def rows(pdf, page, ink=COMBS):
         cells = []
         for i in range(len(verticals) - 1):
             x0, x1 = verticals[i][0], verticals[i + 1][0]
-            if not (3 < x1 - x0 < 400):       # gutters and full-page frames
+            if not (3 < x1 - x0 < widest):    # gutters and full-page frames
                 continue
             if has_h(yt, x0, x1) and has_h(yb, x0, x1):
                 cells.append([round(x0, 2), round(x1, 2)])
@@ -234,17 +241,20 @@ def main(argv):
     if len(argv) < 2:
         sys.exit(__doc__)
     ink: str = COMBS
+    widest: float = WIDEST
     args: list[str] = []
     for a in argv[1:]:
         if a.startswith("--ink="):
             ink = a.split("=", 1)[1]
             if ink not in INKS:
                 sys.exit(f"--ink must be one of {', '.join(INKS)}")
+        elif a.startswith("--widest="):
+            widest = float(a.split("=", 1)[1])
         else:
             args.append(a)
     pdf, pages = args[0], [int(p) for p in args[1:]] or [1]
     for page in pages:
-        found = rows(pdf, page, ink)
+        found = rows(pdf, page, ink, widest)
         total = sum(len(r["cells"]) for r in found)
         print(f"=== PAGE {page} [{ink}]: {len(found)} rows, {total} cells")
         for r in found:

@@ -5,8 +5,10 @@
  *   node frontend/scripts/stamp-form-boxes.mjs <in.pdf> <out.pdf> <page> [page ...]
  *   node frontend/scripts/stamp-form-boxes.mjs caste.pdf out.pdf 1 --ink=rects
  *
- * `--ink` is passed straight to the extractor: forms whose boxes are closed
- * rectangles rather than combs need `rects` or almost nothing is found.
+ * `--ink` and `--widest` are passed straight to the extractor: forms whose boxes
+ * are closed rectangles rather than combs need `rects` or almost nothing is
+ * found, and a form with a box wider than 400pt needs `--widest` raised or that
+ * box is silently dropped.
  *
  * Each row is marked with `R{n}` in red at its left, and every cell in that
  * row gets a cycling 0-9 digit. If a stamped digit lands inside a printed
@@ -28,14 +30,14 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 const HERE = dirname(fileURLToPath(import.meta.url))
 const EXTRACT = resolve(HERE, '..', '..', 'scripts', 'extract-form-boxes.py')
 
-function extractRows(pdfPath, pages, ink) {
+function extractRows(pdfPath, pages, ink, widest) {
   const py = `
 import json, importlib.util
 spec = importlib.util.spec_from_file_location("efb", ${JSON.stringify(EXTRACT)})
 efb = importlib.util.module_from_spec(spec); spec.loader.exec_module(efb)
 data = []
 for p in ${JSON.stringify(pages)}:
-    for r in efb.rows(${JSON.stringify(pdfPath)}, p, ${JSON.stringify(ink)}):
+    for r in efb.rows(${JSON.stringify(pdfPath)}, p, ${JSON.stringify(ink)}, ${widest}):
         r["page"] = p
         data.append(r)
 print(json.dumps(data))
@@ -47,14 +49,16 @@ async function main() {
   const [, , inPath, outPath, ...rest] = process.argv
   const inkArg = rest.find((a) => a.startsWith('--ink='))
   const ink = inkArg ? inkArg.slice('--ink='.length) : 'combs'
+  const widestArg = rest.find((a) => a.startsWith('--widest='))
+  const widest = widestArg ? Number(widestArg.slice('--widest='.length)) : 400
   const pageArgs = rest.filter((a) => !a.startsWith('--'))
   if (!inPath || !outPath || pageArgs.length === 0) {
-    console.error('usage: stamp-form-boxes.mjs <in.pdf> <out.pdf> <page> [page ...] [--ink=combs|rects]')
+    console.error('usage: stamp-form-boxes.mjs <in.pdf> <out.pdf> <page> [page ...] [--ink=combs|rects] [--widest=pt]')
     process.exit(1)
   }
   const pages = pageArgs.map(Number)
 
-  const rows = extractRows(resolve(inPath), pages, ink)
+  const rows = extractRows(resolve(inPath), pages, ink, widest)
   const pdf = await PDFDocument.load(readFileSync(inPath))
   const font = await pdf.embedFont(StandardFonts.Helvetica)
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold)

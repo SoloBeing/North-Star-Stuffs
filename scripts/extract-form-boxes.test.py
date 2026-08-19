@@ -91,7 +91,7 @@ def box(x0: float, y_top: float, x1: float, y_bot: float) -> list[Point]:
     return [(x0, y_top), (x1, y_top), (x1, y_bot), (x0, y_bot)]
 
 
-def cells_from_xml(xml: str, ink: str) -> list[Cell]:
+def cells_from_xml(xml: str, ink: str, widest: float | None = None) -> list[Cell]:
     """Run the real XML parser — the half of the extractor segs cases skip.
 
     Loads its own module because the cases above replace `segments` wholesale,
@@ -99,7 +99,8 @@ def cells_from_xml(xml: str, ink: str) -> list[Cell]:
     """
     module: ModuleType = load_extractor()
     module._trace = lambda pdf, page: xml
-    found: list[dict] = module.rows("unused.pdf", 1, ink)
+    found: list[dict] = module.rows("unused.pdf", 1, ink,
+                                    widest if widest else module.WIDEST)
     return [cell for row in found for cell in row["cells"]]
 
 
@@ -158,7 +159,7 @@ def cases() -> list[tuple[str, list[Segment], list[Cell]]]:
     ]
 
 
-def parser_cases() -> list[tuple[str, str, str, list[Cell]]]:
+def parser_cases() -> list[tuple[str, str, str, list[Cell], float | None]]:
     """Cases for the XML parse itself, which the cases above stub away.
 
     The Rajasthan caste form is 27 closed rectangles and almost nothing else,
@@ -169,25 +170,36 @@ def parser_cases() -> list[tuple[str, str, str, list[Cell]]]:
     one_rect: list[tuple[str, list[Point], bool]] = [
         ("stroke_path", box(10.0, 100.0, 40.0, 120.0), True),
     ]
+    wide: list[tuple[str, list[Point], bool]] = [
+        ("stroke_path", box(76.0, 100.0, 557.5, 120.0), True),
+    ]
     return [
         (
             "a closed rectangle, the way Word draws a box",
-            trace_xml(one_rect), "rects", [[10.0, 40.0]],
+            trace_xml(one_rect), "rects", [[10.0, 40.0]], None,
+        ),
+        (
+            "a 481pt address box is dropped by the default cap",
+            trace_xml(wide), "rects", [], None,
+        ),
+        (
+            "and found once widest is raised for that form",
+            trace_xml(wide), "rects", [[76.0, 557.5]], 500.0,
         ),
         (
             "the same rectangle with its closepath ignored (the shipped bug)",
             trace_xml([("stroke_path", box(10.0, 100.0, 40.0, 120.0), False)]),
-            "rects", [],
+            "rects", [], None,
         ),
         (
             "a clip path around a glyph run is not a box",
             trace_xml([("clip_path", box(10.0, 100.0, 40.0, 120.0), True)]),
-            "rects", [],
+            "rects", [], None,
         ),
         (
             "a fat filled rectangle is printed ink, not a rule",
             trace_xml([("fill_path", box(10.0, 100.0, 40.0, 120.0), True)]),
-            "rects", [],
+            "rects", [], None,
         ),
         (
             "a Word table drawn as hairline fills (the Aadhaar row)",
@@ -198,25 +210,25 @@ def parser_cases() -> list[tuple[str, str, str, list[Cell]]]:
                        ("fill_path", box(70.0, 100.0, 70.5, 120.0), True),
                        ("fill_path", box(10.0, 100.0, 70.5, 100.5), True),
                        ("fill_path", box(10.0, 119.5, 70.5, 120.0), True)]),
-            "rects", [[10.25, 40.25], [40.25, 70.25]],
+            "rects", [[10.25, 40.25], [40.25, 70.25]], None,
         ),
         (
             "a hairline square is a dot, and closes nothing",
             trace_xml([("fill_path", box(10.0, 100.0, 11.0, 101.0), True)]),
-            "rects", [],
+            "rects", [], None,
         ),
         (
             "combs mode is unmoved by hairline fills, so no shipped row shifts",
             trace_xml([("stroke_path", box(10.0, 200.0, 40.0, 220.0), True),
                        ("fill_path", box(10.0, 100.0, 10.5, 120.0), True),
                        ("fill_path", box(40.0, 100.0, 40.5, 120.0), True)]),
-            "combs", [],
+            "combs", [], None,
         ),
         (
             "two rectangles sharing an edge give two cells, not three",
             trace_xml([("stroke_path", box(10.0, 100.0, 40.0, 120.0), True),
                        ("stroke_path", box(40.0, 100.0, 70.0, 120.0), True)]),
-            "rects", [[10.0, 40.0], [40.0, 70.0]],
+            "rects", [[10.0, 40.0], [40.0, 70.0]], None,
         ),
         (
             "combs mode builds cells out of clip-path ink, as both maps rely on",
@@ -226,20 +238,20 @@ def parser_cases() -> list[tuple[str, str, str, list[Cell]]]:
             trace_xml([("stroke_path", box(10.0, 200.0, 40.0, 220.0), True),
                        ("clip_path", box(10.0, 100.0, 40.0, 120.0), True),
                        ("clip_path", box(40.0, 100.0, 70.0, 120.0), True)]),
-            "combs", [[40.0, 70.0]],
+            "combs", [[40.0, 70.0]], None,
         ),
         (
             "and only because a stroke_path set the transform they borrow",
             trace_xml([("clip_path", box(10.0, 100.0, 40.0, 120.0), True),
                        ("clip_path", box(40.0, 100.0, 70.0, 120.0), True)]),
-            "combs", [],
+            "combs", [], None,
         ),
         (
             "rects mode resets between elements, so neither is dragged",
             trace_xml([("stroke_path", box(10.0, 200.0, 40.0, 220.0), True),
                        ("stroke_path", box(10.0, 100.0, 40.0, 120.0), True),
                        ("stroke_path", box(40.0, 100.0, 70.0, 120.0), True)]),
-            "rects", [[10.0, 40.0], [40.0, 70.0], [10.0, 40.0]],
+            "rects", [[10.0, 40.0], [40.0, 70.0], [10.0, 40.0]], None,
         ),
     ]
 
@@ -261,9 +273,9 @@ def main() -> None:
             logger.error("        expected %s", expected)
             logger.error("        got      %s", actual)
 
-    for name, xml, ink, expected in parser_cases():
+    for name, xml, ink, expected, widest in parser_cases():
         total += 1
-        actual = cells_from_xml(xml, ink)
+        actual = cells_from_xml(xml, ink, widest)
         if actual == expected:
             logger.info("  ok    [%s] %s", ink, name)
         else:
